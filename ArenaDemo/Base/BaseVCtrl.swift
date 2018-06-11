@@ -16,7 +16,12 @@ class BaseVCtrl: UIViewController {
     // MARK: - Private properties
     
     // MARK: - Properties
-    
+    var isCreateBack = true {
+        didSet {
+            setupNavigation()
+        }
+    }
+
     // MARK: - Init
     public init() {
         super.init(nibName: String(describing: type(of: self)), bundle: Bundle(for: type(of: self)))
@@ -39,6 +44,23 @@ class BaseVCtrl: UIViewController {
         configUIViewWillAppear()
     }
     
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.navigationController?.navigationBar.isUserInteractionEnabled = true
+        setupNavigation()
+    }
+    
+    func setupNavigation() {
+        let interactive = navigationController?.interactivePopGestureRecognizer
+        interactive?.delegate = nil
+        if let vctrl = navigationController?.topViewController as? BaseVCtrl {
+            interactive?.isEnabled = vctrl.isCreateBack
+        }
+        
+    }
+
+    
     // MARK: - Layout UI
     func configUI() {
     }
@@ -47,6 +69,26 @@ class BaseVCtrl: UIViewController {
         
     }
     
+    
+    /// add a custom view to left item on navigation bar
+    public func addViewToLeftBarItem(view: UIView, isTranslate: Bool = true) {
+        if isTranslate {
+            view.findAndReplaceText()
+        }
+        view.backgroundColor = navigationController?.navigationBar.barTintColor
+        let barItem = UIBarButtonItem(customView: view)
+        self.navigationItem.leftBarButtonItem = barItem
+        isCreateBack = false
+    }
+    
+    /// add a custom view to right item on navigation bar
+    public func addViewToRightBarItem(view: UIView) {
+        view.findAndReplaceText()
+        view.backgroundColor = navigationController?.navigationBar.barTintColor
+        let barItem = UIBarButtonItem(customView: view)
+        self.navigationItem.rightBarButtonItem = barItem
+    }
+
     // MARK: - Event Listerner
     func eventListener() {
         
@@ -101,7 +143,10 @@ class BaseVCtrl: UIViewController {
         self.view.bringSubview(toFront: viewLoading)
     }
 
-    
+        func getVCtrlInNavigation<T: UIViewController>(_ type: T.Type) -> T? {
+        return navigationController?.viewControllers.firstOrDefault{$0 is T} as? T
+    }
+
     
     
 }

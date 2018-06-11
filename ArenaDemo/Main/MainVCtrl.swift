@@ -36,7 +36,7 @@ class MainVCtrl: BaseVCtrl {
     }
     
     func configTableView() {
-        tbvCategory.register(UINib(nibName: String(describing: CategoryCell.self), bundle: nil), forCellReuseIdentifier: categoryCellID)
+        tbvCategory.register(UINib(nibName: String(describing: TbvCategoryCell.self), bundle: nil), forCellReuseIdentifier: categoryCellID)
         tbvCategory.dataSource = self
         tbvCategory.delegate = self
     }
@@ -103,7 +103,7 @@ extension MainVCtrl: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: categoryCellID) as! CategoryCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: categoryCellID) as! TbvCategoryCell
         let item = lstCategory[indexPath.row]
         cell.updateCell(item: item)
         return cell

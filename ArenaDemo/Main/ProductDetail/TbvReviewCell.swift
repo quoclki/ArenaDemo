@@ -1,18 +1,17 @@
 //
-//  CategoryCell.swift
-//  App199k
+//  TbvReviewCell.swift
+//  ArenaDemo
 //
-//  Created by Lu Kien Quoc on 6/6/18.
+//  Created by Lu Kien Quoc on 6/11/18.
 //  Copyright © 2018 Newstead Technologies VN. All rights reserved.
 //
 
 import UIKit
 import ArenaDemoAPI
 
-class CategoryCell: UITableViewCell {
+class TbvReviewCell: UITableViewCell {
 
-    @IBOutlet weak var lblName: UILabel!
-    @IBOutlet weak var imv: UIImageView!
+    @IBOutlet weak var lblText: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,8 +24,8 @@ class CategoryCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func updateCell(item: CategoryDTO) {
-        lblName.text = item.name
+    func updateCell(item: ReviewDTO) {
+        lblText.text = item.review
     }
     
 }

@@ -15,7 +15,7 @@ class SlideVCtrl: BaseVCtrl {
     @IBOutlet weak var imvPhoto: UIImageView!
     
     // MARK: - Private properties
-    private var image: Images = Images()
+    var image: Images = Images()
     
     // MARK: - Properties
     
@@ -35,7 +35,7 @@ class SlideVCtrl: BaseVCtrl {
     override func configUI() {
         super.configUI()
         ImageStore.shared.setImg(toImageView: imvPhoto, imgURL: image.src)
-
+        imvPhoto.contentMode = .scaleAspectFit
     }
     
     override func configUIViewWillAppear() {
