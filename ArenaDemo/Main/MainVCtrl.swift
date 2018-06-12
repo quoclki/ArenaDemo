@@ -1,26 +1,35 @@
 //
 //  MainVCtrl.swift
-//  199k
+//  ArenaDemo
 //
-//  Created by Lu Kien Quoc on 6/3/18.
+//  Created by Lu Kien Quoc on 6/12/18.
 //  Copyright © 2018 Newstead Technologies VN. All rights reserved.
 //
 
 import UIKit
-import CustomControl
 import ArenaDemoAPI
 
 class MainVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
-    @IBOutlet weak var tbvCategory: UITableView!
+    @IBOutlet var btnMenu: UIButton!
+    @IBOutlet var vSlide: UIView!
+    @IBOutlet weak var tbvSlideSource: UITableView!
     
     // MARK: - Private properties
-    fileprivate var lstCategory: [CategoryDTO] = []
-    fileprivate var categoryCellID = "categoryID"
+    private var cellID: String = "slideCellID"
+    private var lstMenu: [MenuData] = []
+    
+    private var isShowMenu: Bool = false {
+        didSet {
+            let width = self.view.width
+            UIView.animate(withDuration: 0.3) {
+                self.vSlide.originX = self.isShowMenu ? width - self.vSlide.width : width
+            }
+        }
+    }
     
     // MARK: - Properties
-    var refControl = UIRefreshControl()
     
     // MARK: - Init
     
@@ -29,18 +38,26 @@ class MainVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        title = "Categories"
         navigationController?.navigationBar.isTranslucent = false
+        addViewToRightBarItem(view: btnMenu)
         configTableView()
-        
+        addSlideView()
+    }
+    
+    func addSlideView() {
+        vSlide.frame.origin.x = self.view.width
+        self.view.addSubview(vSlide)
+        isShowMenu = false
     }
     
     func configTableView() {
-        tbvCategory.register(UINib(nibName: String(describing: TbvCategoryCell.self), bundle: nil), forCellReuseIdentifier: categoryCellID)
-        tbvCategory.dataSource = self
-        tbvCategory.delegate = self
+        initSlideSource()
+        tbvSlideSource.register(UINib(nibName: String(describing: TbvMenuCell.self), bundle: nil), forCellReuseIdentifier: cellID)
+        tbvSlideSource.dataSource = self
+        tbvSlideSource.delegate = self
+        
     }
-    
+        
     override func configUIViewWillAppear() {
         super.configUIViewWillAppear()
         
@@ -49,88 +66,102 @@ class MainVCtrl: BaseVCtrl {
     // MARK: - Event Listerner
     override func eventListener() {
         super.eventListener()
-        
-        refControl.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
-        tbvCategory.addSubview(refControl)
-        
+        btnMenu.touchUpInside(block: btnMenu_Touched)
     }
     
     // MARK: - Event Handler
+    func btnMenu_Touched(sender: UIButton) {
+        isShowMenu = !isShowMenu
+    }
     
     // MARK: - Func
     override func loadData() {
         super.loadData()
-        let request = GetCategoryRequest(page: 1)
-
-        SEProduct.getListCategory(request, animation: {
-            self.showLoadingView($0)
-            $0 ? self.refControl.beginRefreshing() : self.refControl.endRefreshing()
-        }) { (reponse) in
-            if let lst = reponse?.lstCategory {
-                self.lstCategory = lst
-                self.tbvCategory.reloadData()
-            }
-
-
-        }
         
     }
     
-    @objc func handleRefresh(_ refControl: UIRefreshControl) {
-        let request = GetCategoryRequest(page: 1)
-        
-        SEProduct.getListCategory(request, animation: {
-            $0 ? self.refControl.beginRefreshing() : self.refControl.endRefreshing()
-        }) { (reponse) in
-            if let lst = reponse?.lstCategory {
-                self.lstCategory = lst
-                self.tbvCategory.reloadData()
-            }
-        }
+    func initSlideSource() {
+        var item = MenuData()
+        item.menu = .product
+        lstMenu.append(item)
+
+        item = MenuData()
+        item.menu = .post
+        lstMenu.append(item)
+
     }
-    
-    
 }
 
 extension MainVCtrl: UITableViewDataSource, UITableViewDelegate {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return lstCategory.count
+        return lstMenu.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: categoryCellID) as! TbvCategoryCell
-        let item = lstCategory[indexPath.row]
-        cell.updateCell(item: item)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as! TbvMenuCell
+        let item = lstMenu[indexPath.row]
+        cell.updateCell(item)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let item = lstCategory[indexPath.row]
-        let request = GetProductRequest(page: 1)
-        request.category = item.id?.toString()
+        let item = lstMenu[indexPath.row]
+        navigationController?.popToRootViewController(animated: true)
+        isShowMenu = false
+        
+        switch item.menu {
+        case .post:
+            pushPost()
+            
+        case .product:
+            pushProductCategoru()
+        }
+        
+    }
+    
+    func pushPost() {
+        let post = PostVCtrl()
+        navigationController?.pushViewController(post, animated: true)
 
-        SEProduct.getListProduct(request, animation: {
+    }
+    
+    func pushProductCategoru() {
+        let request = GetCategoryRequest(page: 1)
+        
+        SEProduct.getListCategory(request, animation: {
             self.showLoadingView($0)
+            
         }) { (reponse) in
-            if let lst = reponse?.lstProduct {
-                let product = ProductVCtrl(lstProduct: lst)
-                self.navigationController?.pushViewController(product, animated: true)
+            if let lst = reponse?.lstCategory {
+                let categoryProduct = CategoryVCtrl(lst)
+                self.navigationController?.pushViewController(categoryProduct, animated: true)
             }
         }
     }
+}
 
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
-    }
+class MenuData {
+    var menu: EMenu = .post
     
 }
 
+enum EMenu: Int {
+    case post
+    case product
+    
+    var title: String {
+        switch self {
+        case .post:
+            return "Post"
+            
+        case .product:
+            return "Product"
+            
+        }
+    }
+    
+}
 
 

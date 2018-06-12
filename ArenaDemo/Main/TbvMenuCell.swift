@@ -1,19 +1,16 @@
 //
-//  CategoryCell.swift
-//  App199k
+//  TbvMenuCell.swift
+//  ArenaDemo
 //
-//  Created by Lu Kien Quoc on 6/6/18.
+//  Created by Lu Kien Quoc on 6/12/18.
 //  Copyright © 2018 Newstead Technologies VN. All rights reserved.
 //
 
 import UIKit
-import ArenaDemoAPI
 
-class TbvCategoryCell: UITableViewCell {
+class TbvMenuCell: UITableViewCell {
 
     @IBOutlet weak var lblName: UILabel!
-    @IBOutlet weak var imv: UIImageView!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -25,8 +22,8 @@ class TbvCategoryCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func updateCell(item: CategoryDTO) {
-        lblName.text = item.name
+    func updateCell(_ item: MenuData) {
+        lblName.text = item.menu.title
     }
     
 }
