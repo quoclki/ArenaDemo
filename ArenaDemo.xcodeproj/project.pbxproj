@@ -45,6 +45,8 @@
 		0D4AA9B820CE87F1006A0A2C /* OAuthSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0D4AA9B520CE87F1006A0A2C /* OAuthSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0D4AA9B920CE87F1006A0A2C /* ServiceStack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D4AA9B620CE87F1006A0A2C /* ServiceStack.framework */; };
 		0D4AA9BA20CE87F1006A0A2C /* ServiceStack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0D4AA9B620CE87F1006A0A2C /* ServiceStack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0DA9DDE920D01DE500194121 /* TbvPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA9DDE720D01DE500194121 /* TbvPostCell.swift */; };
+		0DA9DDEA20D01DE500194121 /* TbvPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DA9DDE820D01DE500194121 /* TbvPostCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -100,6 +102,8 @@
 		0D2C57D920CA232B00F78A5B /* ArenaDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ArenaDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D4AA9B520CE87F1006A0A2C /* OAuthSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OAuthSwift.framework; path = ../ArenaDemoAPI/ArenaDemoAPI/Framework/OAuthSwift.framework; sourceTree = "<group>"; };
 		0D4AA9B620CE87F1006A0A2C /* ServiceStack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceStack.framework; path = ../ArenaDemoAPI/ArenaDemoAPI/Framework/ServiceStack.framework; sourceTree = "<group>"; };
+		0DA9DDE720D01DE500194121 /* TbvPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TbvPostCell.swift; sourceTree = "<group>"; };
+		0DA9DDE820D01DE500194121 /* TbvPostCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TbvPostCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +219,8 @@
 			children = (
 				0D1F3CA220D00FF8000EEB95 /* PostVCtrl.swift */,
 				0D1F3CA320D00FF8000EEB95 /* PostVCtrl.xib */,
+				0DA9DDE720D01DE500194121 /* TbvPostCell.swift */,
+				0DA9DDE820D01DE500194121 /* TbvPostCell.xib */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -332,6 +338,7 @@
 				0D1F3C9120D00BC7000EEB95 /* ProductVCtrl.xib in Resources */,
 				0D1F3C9620D00BC7000EEB95 /* Info.plist in Resources */,
 				0D1F3C8320D00BC7000EEB95 /* Assets.xcassets in Resources */,
+				0DA9DDEA20D01DE500194121 /* TbvPostCell.xib in Resources */,
 				0D1F3CA920D01251000EEB95 /* TbvMenuCell.xib in Resources */,
 				0D1F3C9C20D00C25000EEB95 /* MainVCtrl.xib in Resources */,
 				0D1F3C8420D00BC7000EEB95 /* LaunchScreen.storyboard in Resources */,
@@ -357,6 +364,7 @@
 				0D1F3C8620D00BC7000EEB95 /* ImageStore.swift in Sources */,
 				0D1F3C8D20D00BC7000EEB95 /* ProductDetailVCtrl.swift in Sources */,
 				0D1F3C9720D00BC7000EEB95 /* BaseVCtrl.swift in Sources */,
+				0DA9DDE920D01DE500194121 /* TbvPostCell.swift in Sources */,
 				0D1F3C8E20D00BC7000EEB95 /* TbvReviewCell.swift in Sources */,
 				0D1F3C8B20D00BC7000EEB95 /* SlideVCtrl.swift in Sources */,
 			);

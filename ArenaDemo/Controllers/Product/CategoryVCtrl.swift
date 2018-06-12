@@ -76,10 +76,9 @@ class CategoryVCtrl: BaseVCtrl {
         SEProduct.getListCategory(request, animation: {
             $0 ? self.refControl.beginRefreshing() : self.refControl.endRefreshing()
         }) { (reponse) in
-            if let lst = reponse?.lstCategory {
-                self.lstCategory = lst
-                self.tbvCategory.reloadData()
-            }
+            guard let lst = reponse?.lstCategory else { return }
+            self.lstCategory = lst
+            self.tbvCategory.reloadData()
         }
     }
     
@@ -108,10 +107,10 @@ extension CategoryVCtrl: UITableViewDataSource, UITableViewDelegate {
         SEProduct.getListProduct(request, animation: {
             self.showLoadingView($0)
         }) { (reponse) in
-            if let lst = reponse?.lstProduct {
-                let product = ProductVCtrl(lstProduct: lst)
-                self.navigationController?.pushViewController(product, animated: true)
-            }
+            guard let lst = reponse?.lstProduct else { return }
+            let product = ProductVCtrl(lstProduct: lst)
+            self.navigationController?.pushViewController(product, animated: true)
+            
         }
     }
 

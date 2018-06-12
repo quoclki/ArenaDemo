@@ -122,9 +122,17 @@ extension MainVCtrl: UITableViewDataSource, UITableViewDelegate {
     }
     
     func pushPost() {
-        let post = PostVCtrl()
-        navigationController?.pushViewController(post, animated: true)
+        let request = GetPostCategoryRequest(page: 1)
+        
+        SEPost.getListCategory(request, animation: {
+            self.showLoadingView($0)
+        }) { (response) in
+            if let lst = response?.lstPostCategory {
+                let post = PostVCtrl(lst)
+                self.navigationController?.pushViewController(post, animated: true)
 
+            }
+        }
     }
     
     func pushProductCategoru() {
