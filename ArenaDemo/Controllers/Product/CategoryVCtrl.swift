@@ -78,11 +78,12 @@ class CategoryVCtrl: BaseVCtrl {
         }) { (reponse) in
             guard let lst = reponse?.lstCategory else { return }
             self.lstCategory = lst
+            
+            self.lstCategory.insert(self.getAllCategory(), at: 0)
             self.tbvCategory.reloadData()
         }
     }
-    
-    
+        
 }
 
 extension CategoryVCtrl: UITableViewDataSource, UITableViewDelegate {

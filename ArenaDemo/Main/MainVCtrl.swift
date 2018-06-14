@@ -12,6 +12,8 @@ import ArenaDemoAPI
 class MainVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
+    @IBOutlet var btnBack: UIButton!
+    @IBOutlet weak var webView: UIWebView!
     @IBOutlet var btnMenu: UIButton!
     @IBOutlet var vSlide: UIView!
     @IBOutlet weak var tbvSlideSource: UITableView!
@@ -40,8 +42,21 @@ class MainVCtrl: BaseVCtrl {
         super.configUI()
         navigationController?.navigationBar.isTranslucent = false
         addViewToRightBarItem(view: btnMenu)
+        addViewToLeftBarItem(view: btnBack)
         configTableView()
         addSlideView()
+        loadWebView()
+    }
+    
+    func loadWebView() {
+        let urlString = "http://xhome.com.vn"
+        webView.delegate = self
+        if let url = URL(string: urlString) {
+            
+            let request = URLRequest(url: url)
+            webView.loadRequest(request)
+        }
+
     }
     
     func addSlideView() {
@@ -67,11 +82,16 @@ class MainVCtrl: BaseVCtrl {
     override func eventListener() {
         super.eventListener()
         btnMenu.touchUpInside(block: btnMenu_Touched)
+        btnBack.touchUpInside(block: btnBack_Touched)
     }
     
     // MARK: - Event Handler
     func btnMenu_Touched(sender: UIButton) {
         isShowMenu = !isShowMenu
+    }
+    
+    func btnBack_Touched(sender: UIButton) {
+        webView.goBack()
     }
     
     // MARK: - Func
@@ -127,7 +147,11 @@ extension MainVCtrl: UITableViewDataSource, UITableViewDelegate {
         SEPost.getListCategory(request, animation: {
             self.showLoadingView($0)
         }) { (response) in
-            if let lst = response?.lstPostCategory {
+            if var lst = response?.lstPostCategory {
+                let all = PostCategoryDTO()
+                all.name = "All"
+                lst.insert(all, at: 0)
+
                 let post = PostVCtrl(lst)
                 self.navigationController?.pushViewController(post, animated: true)
 
@@ -142,13 +166,39 @@ extension MainVCtrl: UITableViewDataSource, UITableViewDelegate {
             self.showLoadingView($0)
             
         }) { (reponse) in
-            if let lst = reponse?.lstCategory {
+            if var lst = reponse?.lstCategory {
+                lst.insert(self.getAllCategory(), at: 0)
                 let categoryProduct = CategoryVCtrl(lst)
                 self.navigationController?.pushViewController(categoryProduct, animated: true)
             }
         }
     }
 }
+
+extension MainVCtrl: UIWebViewDelegate {
+    
+    public func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        return true
+    }
+    
+    public func webViewDidStartLoad(_ webView: UIWebView) {
+        print(#function)
+    }
+    
+    public func webViewDidFinishLoad(_ webView: UIWebView) {
+        print(#function)
+    }
+    
+    public func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
+        print(#function)
+        print(error)
+//        startLoadingAnimation(isStart: false)
+//        showWarning(message: "Unable to load report. Please check the Internet connection.".translate)
+    }
+    
+    
+}
+
 
 class MenuData {
     var menu: EMenu = .post

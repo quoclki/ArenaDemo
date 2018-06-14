@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import ArenaDemoAPI
 
 class BaseVCtrl: UIViewController {
     
@@ -21,7 +22,7 @@ class BaseVCtrl: UIViewController {
             setupNavigation()
         }
     }
-
+    
     // MARK: - Init
     public init() {
         super.init(nibName: String(describing: type(of: self)), bundle: Bundle(for: type(of: self)))
@@ -59,7 +60,7 @@ class BaseVCtrl: UIViewController {
         }
         
     }
-
+    
     
     // MARK: - Layout UI
     func configUI() {
@@ -88,7 +89,7 @@ class BaseVCtrl: UIViewController {
         let barItem = UIBarButtonItem(customView: view)
         self.navigationItem.rightBarButtonItem = barItem
     }
-
+    
     // MARK: - Event Listerner
     func eventListener() {
         
@@ -142,12 +143,19 @@ class BaseVCtrl: UIViewController {
         self.view.addSubview(viewLoading)
         self.view.bringSubview(toFront: viewLoading)
     }
-
-        func getVCtrlInNavigation<T: UIViewController>(_ type: T.Type) -> T? {
+    
+    /// Get Navigation Child ViewController
+    func getVCtrlInNavigation<T: UIViewController>(_ type: T.Type) -> T? {
         return navigationController?.viewControllers.firstOrDefault{$0 is T} as? T
     }
-
     
+    /// get Category All
+    func getAllCategory() -> CategoryDTO {
+        let all = CategoryDTO()
+        all.name = "All"
+        return all
+    }
+
     
 }
 

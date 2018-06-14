@@ -38,6 +38,7 @@ class PostVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
+        title = "Posts"
         configTableView()
         configScrollViewCategory()
     }
@@ -50,6 +51,7 @@ class PostVCtrl: BaseVCtrl {
     }
 
     func configScrollViewCategory() {
+        vMark.originX = -vMark.width
         for (index, element) in lstPostCategory.enumerated() {
             let btn = UIButton(type: .system)
             btn.frame = CGRect(CGFloat(index) * vMark.width, 0, vMark.width, scvCategory.height)
@@ -80,7 +82,6 @@ class PostVCtrl: BaseVCtrl {
     
     // MARK: - Event Handler
     func btnCategory_Touched(sender: UIButton) {
-        guard let id = sender.accessibilityValue else { return }
         UIView.animate(withDuration: 0.3) {
             self.vMark.originX = sender.originX
     
@@ -94,13 +95,11 @@ class PostVCtrl: BaseVCtrl {
             }
         }
         
-        getPost(id: Int(id))
+        getPost(id: Int(sender.accessibilityValue ?? ""))
         
     }
     
     func getPost(id: Int?) {
-        guard let id = id else { return }
-        
         lstPost.removeAll()
         tbvPost.reloadData()
         
@@ -142,6 +141,9 @@ extension PostVCtrl: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let item = lstPost[indexPath.row]
+        let post = PostDetailVCtrl(item)
+        navigationController?.pushViewController(post, animated: true)
     }
     
 }

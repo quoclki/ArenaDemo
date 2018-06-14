@@ -47,6 +47,8 @@
 		0D4AA9BA20CE87F1006A0A2C /* ServiceStack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0D4AA9B620CE87F1006A0A2C /* ServiceStack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0DA9DDE920D01DE500194121 /* TbvPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA9DDE720D01DE500194121 /* TbvPostCell.swift */; };
 		0DA9DDEA20D01DE500194121 /* TbvPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DA9DDE820D01DE500194121 /* TbvPostCell.xib */; };
+		0DA9DDF120D23E3500194121 /* PostDetailVCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA9DDEF20D23E3500194121 /* PostDetailVCtrl.swift */; };
+		0DA9DDF220D23E3500194121 /* PostDetailVCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DA9DDF020D23E3500194121 /* PostDetailVCtrl.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -104,6 +106,8 @@
 		0D4AA9B620CE87F1006A0A2C /* ServiceStack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceStack.framework; path = ../ArenaDemoAPI/ArenaDemoAPI/Framework/ServiceStack.framework; sourceTree = "<group>"; };
 		0DA9DDE720D01DE500194121 /* TbvPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TbvPostCell.swift; sourceTree = "<group>"; };
 		0DA9DDE820D01DE500194121 /* TbvPostCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TbvPostCell.xib; sourceTree = "<group>"; };
+		0DA9DDEF20D23E3500194121 /* PostDetailVCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailVCtrl.swift; sourceTree = "<group>"; };
+		0DA9DDF020D23E3500194121 /* PostDetailVCtrl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostDetailVCtrl.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,25 +129,17 @@
 		0D1F3C5D20D00BC6000EEB95 /* ArenaDemo */ = {
 			isa = PBXGroup;
 			children = (
-				0D1F3C5F20D00BC6000EEB95 /* Framework */,
-				0D1F3C6020D00BC6000EEB95 /* Assets.xcassets */,
-				0D1F3C6120D00BC6000EEB95 /* LaunchScreen.storyboard */,
-				0D1F3C6320D00BC6000EEB95 /* Main.storyboard */,
-				0D1F3C6520D00BC6000EEB95 /* Ultities */,
 				0D1F3C6820D00BC6000EEB95 /* AppDelegate.swift */,
-				0D1F3C6920D00BC6000EEB95 /* Main */,
+				0D1F3C6020D00BC6000EEB95 /* Assets.xcassets */,
+				0D1F3C7F20D00BC7000EEB95 /* Base */,
 				0D1F3C7B20D00BC7000EEB95 /* Controllers */,
 				0D1F3C7E20D00BC7000EEB95 /* Info.plist */,
-				0D1F3C7F20D00BC7000EEB95 /* Base */,
+				0D1F3C6120D00BC6000EEB95 /* LaunchScreen.storyboard */,
+				0D1F3C6920D00BC6000EEB95 /* Main */,
+				0D1F3C6320D00BC6000EEB95 /* Main.storyboard */,
+				0D1F3C6520D00BC6000EEB95 /* Ultities */,
 			);
 			path = ArenaDemo;
-			sourceTree = "<group>";
-		};
-		0D1F3C5F20D00BC6000EEB95 /* Framework */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Framework;
 			sourceTree = "<group>";
 		};
 		0D1F3C6520D00BC6000EEB95 /* Ultities */ = {
@@ -217,6 +213,7 @@
 		0D1F3C7C20D00BC7000EEB95 /* Post */ = {
 			isa = PBXGroup;
 			children = (
+				0DA9DDEE20D23D4A00194121 /* PostDetail */,
 				0D1F3CA220D00FF8000EEB95 /* PostVCtrl.swift */,
 				0D1F3CA320D00FF8000EEB95 /* PostVCtrl.xib */,
 				0DA9DDE720D01DE500194121 /* TbvPostCell.swift */,
@@ -266,6 +263,15 @@
 				0D2C57D920CA232B00F78A5B /* ArenaDemo.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		0DA9DDEE20D23D4A00194121 /* PostDetail */ = {
+			isa = PBXGroup;
+			children = (
+				0DA9DDEF20D23E3500194121 /* PostDetailVCtrl.swift */,
+				0DA9DDF020D23E3500194121 /* PostDetailVCtrl.xib */,
+			);
+			path = PostDetail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -335,6 +341,7 @@
 				0D1F3C9420D00BC7000EEB95 /* CategoryVCtrl.xib in Resources */,
 				0D1F3C8A20D00BC7000EEB95 /* SlideVCtrl.xib in Resources */,
 				0D1F3C8520D00BC7000EEB95 /* Main.storyboard in Resources */,
+				0DA9DDF220D23E3500194121 /* PostDetailVCtrl.xib in Resources */,
 				0D1F3C9120D00BC7000EEB95 /* ProductVCtrl.xib in Resources */,
 				0D1F3C9620D00BC7000EEB95 /* Info.plist in Resources */,
 				0D1F3C8320D00BC7000EEB95 /* Assets.xcassets in Resources */,
@@ -356,6 +363,7 @@
 				0D1F3C9820D00BC7000EEB95 /* Base.swift in Sources */,
 				0D1F3CA820D01251000EEB95 /* TbvMenuCell.swift in Sources */,
 				0D1F3C9520D00BC7000EEB95 /* TbvCategoryCell.swift in Sources */,
+				0DA9DDF120D23E3500194121 /* PostDetailVCtrl.swift in Sources */,
 				0D1F3C8720D00BC7000EEB95 /* AppDelegate.swift in Sources */,
 				0D1F3C9020D00BC7000EEB95 /* ProductVCtrl.swift in Sources */,
 				0D1F3CA420D00FF8000EEB95 /* PostVCtrl.swift in Sources */,
