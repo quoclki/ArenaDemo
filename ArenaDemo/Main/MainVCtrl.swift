@@ -174,16 +174,20 @@ extension MainVCtrl: UITableViewDataSource, UITableViewDelegate {
         SEPost.getListCategory(request, animation: {
             self.showLoadingView($0)
         }) { (response) in
-            if var lst = response?.lstPostCategory {
-                let all = PostCategoryDTO()
-                all.name = "All"
-                lst.insert(all, at: 0)
-
-                let post = PostVCtrl(lst)
-                self.navigationController?.pushViewController(post, animated: true)
-
+            if !self.checkResponse(response) {
+                return
             }
+            
+            var lst = response.lstPostCategory
+            let all = PostCategoryDTO()
+            all.name = "All"
+            lst.insert(all, at: 0)
+            
+            let post = PostVCtrl(lst)
+            self.navigationController?.pushViewController(post, animated: true)
+            
         }
+        
     }
     
     func pushProductCategoru() {
@@ -192,12 +196,16 @@ extension MainVCtrl: UITableViewDataSource, UITableViewDelegate {
         SEProduct.getListCategory(request, animation: {
             self.showLoadingView($0)
             
-        }) { (reponse) in
-            if var lst = reponse?.lstCategory {
-                lst.insert(self.getAllCategory(), at: 0)
-                let categoryProduct = CategoryVCtrl(lst)
-                self.navigationController?.pushViewController(categoryProduct, animated: true)
+        }) { (response) in
+            if !self.checkResponse(response) {
+                return
             }
+
+            var lst = response.lstCategory
+            lst.insert(self.getAllCategory(), at: 0)
+            let categoryProduct = CategoryVCtrl(lst)
+            self.navigationController?.pushViewController(categoryProduct, animated: true)
+            
         }
     }
     
@@ -208,15 +216,17 @@ extension MainVCtrl: UITableViewDataSource, UITableViewDelegate {
         SECustomer.getList(request, animation: {
             self.showLoadingView($0)
             
-        }) { (reponse) in
-            if let lst = reponse?.lstCustomer {
-                let account = AccountVCtrl(lst)
-                self.navigationController?.pushViewController(account, animated: true)
+        }) { (response) in
+            if !self.checkResponse(response) {
+                return
             }
+            
+            let lst = response.lstCustomer
+            let account = AccountVCtrl(lst)
+            self.navigationController?.pushViewController(account, animated: true)
+            
         }
 
-        
-        
     }
 }
 

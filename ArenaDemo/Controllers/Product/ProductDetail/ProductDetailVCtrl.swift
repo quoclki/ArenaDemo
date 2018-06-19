@@ -110,11 +110,14 @@ class ProductDetailVCtrl: BaseVCtrl {
         SEProduct.getReview(id, animation: {
             self.showLoadingView($0)
         }) { (response) in
-            if let lst = response?.lstReview {
-                self.lstReview = lst
-                self.tbvReview.reloadData()
-                
+            if !self.checkResponse(response) {
+                return
             }
+
+            let lst = response.lstReview
+            self.lstReview = lst
+            self.tbvReview.reloadData()
+            
         }
         
     }

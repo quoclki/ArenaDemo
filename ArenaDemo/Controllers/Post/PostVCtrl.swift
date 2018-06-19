@@ -110,7 +110,11 @@ class PostVCtrl: BaseVCtrl {
             self.showLoadingView($0)
             
         }) { (response) in
-            guard let lst = response?.lstPost else { return }
+            if !self.checkResponse(response) {
+                return
+            }
+
+            let lst = response.lstPost
             self.lstPost = lst
             self.tbvPost.reloadData()
             

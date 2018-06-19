@@ -71,7 +71,11 @@ class PostDetailVCtrl: BaseVCtrl {
             request.special_link = authorLink
             
             SEUser.getListUser(request, completed: { (response) in
-                if let user = response?.lstUser.first {
+                if !self.checkResponse(response) {
+                    return
+                }
+
+                if let user = response.lstUser.first {
                     self.lstAuthor.append(user)
                 }
                 

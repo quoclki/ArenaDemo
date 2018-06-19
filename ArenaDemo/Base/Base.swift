@@ -21,3 +21,14 @@ public extension BaseRequest {
         
     }
 }
+
+extension BaseVCtrl {
+    func checkResponse<T: BaseResponse>(_ response: T) -> Bool {
+        if !response.success {
+            _ = showWarningAlert(message: response.message ?? "")
+        }
+        
+        return response.success
+    }
+    
+}
