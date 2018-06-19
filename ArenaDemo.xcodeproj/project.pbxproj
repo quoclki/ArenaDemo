@@ -49,6 +49,10 @@
 		0DA9DDEA20D01DE500194121 /* TbvPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DA9DDE820D01DE500194121 /* TbvPostCell.xib */; };
 		0DA9DDF120D23E3500194121 /* PostDetailVCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA9DDEF20D23E3500194121 /* PostDetailVCtrl.swift */; };
 		0DA9DDF220D23E3500194121 /* PostDetailVCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DA9DDF020D23E3500194121 /* PostDetailVCtrl.xib */; };
+		0DF574BE20D8E20F00D382DE /* AccountVCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF574BC20D8E20F00D382DE /* AccountVCtrl.swift */; };
+		0DF574BF20D8E20F00D382DE /* AccountVCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DF574BD20D8E20F00D382DE /* AccountVCtrl.xib */; };
+		0DF574C220D8E33400D382DE /* TbvAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF574C020D8E33400D382DE /* TbvAccountCell.swift */; };
+		0DF574C320D8E33400D382DE /* TbvAccountCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DF574C120D8E33400D382DE /* TbvAccountCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -108,6 +112,10 @@
 		0DA9DDE820D01DE500194121 /* TbvPostCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TbvPostCell.xib; sourceTree = "<group>"; };
 		0DA9DDEF20D23E3500194121 /* PostDetailVCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailVCtrl.swift; sourceTree = "<group>"; };
 		0DA9DDF020D23E3500194121 /* PostDetailVCtrl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostDetailVCtrl.xib; sourceTree = "<group>"; };
+		0DF574BC20D8E20F00D382DE /* AccountVCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountVCtrl.swift; sourceTree = "<group>"; };
+		0DF574BD20D8E20F00D382DE /* AccountVCtrl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountVCtrl.xib; sourceTree = "<group>"; };
+		0DF574C020D8E33400D382DE /* TbvAccountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TbvAccountCell.swift; sourceTree = "<group>"; };
+		0DF574C120D8E33400D382DE /* TbvAccountCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TbvAccountCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,6 +212,7 @@
 		0D1F3C7B20D00BC7000EEB95 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				0DF574BB20D8E1FC00D382DE /* Account */,
 				0D1F3C7C20D00BC7000EEB95 /* Post */,
 				0D1F3C7D20D00BC7000EEB95 /* Product */,
 			);
@@ -274,6 +283,17 @@
 			path = PostDetail;
 			sourceTree = "<group>";
 		};
+		0DF574BB20D8E1FC00D382DE /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				0DF574BC20D8E20F00D382DE /* AccountVCtrl.swift */,
+				0DF574BD20D8E20F00D382DE /* AccountVCtrl.xib */,
+				0DF574C020D8E33400D382DE /* TbvAccountCell.swift */,
+				0DF574C120D8E33400D382DE /* TbvAccountCell.xib */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -337,12 +357,14 @@
 				0D1F3C8C20D00BC7000EEB95 /* ProductDetailVCtrl.xib in Resources */,
 				0D1F3C8F20D00BC7000EEB95 /* TbvCategoryCell.xib in Resources */,
 				0D1F3C8920D00BC7000EEB95 /* TbvReviewCell.xib in Resources */,
+				0DF574C320D8E33400D382DE /* TbvAccountCell.xib in Resources */,
 				0D1F3C9320D00BC7000EEB95 /* ClvProductCell.xib in Resources */,
 				0D1F3C9420D00BC7000EEB95 /* CategoryVCtrl.xib in Resources */,
 				0D1F3C8A20D00BC7000EEB95 /* SlideVCtrl.xib in Resources */,
 				0D1F3C8520D00BC7000EEB95 /* Main.storyboard in Resources */,
 				0DA9DDF220D23E3500194121 /* PostDetailVCtrl.xib in Resources */,
 				0D1F3C9120D00BC7000EEB95 /* ProductVCtrl.xib in Resources */,
+				0DF574BF20D8E20F00D382DE /* AccountVCtrl.xib in Resources */,
 				0D1F3C9620D00BC7000EEB95 /* Info.plist in Resources */,
 				0D1F3C8320D00BC7000EEB95 /* Assets.xcassets in Resources */,
 				0DA9DDEA20D01DE500194121 /* TbvPostCell.xib in Resources */,
@@ -365,7 +387,9 @@
 				0D1F3C9520D00BC7000EEB95 /* TbvCategoryCell.swift in Sources */,
 				0DA9DDF120D23E3500194121 /* PostDetailVCtrl.swift in Sources */,
 				0D1F3C8720D00BC7000EEB95 /* AppDelegate.swift in Sources */,
+				0DF574C220D8E33400D382DE /* TbvAccountCell.swift in Sources */,
 				0D1F3C9020D00BC7000EEB95 /* ProductVCtrl.swift in Sources */,
+				0DF574BE20D8E20F00D382DE /* AccountVCtrl.swift in Sources */,
 				0D1F3CA420D00FF8000EEB95 /* PostVCtrl.swift in Sources */,
 				0D1F3C9220D00BC7000EEB95 /* ClvProductCell.swift in Sources */,
 				0D1F3C8820D00BC7000EEB95 /* CategoryVCtrl.swift in Sources */,

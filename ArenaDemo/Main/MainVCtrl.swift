@@ -8,17 +8,20 @@
 
 import UIKit
 import ArenaDemoAPI
+import WebKit
 
 class MainVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
     @IBOutlet var btnBack: UIButton!
-    @IBOutlet weak var webView: UIWebView!
     @IBOutlet var btnMenu: UIButton!
     @IBOutlet var vSlide: UIView!
     @IBOutlet weak var tbvSlideSource: UITableView!
     
     // MARK: - Private properties
+    private var wkWebView: WKWebView!
+    private var progressView: UIProgressView!
+    
     private var cellID: String = "slideCellID"
     private var lstMenu: [MenuData] = []
     
@@ -41,20 +44,38 @@ class MainVCtrl: BaseVCtrl {
     override func configUI() {
         super.configUI()
         navigationController?.navigationBar.isTranslucent = false
+        initWKWebview()
+//        loadWebView()
         addViewToRightBarItem(view: btnMenu)
         addViewToLeftBarItem(view: btnBack)
         configTableView()
         addSlideView()
-        loadWebView()
     }
+    
+    func initWKWebview() {
+        wkWebView = WKWebView(frame: self.view.bounds)
+        wkWebView.navigationDelegate = self
+        self.view.addSubview(wkWebView)
+        
+        progressView = UIProgressView(progressViewStyle: .default)
+        progressView.sizeToFit()
+        wkWebView.addSubview(progressView)
+        wkWebView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
+
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "estimatedProgress" {
+            progressView.progress = Float(wkWebView.estimatedProgress)
+        }
+    }
+
     
     func loadWebView() {
         let urlString = "http://xhome.com.vn"
-        webView.delegate = self
         if let url = URL(string: urlString) {
-            
             let request = URLRequest(url: url)
-            webView.loadRequest(request)
+            wkWebView.load(request)
         }
 
     }
@@ -75,7 +96,8 @@ class MainVCtrl: BaseVCtrl {
         
     override func configUIViewWillAppear() {
         super.configUIViewWillAppear()
-        
+        wkWebView.frame = self.view.bounds
+        progressView.frame.size.width = wkWebView.width
     }
     
     // MARK: - Event Listerner
@@ -91,7 +113,7 @@ class MainVCtrl: BaseVCtrl {
     }
     
     func btnBack_Touched(sender: UIButton) {
-        webView.goBack()
+        wkWebView.goBack()
     }
     
     // MARK: - Func
@@ -107,6 +129,10 @@ class MainVCtrl: BaseVCtrl {
 
         item = MenuData()
         item.menu = .post
+        lstMenu.append(item)
+
+        item = MenuData()
+        item.menu = .account
         lstMenu.append(item)
 
     }
@@ -134,9 +160,10 @@ extension MainVCtrl: UITableViewDataSource, UITableViewDelegate {
         switch item.menu {
         case .post:
             pushPost()
-            
         case .product:
             pushProductCategoru()
+        case .account:
+            pushAccount()
         }
         
     }
@@ -173,32 +200,40 @@ extension MainVCtrl: UITableViewDataSource, UITableViewDelegate {
             }
         }
     }
+    
+    func pushAccount() {
+        let request = GetCustomerRequest(page: 1)
+        request.role = ECustomerRole.all.rawValue
+        
+        SECustomer.getList(request, animation: {
+            self.showLoadingView($0)
+            
+        }) { (reponse) in
+            if let lst = reponse?.lstCustomer {
+                let account = AccountVCtrl(lst)
+                self.navigationController?.pushViewController(account, animated: true)
+            }
+        }
+
+        
+        
+    }
 }
 
-extension MainVCtrl: UIWebViewDelegate {
+extension MainVCtrl: WKNavigationDelegate {
     
-    public func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        return true
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        print(#function)
+        progressView.isHidden = false
     }
     
-    public func webViewDidStartLoad(_ webView: UIWebView) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print(#function)
-    }
-    
-    public func webViewDidFinishLoad(_ webView: UIWebView) {
-        print(#function)
-    }
-    
-    public func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
-        print(#function)
-        print(error)
-//        startLoadingAnimation(isStart: false)
-//        showWarning(message: "Unable to load report. Please check the Internet connection.".translate)
+        progressView.isHidden = true
     }
     
     
 }
-
 
 class MenuData {
     var menu: EMenu = .post
@@ -208,6 +243,7 @@ class MenuData {
 enum EMenu: Int {
     case post
     case product
+    case account
     
     var title: String {
         switch self {
@@ -216,6 +252,9 @@ enum EMenu: Int {
             
         case .product:
             return "Product"
+         
+        case .account:
+            return "Account"
             
         }
     }
