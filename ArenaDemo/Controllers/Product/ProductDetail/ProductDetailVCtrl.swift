@@ -107,7 +107,7 @@ class ProductDetailVCtrl: BaseVCtrl {
     
     func getReviewData() {
         guard let id = self.product.id else { return }
-        SEProduct.getReview(id, animation: {
+        _ = SEProduct.getReview(id, animation: {
             self.showLoadingView($0)
         }) { (response) in
             if !self.checkResponse(response) {

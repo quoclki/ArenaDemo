@@ -171,7 +171,7 @@ extension MainVCtrl: UITableViewDataSource, UITableViewDelegate {
     func pushPost() {
         let request = GetPostCategoryRequest(page: 1)
         
-        SEPost.getListCategory(request, animation: {
+        _ = SEPost.getListCategory(request, animation: {
             self.showLoadingView($0)
         }) { (response) in
             if !self.checkResponse(response) {
@@ -193,7 +193,7 @@ extension MainVCtrl: UITableViewDataSource, UITableViewDelegate {
     func pushProductCategoru() {
         let request = GetCategoryRequest(page: 1)
         
-        SEProduct.getListCategory(request, animation: {
+        _ = SEProduct.getListCategory(request, animation: {
             self.showLoadingView($0)
             
         }) { (response) in
@@ -213,7 +213,7 @@ extension MainVCtrl: UITableViewDataSource, UITableViewDelegate {
         let request = GetCustomerRequest(page: 1)
         request.role = ECustomerRole.all.rawValue
         
-        SECustomer.getList(request, animation: {
+        _ = SECustomer.getList(request, animation: {
             self.showLoadingView($0)
             
         }) { (response) in

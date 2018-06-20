@@ -73,7 +73,7 @@ class CategoryVCtrl: BaseVCtrl {
     @objc func handleRefresh(_ refControl: UIRefreshControl) {
         let request = GetCategoryRequest(page: 1)
         
-        SEProduct.getListCategory(request, animation: {
+        _ = SEProduct.getListCategory(request, animation: {
             $0 ? self.refControl.beginRefreshing() : self.refControl.endRefreshing()
         }) { (response) in
             if !self.checkResponse(response) {
@@ -109,7 +109,7 @@ extension CategoryVCtrl: UITableViewDataSource, UITableViewDelegate {
         let request = GetProductRequest(page: 1)
         request.category = item.id?.toString()
 
-        SEProduct.getListProduct(request, animation: {
+        _ = SEProduct.getListProduct(request, animation: {
             self.showLoadingView($0)
         }) { (response) in
             if !self.checkResponse(response) {

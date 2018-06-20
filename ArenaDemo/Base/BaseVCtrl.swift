@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import ArenaDemoAPI
+import OAuthSwift
 
 class BaseVCtrl: UIViewController {
     
@@ -22,6 +23,7 @@ class BaseVCtrl: UIViewController {
             setupNavigation()
         }
     }
+    var task: OAuthSwiftRequestHandle?
     
     // MARK: - Init
     public init() {
