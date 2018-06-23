@@ -50,6 +50,7 @@ class MainVCtrl: BaseVCtrl {
         addViewToLeftBarItem(view: btnBack)
         configTableView()
         addSlideView()
+        
     }
     
     func initWKWebview() {

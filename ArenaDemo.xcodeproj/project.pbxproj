@@ -49,6 +49,8 @@
 		0DA9DDEA20D01DE500194121 /* TbvPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DA9DDE820D01DE500194121 /* TbvPostCell.xib */; };
 		0DA9DDF120D23E3500194121 /* PostDetailVCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DA9DDEF20D23E3500194121 /* PostDetailVCtrl.swift */; };
 		0DA9DDF220D23E3500194121 /* PostDetailVCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DA9DDF020D23E3500194121 /* PostDetailVCtrl.xib */; };
+		0DE71FD920DCFF590094E292 /* AccountDetailVCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DE71FD720DCFF590094E292 /* AccountDetailVCtrl.swift */; };
+		0DE71FDA20DCFF590094E292 /* AccountDetailVCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DE71FD820DCFF590094E292 /* AccountDetailVCtrl.xib */; };
 		0DF574BE20D8E20F00D382DE /* AccountVCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF574BC20D8E20F00D382DE /* AccountVCtrl.swift */; };
 		0DF574BF20D8E20F00D382DE /* AccountVCtrl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0DF574BD20D8E20F00D382DE /* AccountVCtrl.xib */; };
 		0DF574C220D8E33400D382DE /* TbvAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF574C020D8E33400D382DE /* TbvAccountCell.swift */; };
@@ -112,6 +114,8 @@
 		0DA9DDE820D01DE500194121 /* TbvPostCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TbvPostCell.xib; sourceTree = "<group>"; };
 		0DA9DDEF20D23E3500194121 /* PostDetailVCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailVCtrl.swift; sourceTree = "<group>"; };
 		0DA9DDF020D23E3500194121 /* PostDetailVCtrl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostDetailVCtrl.xib; sourceTree = "<group>"; };
+		0DE71FD720DCFF590094E292 /* AccountDetailVCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailVCtrl.swift; sourceTree = "<group>"; };
+		0DE71FD820DCFF590094E292 /* AccountDetailVCtrl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountDetailVCtrl.xib; sourceTree = "<group>"; };
 		0DF574BC20D8E20F00D382DE /* AccountVCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountVCtrl.swift; sourceTree = "<group>"; };
 		0DF574BD20D8E20F00D382DE /* AccountVCtrl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountVCtrl.xib; sourceTree = "<group>"; };
 		0DF574C020D8E33400D382DE /* TbvAccountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TbvAccountCell.swift; sourceTree = "<group>"; };
@@ -283,9 +287,19 @@
 			path = PostDetail;
 			sourceTree = "<group>";
 		};
+		0DE71FD620DCFF170094E292 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				0DE71FD720DCFF590094E292 /* AccountDetailVCtrl.swift */,
+				0DE71FD820DCFF590094E292 /* AccountDetailVCtrl.xib */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
 		0DF574BB20D8E1FC00D382DE /* Account */ = {
 			isa = PBXGroup;
 			children = (
+				0DE71FD620DCFF170094E292 /* Detail */,
 				0DF574BC20D8E20F00D382DE /* AccountVCtrl.swift */,
 				0DF574BD20D8E20F00D382DE /* AccountVCtrl.xib */,
 				0DF574C020D8E33400D382DE /* TbvAccountCell.swift */,
@@ -357,6 +371,7 @@
 				0D1F3C8C20D00BC7000EEB95 /* ProductDetailVCtrl.xib in Resources */,
 				0D1F3C8F20D00BC7000EEB95 /* TbvCategoryCell.xib in Resources */,
 				0D1F3C8920D00BC7000EEB95 /* TbvReviewCell.xib in Resources */,
+				0DE71FDA20DCFF590094E292 /* AccountDetailVCtrl.xib in Resources */,
 				0DF574C320D8E33400D382DE /* TbvAccountCell.xib in Resources */,
 				0D1F3C9320D00BC7000EEB95 /* ClvProductCell.xib in Resources */,
 				0D1F3C9420D00BC7000EEB95 /* CategoryVCtrl.xib in Resources */,
@@ -394,6 +409,7 @@
 				0D1F3C9220D00BC7000EEB95 /* ClvProductCell.swift in Sources */,
 				0D1F3C8820D00BC7000EEB95 /* CategoryVCtrl.swift in Sources */,
 				0D1F3C8620D00BC7000EEB95 /* ImageStore.swift in Sources */,
+				0DE71FD920DCFF590094E292 /* AccountDetailVCtrl.swift in Sources */,
 				0D1F3C8D20D00BC7000EEB95 /* ProductDetailVCtrl.swift in Sources */,
 				0D1F3C9720D00BC7000EEB95 /* BaseVCtrl.swift in Sources */,
 				0DA9DDE920D01DE500194121 /* TbvPostCell.swift in Sources */,
