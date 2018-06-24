@@ -55,6 +55,7 @@ class AccountDetailVCtrl: BaseVCtrl {
         txtPassword.text = customerDTO.password
         txtFirstName.text = customerDTO.first_name
         txtLastName.text = customerDTO.last_name
+        btnRole.isEnabled = customerDTO.id == nil
         self.role = customerDTO.role ?? ECustomerRole.customer.rawValue
         
     }

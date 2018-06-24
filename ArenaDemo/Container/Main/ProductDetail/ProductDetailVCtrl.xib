@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProductDetailVCtrl" customModule="ArenaDemo" customModuleProvider="target">
             <connections>
+                <outlet property="btnOrder" destination="eOB-JN-jOl" id="2X9-22-5cf"/>
                 <outlet property="btnRight" destination="U7J-en-0bz" id="FbL-fO-2GA"/>
                 <outlet property="lblDescription" destination="Nhu-Pa-tFj" id="rAK-2U-jzS"/>
                 <outlet property="lblNoPhoto" destination="CPa-EL-nuK" id="SzZ-ip-aUC"/>

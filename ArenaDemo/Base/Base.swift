@@ -10,7 +10,7 @@ import Foundation
 import ArenaDemoAPI
 
 class Base {
-    
+    static var container: ContainerVCtrl!
 }
 
 public extension BaseRequest {

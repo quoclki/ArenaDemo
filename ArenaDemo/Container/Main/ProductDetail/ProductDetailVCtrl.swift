@@ -22,6 +22,7 @@ class ProductDetailVCtrl: BaseVCtrl {
     @IBOutlet weak var vBody: UIView!
     @IBOutlet weak var tbvReview: UITableView!
     @IBOutlet var btnRight: UIButton!
+    @IBOutlet weak var btnOrder: UIButton!
     
     // MARK: - Private properties
     fileprivate var lstReview: [ReviewDTO] = []
@@ -92,11 +93,17 @@ class ProductDetailVCtrl: BaseVCtrl {
     override func eventListener() {
         super.eventListener()
         btnRight.touchUpInside(block: btnRight_Touched)
+        btnOrder.touchUpInside(block: btnOrder_Touched)
     }
     
     // MARK: - Event Handler
     func btnRight_Touched(sender: UIButton) {
         isReview = !isReview
+    }
+    
+    func btnOrder_Touched(sender: UIButton) {
+        navigationController?.popViewController(animated: true)
+        Order.shared.orderProduct(dto: self.product)
     }
 
     // MARK: - Func
@@ -306,6 +313,9 @@ extension ProductDetailVCtrl: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     
     
 }
