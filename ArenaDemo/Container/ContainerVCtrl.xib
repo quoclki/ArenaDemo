@@ -36,7 +36,7 @@
                 </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <viewLayoutGuide key="safeArea" id="anc-Mm-tbO"/>
             <point key="canvasLocation" x="30.5" y="196.5"/>
         </view>
         <view contentMode="scaleToFill" id="L2Y-h8-SkG">
@@ -51,7 +51,7 @@
             </subviews>
             <color key="backgroundColor" red="0.87058823529999996" green="0.87058823529999996" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="pcw-ix-VKd"/>
+            <viewLayoutGuide key="safeArea" id="Lz8-jr-NjO"/>
             <point key="canvasLocation" x="501" y="196.5"/>
         </view>
     </objects>

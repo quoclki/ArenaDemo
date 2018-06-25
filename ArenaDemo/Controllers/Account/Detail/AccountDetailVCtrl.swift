@@ -131,6 +131,7 @@ class AccountDetailVCtrl: BaseVCtrl {
     
     func present(_ vctrl: BaseVCtrl) {
         let nav = UINavigationController(rootViewController: vctrl)
+        nav.navigationBar.isTranslucent = false
         self.present(nav, animated: true, completion: nil)
     }
     

@@ -12,7 +12,6 @@ import ArenaDemoAPI
 class OrderVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
-    @IBOutlet var btnBack: UIButton!
     @IBOutlet weak var lblTotal: UILabel!
     @IBOutlet weak var tbvOrder: UITableView!
     @IBOutlet weak var btnConfirm: UIButton!
@@ -35,8 +34,6 @@ class OrderVCtrl: BaseVCtrl {
         super.configUI()
         title = "Order"
         configTableView()
-        addViewToLeftBarItem(view: btnBack)
-        
     }
     
     override func configUIViewWillAppear() {
@@ -47,11 +44,8 @@ class OrderVCtrl: BaseVCtrl {
     // MARK: - Event Listerner
     override func eventListener() {
         super.eventListener()
-        btnBack.touchUpInside(block: btnBack_Touched)
-    }
-    
-    func btnBack_Touched(sender: UIButton) {
-        navigationController?.popViewController(animated: true)
+        btnConfirm.touchUpInside(block: btnConfirm_Touched)
+        btnCancel.touchUpInside(block: btnCancel_Touched)
     }
     
     // MARK: - Event Handler
@@ -59,8 +53,20 @@ class OrderVCtrl: BaseVCtrl {
         let orderDetail = Order.shared.orderDTO
         
         func pushPayment() {
-            let payment = PaymentVCtrl()
-            navigationController?.pushViewController(payment, animated: true)
+            let request = BaseRequest(page: 1)
+            
+            _ = SEPayment.getList(request, animation: {
+                self.showLoadingView($0)
+            }, completed: { (response) in
+                if !self.checkResponse(response) {
+                    return
+                }
+                
+                let payment = PaymentVCtrl(response.lstPayment)
+                self.navigationController?.pushViewController(payment, animated: true)
+                
+            })
+            
         }
         
         if orderDetail.customer_id == nil {
@@ -72,6 +78,9 @@ class OrderVCtrl: BaseVCtrl {
                     orderDetail.billing = dto.billing
                     pushPayment()
                 }
+                let nav = UINavigationController(rootViewController: login)
+                nav.navigationBar.isTranslucent = false
+                self.present(nav, animated: true, completion: nil)
                 
             }, rightBtnTitle: "Continue", rightBtnStyle: .default, rightAction: {
                 pushPayment()
@@ -85,7 +94,7 @@ class OrderVCtrl: BaseVCtrl {
     
     func btnCancel_Touched(sender: UIButton) {
         Order.shared.clearOrder()
-        btnBack.sendActions(for: .touchUpInside)
+        navigationController?.popViewController(animated: true)
     }
     
     // MARK: - Func

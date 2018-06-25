@@ -70,7 +70,7 @@ class PostDetailVCtrl: BaseVCtrl {
             let request = GetUserRequest()
             request.special_link = authorLink
             
-            SEUser.getListUser(request, completed: { (response) in
+            _ = SEUser.getList(request, completed: { (response) in
                 if !self.checkResponse(response) {
                     return
                 }

@@ -50,6 +50,7 @@ class ContainerVCtrl: BaseVCtrl {
         super.configUI()
         let main = MainVCtrl()
         nav = UINavigationController(rootViewController: main)
+        nav.view.frame.size = self.vMain.frame.size
         addChildViewController(nav)
         self.vMain.addSubview(nav.view)
         

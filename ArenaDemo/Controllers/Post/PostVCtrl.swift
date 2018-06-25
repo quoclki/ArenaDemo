@@ -106,7 +106,7 @@ class PostVCtrl: BaseVCtrl {
         let request = GetPostRequest(page: 1)
         request.categories = id
         
-        SEPost.getListPost(request, animation: {
+        _ = SEPost.getListPost(request, animation: {
             self.showLoadingView($0)
             
         }) { (response) in

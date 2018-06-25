@@ -30,12 +30,13 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <viewLayoutGuide key="safeArea" id="Ycf-ss-4pE"/>
             <point key="canvasLocation" x="-198" y="35"/>
         </view>
         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="v2i-zT-BzK">
             <rect key="frame" x="0.0" y="0.0" width="60" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+            <viewLayoutGuide key="safeArea" id="aKS-xd-qoQ"/>
             <state key="normal" title="Add"/>
             <point key="canvasLocation" x="198" y="-5"/>
         </button>

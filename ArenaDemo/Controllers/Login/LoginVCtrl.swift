@@ -29,6 +29,7 @@ class LoginVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
+        title = "Login"
         addViewToLeftBarItem(view: btnCancel)
     }
     

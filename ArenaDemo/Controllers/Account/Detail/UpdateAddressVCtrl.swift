@@ -16,6 +16,9 @@ class UpdateAddressVCtrl: BaseVCtrl {
     @IBOutlet weak var txtLastName: UITextField!
     @IBOutlet weak var txtAddress: UITextField!
     @IBOutlet weak var txtCity: UITextField!
+    @IBOutlet weak var txtCountry: UITextField!
+    
+    @IBOutlet weak var vBilling: UIView!
     @IBOutlet weak var txtPhone: UITextField!
     @IBOutlet weak var txtEmail: UITextField!
     @IBOutlet var btnCancel: UIButton!
@@ -67,6 +70,7 @@ class UpdateAddressVCtrl: BaseVCtrl {
         addressDTO.last_name = txtLastName.text ?? ""
         addressDTO.address_1 = txtAddress.text ?? ""
         addressDTO.city = txtCity.text ?? ""
+        addressDTO.country = txtCountry.text ?? ""
         addressDTO.phone = txtPhone.text ?? ""
         addressDTO.email = txtEmail.text ?? ""
         addressDTO.company = "ns"
@@ -92,8 +96,10 @@ class UpdateAddressVCtrl: BaseVCtrl {
         txtLastName.text = addressDTO.last_name
         txtAddress.text = addressDTO.address_1
         txtCity.text = addressDTO.city
+        txtCountry.text = addressDTO.country
         txtPhone.text = addressDTO.phone
         txtEmail.text = addressDTO.email
+        vBilling.isHidden = !self.isBilling
         
     }
     
