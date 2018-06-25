@@ -11,6 +11,7 @@ import ArenaDemoAPI
 
 class Base {
     static var container: ContainerVCtrl!
+    static var lstPayment: [PaymentMethodDTO] = []
 }
 
 public extension BaseRequest {

@@ -36,8 +36,8 @@ class TbvOrderCell: UITableViewCell {
         self.item = item
         ImageStore.shared.setImg(toImageView: imv, imgURL: item.imageURL)
         lblName.text = item.name
-        lblQuantity.text = item.quantity?.toString()
-        lblPrice.text = item.subtotal?.toString()
+        lblQuantity.text = item.quantity.toString()
+        lblPrice.text = item.total.toString()
         
         btnMinus.touchUpInside(block: btnMinus_Touched)
         btnPlus.touchUpInside(block: btnPlus_Touched)
@@ -45,16 +45,17 @@ class TbvOrderCell: UITableViewCell {
     }
  
     func btnMinus_Touched(sender: UIButton) {
-        guard let quantity = item.quantity, quantity > 1 else { return }
-        item.quantity = quantity - 1
+        if item.quantity <= 1 {
+            return
+        }
+        item.quantity -= 1
         item.calculateSubTotal()
         updateTotal?()
         updateCell(item)
     }
     
     func btnPlus_Touched(sender: UIButton) {
-        guard let quantity = item.quantity else { return }
-        item.quantity = quantity + 1
+        item.quantity += 1
         item.calculateSubTotal()
         updateTotal?()
         updateCell(item)

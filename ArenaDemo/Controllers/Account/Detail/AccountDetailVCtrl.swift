@@ -126,6 +126,28 @@ class AccountDetailVCtrl: BaseVCtrl {
     }
     
     func btnHistory_Touched(sender: UIButton) {
+        guard let id = customerDTO.id else { return }
+        
+        let request = GetOrderRequest(page: 1)
+        request.customer = id
+        
+        _ = SEOrder.getList(request, animation: {
+            self.showLoadingView($0)
+        }, completed: { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            
+            if response.lstOrder.isEmpty {
+                _ = self.showWarningAlert(message: "Not have any order")
+                return
+            }
+            
+            let order = AccountOrderHistoryVCtrl(response.lstOrder)
+            self.navigationController?.pushViewController(order, animated: true)
+            
+        })
+        
         
     }
     

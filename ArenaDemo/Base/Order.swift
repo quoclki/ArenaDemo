@@ -14,21 +14,21 @@ class Order {
     
     var orderDTO: OrderDTO = OrderDTO()
     
-    var subTotal: Double {
+    var total: Double {
         return orderDTO.line_items.reduce(0, { (value, dto) -> Double in
-            return value + (dto.subtotal?.toDouble() ?? 0)
+            return value + (dto.total.toDouble() )
         })
     }
     
     var totalItem: Int {
         return orderDTO.line_items.reduce(0, { (value, dto) -> Int in
-            return value + (dto.quantity ?? 0)
+            return value + (dto.quantity )
         })
     }
     
     func orderProduct(dto: ProductDTO) {
         if let item = orderDTO.line_items.first(where: { $0.product_id == dto.id }) {
-            item.quantity = (item.quantity ?? 0) + 1
+            item.quantity = (item.quantity ) + 1
             item.calculateSubTotal()
             return
         }
@@ -53,7 +53,7 @@ class Order {
 
 extension OrderLineItemDTO {
     func calculateSubTotal() {
-        self.subtotal = (Double(self.quantity ?? 0) * (self.price?.toDouble() ?? 0)).toString()
+        self.total = (Double(self.quantity) * (self.price?.toDouble() ?? 0)).toString()
 
     }
 }

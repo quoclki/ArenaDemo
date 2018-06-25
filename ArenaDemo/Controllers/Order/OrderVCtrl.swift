@@ -53,20 +53,8 @@ class OrderVCtrl: BaseVCtrl {
         let orderDetail = Order.shared.orderDTO
         
         func pushPayment() {
-            let request = BaseRequest(page: 1)
-            
-            _ = SEPayment.getList(request, animation: {
-                self.showLoadingView($0)
-            }, completed: { (response) in
-                if !self.checkResponse(response) {
-                    return
-                }
-                
-                let payment = PaymentVCtrl(response.lstPayment)
-                self.navigationController?.pushViewController(payment, animated: true)
-                
-            })
-            
+            let summary = SummaryVCtrl(Order.shared.orderDTO)
+            self.navigationController?.pushViewController(summary, animated: true)
         }
         
         if orderDetail.customer_id == nil {
@@ -94,7 +82,7 @@ class OrderVCtrl: BaseVCtrl {
     
     func btnCancel_Touched(sender: UIButton) {
         Order.shared.clearOrder()
-        navigationController?.popViewController(animated: true)
+        navigationController?.popToRootViewController(animated: true)
     }
     
     // MARK: - Func
@@ -104,7 +92,7 @@ class OrderVCtrl: BaseVCtrl {
     }
     
     func updateTotal() {
-        lblTotal.text = Order.shared.subTotal.toString()
+        lblTotal.text = Order.shared.total.toString()
     }
 }
 
@@ -130,8 +118,8 @@ extension OrderVCtrl: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let item = lstItem[indexPath.row]
-        guard let quantity = item.quantity else { return }
-        item.quantity = quantity + 1
+        item.quantity += 1
+        item.calculateSubTotal()
         tbvOrder.reloadRows(at: [indexPath], with: .automatic)
         updateTotal()
 

@@ -9,7 +9,7 @@
 import UIKit
 import ArenaDemoAPI
 
-class TbvPaymentOrderInfoCell: UITableViewCell {
+class TbvSummaryOrderInfoCell: UITableViewCell {
 
     @IBOutlet weak var lblName: UILabel!
     @IBOutlet weak var lblValue: UILabel!
@@ -28,12 +28,12 @@ class TbvPaymentOrderInfoCell: UITableViewCell {
     
     func updateCell(_ item: OrderLineItemDTO) {
         lblName.text = "\( item.name ?? "" ) x \( item.quantity.toString() )"
-        lblValue.text = item.subtotal
+        lblValue.text = item.total
     }
     
     func updateCellHeader(name: String, value: String) {
         lblName.text = name.uppercased()
-        lblValue.text = name.uppercased()
+        lblValue.text = value.uppercased()
         
     }
     

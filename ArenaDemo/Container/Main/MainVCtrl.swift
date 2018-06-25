@@ -148,7 +148,7 @@ class MainVCtrl: BaseVCtrl {
     // MARK: - Func
     override func loadData() {
         super.loadData()
-        
+        loadPaymentMethod()
     }
     
     func didChooseCategory(dto: CategoryDTO) {
@@ -173,6 +173,15 @@ class MainVCtrl: BaseVCtrl {
     func updateCart() {
         let totalItem = Order.shared.totalItem
         btnCart.setTitle(totalItem.toString(), for: .normal)
+    }
+    
+    func loadPaymentMethod() {
+        let request = BaseRequest(page: 1)
+        
+        _ = SEPayment.getList(request, completed: { (response) in
+            Base.lstPayment = response.lstPayment
+        })
+
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
