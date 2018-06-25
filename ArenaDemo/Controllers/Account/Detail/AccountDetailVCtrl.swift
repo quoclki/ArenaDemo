@@ -21,6 +21,10 @@ class AccountDetailVCtrl: BaseVCtrl {
     @IBOutlet weak var btnUpdate: UIButton!
     @IBOutlet weak var btnRole: UIButton!
     
+    @IBOutlet weak var btnBilling: UIButton!
+    @IBOutlet weak var btnShipping: UIButton!
+    @IBOutlet weak var btnHistory: UIButton!
+    
     // MARK: - Private properties
     private var customerDTO: CustomerDTO = CustomerDTO()
     private var lstRole: [DropDownItem] = []
@@ -51,11 +55,12 @@ class AccountDetailVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
+        title = "User Info"
         txtEmail.text = customerDTO.email
         txtPassword.text = customerDTO.password
         txtFirstName.text = customerDTO.first_name
         txtLastName.text = customerDTO.last_name
-        btnRole.isEnabled = customerDTO.id == nil
+        btnRole.isUserInteractionEnabled = customerDTO.id == nil
         self.role = customerDTO.role ?? ECustomerRole.customer.rawValue
         
     }
@@ -72,6 +77,9 @@ class AccountDetailVCtrl: BaseVCtrl {
         btnImg.touchUpInside(block: btnImg_Touched)
         btnUpdate.touchUpInside(block: btnUpdate_Touched)
         btnRole.touchUpInside(block: btnRole_Touched)
+        btnBilling.touchUpInside(block: btnBilling_Touched)
+        btnShipping.touchUpInside(block: btnShipping_Touched)
+        btnHistory.touchUpInside(block: btnHistory_Touched)
     }
     
     // MARK: - Event Handler
@@ -85,7 +93,7 @@ class AccountDetailVCtrl: BaseVCtrl {
     }
     
     func btnRole_Touched(sender: UIButton) {
-        let roleMenu = UIAlertController(title: "", message: "Choose Role", preferredStyle: .actionSheet)
+        let roleMenu = UIAlertController(title: "Choose Role", message: nil, preferredStyle: .actionSheet)
         [ECustomerRole.administrator, .author, .contributor, .customer, .editor, .shop_manager, .subscriber].forEach { (role) in
             let action = UIAlertAction(title: role.name, style: .default) { (action) in
                 self.role = role.rawValue
@@ -106,6 +114,26 @@ class AccountDetailVCtrl: BaseVCtrl {
         
     }
     
+    func btnBilling_Touched(sender: UIButton) {
+        let update = UpdateAddressVCtrl(customerDTO)
+        present(update)
+    }
+    
+    func btnShipping_Touched(sender: UIButton) {
+        let update = UpdateAddressVCtrl(customerDTO, isBilling: false)
+        present(update)
+
+    }
+    
+    func btnHistory_Touched(sender: UIButton) {
+        
+    }
+    
+    func present(_ vctrl: BaseVCtrl) {
+        let nav = UINavigationController(rootViewController: vctrl)
+        self.present(nav, animated: true, completion: nil)
+    }
+    
     // MARK: - Func
     override func loadData() {
         super.loadData()
@@ -118,8 +146,6 @@ class AccountDetailVCtrl: BaseVCtrl {
         customerDTO.email = txtEmail.text
         customerDTO.password = txtPassword.text
         customerDTO.role = role
-        customerDTO.billing = nil
-        customerDTO.shipping = nil
         
         task = SECustomer.createOrUpdate(customerDTO, animation: {
             self.showLoadingView($0)

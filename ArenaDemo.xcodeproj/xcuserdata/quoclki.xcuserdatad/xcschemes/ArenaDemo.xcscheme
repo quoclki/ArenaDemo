@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0D2C57C420CA230C00F78A5B"
-               BuildableName = "ArenaDemoAPI.framework"
-               BlueprintName = "ArenaDemoAPI"
-               ReferencedContainer = "container:../ArenaDemoAPI/ArenaDemoAPI.xcodeproj">
+               BlueprintIdentifier = "F43502791A6791B200038A29"
+               BuildableName = "OAuthSwift.framework"
+               BlueprintName = "OAuthSwift"
+               ReferencedContainer = "container:../../Clone/OAuthSwift/OAuthSwift.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -32,6 +32,20 @@
                BuildableName = "CustomControl.framework"
                BlueprintName = "CustomControl"
                ReferencedContainer = "container:../../../Work/Swift 4/Lib/CustomControl/CustomControl.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "0D2C57C420CA230C00F78A5B"
+               BuildableName = "ArenaDemoAPI.framework"
+               BlueprintName = "ArenaDemoAPI"
+               ReferencedContainer = "container:../ArenaDemoAPI/ArenaDemoAPI.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry

@@ -22,7 +22,6 @@ class MainVCtrl: BaseVCtrl {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var clvProduct: UICollectionView!
     
-    
     // MARK: - Private properties
 //    private var wkWebView: WKWebView!
 //    private var progressView: UIProgressView!
@@ -45,15 +44,21 @@ class MainVCtrl: BaseVCtrl {
     // MARK: - Init
     
     // MARK: - UIViewController func
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        updateCart()
+    }
     
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
+        title = "Home"
         navigationController?.navigationBar.isTranslucent = false
         addViewToRightBarItem(view: vActionRight)
         initCategory()
         searchBar.delegate = self
         configTableView()
+        
     }
     
     func getTestOrder() {
@@ -109,11 +114,17 @@ class MainVCtrl: BaseVCtrl {
     }
     
     func btnCart_Touched(sender: UIButton) {
+        if Order.shared.orderDTO.line_items.isEmpty {
+            _ = showWarningAlert(message: "Please choose prudct to order")
+        }
+        
+        let order = OrderVCtrl()
+        navigationController?.pushViewController(order, animated: true)
         
     }
     
     func btnCategory_Touched(sender: UIButton) {
-        let roleMenu = UIAlertController(title: "", message: "Choose Category", preferredStyle: .actionSheet)
+        let roleMenu = UIAlertController(title: "Choose Category", message: nil, preferredStyle: .actionSheet)
         lstCategory.forEach { (category) in
             let action = UIAlertAction(title: category.name, style: .default) { (action) in
                 self.didChooseCategory(dto: category)
@@ -159,6 +170,11 @@ class MainVCtrl: BaseVCtrl {
 
     }
     
+    func updateCart() {
+        let totalItem = Order.shared.totalItem
+        btnCart.setTitle(totalItem.toString(), for: .normal)
+    }
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
@@ -196,6 +212,7 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICol
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = lstProductDisplay[indexPath.row]
         Order.shared.orderProduct(dto: item)
+        updateCart()
     }
     
     func productViewInfo(indexPath: IndexPath) {
