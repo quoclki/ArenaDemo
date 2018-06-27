@@ -92,13 +92,13 @@ class UpdateAddressVCtrl: BaseVCtrl {
     override func loadData() {
         super.loadData()
         let addressDTO = isBilling ? customerDTO.billing : customerDTO.shipping
-        txtFirstName.text = addressDTO.first_name
-        txtLastName.text = addressDTO.last_name
-        txtAddress.text = addressDTO.address_1
-        txtCity.text = addressDTO.city
-        txtCountry.text = addressDTO.country
-        txtPhone.text = addressDTO.phone
-        txtEmail.text = addressDTO.email
+        txtFirstName.text = addressDTO?.first_name
+        txtLastName.text = addressDTO?.last_name
+        txtAddress.text = addressDTO?.address_1
+        txtCity.text = addressDTO?.city
+        txtCountry.text = addressDTO?.country
+        txtPhone.text = addressDTO?.phone
+        txtEmail.text = addressDTO?.email
         vBilling.isHidden = !self.isBilling
         
     }
