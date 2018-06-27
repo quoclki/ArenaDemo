@@ -73,7 +73,6 @@ class UpdateAddressVCtrl: BaseVCtrl {
         addressDTO.country = txtCountry.text ?? ""
         addressDTO.phone = txtPhone.text ?? ""
         addressDTO.email = txtEmail.text ?? ""
-        addressDTO.company = "ns"
         
         if isBilling {
             customerDTO.billing = addressDTO
