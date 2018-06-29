@@ -34,6 +34,8 @@ class AccountDetailVCtrl: BaseVCtrl {
         }
     }
     
+    private var _imgPicker: CustomImagePicker!
+    
     // MARK: - Properties
     var completed: ((CustomerDTO) -> Void)? = nil
     
@@ -64,7 +66,6 @@ class AccountDetailVCtrl: BaseVCtrl {
         self.role = customerDTO.role ?? ECustomerRole.customer.rawValue
         
     }
-
     
     override func configUIViewWillAppear() {
         super.configUIViewWillAppear()
@@ -84,11 +85,23 @@ class AccountDetailVCtrl: BaseVCtrl {
     
     // MARK: - Event Handler
     func btnImg_Touched(sender: UIButton) {
-        
+        _imgPicker = presentImagePicker()
+        _imgPicker?.delegate = self
+
     }
     
     func btnUpdate_Touched(sender: UIButton) {
-        editCustomer()
+        let request = MediaDTO()
+        request.base64 = btnImg.currentImage?.toBase64String()
+        
+        _ = SEMedia.createOrUpdate(request, completed: { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            
+        })
+        
+//        editCustomer()
         
     }
     
@@ -189,5 +202,11 @@ class AccountDetailVCtrl: BaseVCtrl {
         view.endEditing(true)
     }
 
-    
+}
+
+extension AccountDetailVCtrl: CustomImagePickerDelegate {
+    func imagePicker(imagePicker: CustomImagePicker, pickedImage: UIImage) {
+        imagePicker.imagePickerController.dismiss(animated: true, completion: nil)
+        self.btnImg.setImage(pickedImage, for: .normal)
+    }
 }

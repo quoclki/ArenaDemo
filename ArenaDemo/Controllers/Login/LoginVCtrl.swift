@@ -51,32 +51,47 @@ class LoginVCtrl: BaseVCtrl {
     }
     
     func btnLogin_Touched(sender: UIButton) {
-        let request = GetCustomerRequest(page: 1)
-        request.email = txtEmail.text
+        let request = GetAuthRequest()
+        request.username = txtEmail.text
+        request.password = txtPassword.text
     
+        _ = SEAuth.authentication(request, animation: {
+            self.showLoadingView($0)
+        }, completed: { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            
+            guard let email = response.authDTO?.user?.email else { return }
+            self.getCustomerDTO(email)
+        })
+
+    }
+    
+    // MARK: - Func
+    override func loadData() {
+        super.loadData()
+        
+    }
+    
+    func getCustomerDTO(_ email: String) {
+        let request = GetCustomerRequest(page: 1)
+        request.email = email
+        request.role = ECustomerRole.all.rawValue
+        
         _ = SECustomer.getList(request, animation: {
             self.showLoadingView($0)
         }, completed: { (response) in
             if !self.checkResponse(response) {
                 return
             }
-
-            guard let dto = response.lstCustomer.first else {
-                _ = self.showWarningAlert(message: "Unable to find customer!")
-                return
-            }
             
+            guard let cusDTO = response.lstCustomer.first else { return }
             self.dismiss(animated: true, completion: {
-                self.completed?(dto)
+                self.completed?(cusDTO)
             })
+            
         })
-        
-        
-    }
-    
-    // MARK: - Func
-    override func loadData() {
-        super.loadData()
         
     }
 }

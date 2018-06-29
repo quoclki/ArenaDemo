@@ -86,6 +86,16 @@ class ContainerVCtrl: BaseVCtrl {
     // MARK: - Func
     override func loadData() {
         super.loadData()
+//        getMedia()
+    }
+
+    func getMedia() {
+        let request = GetMediaRequest(page: 1)
+        
+        _ = SEMedia.getList(request, completed: { (response) in
+            
+            
+        })
         
     }
 }
