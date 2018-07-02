@@ -3,7 +3,7 @@
 //  ArenaDemo
 //
 //  Created by Lu Kien Quoc on 6/3/18.
-//  Copyright © 2018 Newstead Technologies VN. All rights reserved.
+//  Copyright © 2018 Arena Design VN. All rights reserved.
 //
 
 import Foundation
@@ -24,6 +24,7 @@ class BaseVCtrl: UIViewController {
         }
     }
     var task: OAuthSwiftRequestHandle?
+    var vBar: UIView!
     
     // MARK: - Init
     public init() {
@@ -72,6 +73,20 @@ class BaseVCtrl: UIViewController {
         
     }
     
+    func createNavigationBar(title: String) {
+        let v = UIView()
+        v.backgroundColor = Base.baseColor
+        v.frame = CGRect(0, 0, UIScreen.main.bounds.width, 50)
+        
+        let label = UILabel()
+        label.text = title
+        label.sizeToFit()
+        label.center = v.center
+        v.addSubview(label)
+        
+        vBar = v
+        
+    }
     
     /// add a custom view to left item on navigation bar
     public func addViewToLeftBarItem(view: UIView, isTranslate: Bool = true) {

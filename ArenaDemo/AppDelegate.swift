@@ -3,7 +3,7 @@
 //  ArenaDemo
 //
 //  Created by Lu Kien Quoc on 6/8/18.
-//  Copyright © 2018 Newstead Technologies VN. All rights reserved.
+//  Copyright © 2018 Arena Design VN. All rights reserved.
 //
 
 import UIKit
@@ -18,11 +18,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         window = UIWindow(frame: UIScreen.main.bounds)
         Base.container = ContainerVCtrl()
-        window?.rootViewController = Base.container
+        window?.rootViewController = Base.container        
         window?.makeKeyAndVisible()
         
         return true
     }
+
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
