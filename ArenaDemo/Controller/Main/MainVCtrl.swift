@@ -13,6 +13,7 @@ class MainVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
     @IBOutlet var searchBar: UISearchBar!
+    @IBOutlet weak var vSafe: UIView!
     @IBOutlet weak var clvMain: UICollectionView!
     
     // MARK: - Private properties
@@ -27,11 +28,11 @@ class MainVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(vAdd: searchBar)
+        createNavigationBar(searchBar: searchBar)
         configSearchBar(searchBar)
         searchBar.delegate = self
         initCollectionView()
-        
+        vSetSafeArea = vSafe
     }
     
     override func configUIViewWillAppear() {
@@ -71,7 +72,7 @@ class MainVCtrl: BaseVCtrl {
         
         _ = SEProduct.getListProduct(request, completed: { (response) in
             guard let group = self.lstItem.first(where: { $0.type == .topSaller }) else { return }
-            group.lstProduct = response.lstProduct
+            group.category.lstProduct = response.lstProduct
             self.clvMain.reloadData()
         })
     }
@@ -97,10 +98,10 @@ class MainVCtrl: BaseVCtrl {
         
         let group = MainDataGroup()
         group.type = .category
-        group.name = dto.name
+        group.category = dto
         
         _ = SEProduct.getListProduct(request, completed: { (response) in
-            group.lstProduct = response.lstProduct
+            group.category.lstProduct = response.lstProduct
             self.lstItem.append(group)
             self.clvMain.reloadData()
         })
@@ -127,15 +128,18 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func initData() {
+        let category = CategoryDTO()
+        category.isTopSaller = true
+        category.name = "Sản phẩm bán chạy"
         let group = MainDataGroup()
         group.type = .topSaller
-        group.name = "Sản phẩm bán chạy"
+        group.category = category
         lstItem.append(group)
     }
     
     func configCollectionView() {
         clvMain.backgroundColor = backgroundColor
-        clvMain.register(UINib(nibName: String(describing: ClvMainCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
+        clvMain.register(UINib(nibName: String(describing: ClvProductCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
         clvMain.register(UINib(nibName: String(describing: ClvMainHeaderCell.self), bundle: Bundle(for: type(of: self))), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerCellID)
         clvMain.dataSource = self
         clvMain.delegate = self
@@ -157,7 +161,7 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let count = lstItem[section].lstProduct.count
+        let count = lstItem[section].category.lstProduct.count
         return count % 2 == 0 ? count : count - 1
     }
     
@@ -175,8 +179,8 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let item = lstItem[indexPath.section].lstProduct[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ClvMainCell
+        let item = lstItem[indexPath.section].category.lstProduct[indexPath.row]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ClvProductCell
         cell.updateCell(item)
         return cell
     }
@@ -199,8 +203,7 @@ enum EMain: Int {
 
 class MainDataGroup {
     var type: EMain = .topSaller
-    var name: String?
-    var lstProduct: [ProductDTO] = []
+    var category: CategoryDTO = CategoryDTO()
     
 }
 

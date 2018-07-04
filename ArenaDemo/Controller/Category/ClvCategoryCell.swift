@@ -26,6 +26,7 @@ class ClvCategoryCell: UICollectionViewCell {
 
     func updateCell(_ item: CategoryDTO) {
         ImageStore.shared.setImg(toImageView: imv, imgURL: item.image?.src)
+        imv.contentMode = .scaleAspectFit
         lblName.text = item.name?.uppercased()
         self.cornerRadius = 5
         dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: self.cornerRadius)

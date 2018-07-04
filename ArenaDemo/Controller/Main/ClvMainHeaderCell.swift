@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ArenaDemoAPI
 
 class ClvMainHeaderCell: UICollectionViewCell {
 
@@ -14,15 +15,31 @@ class ClvMainHeaderCell: UICollectionViewCell {
     @IBOutlet weak var lblName: UILabel!
     @IBOutlet weak var btnViewMore: UIButton!
     
+    private var item: MainDataGroup!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
 
     func updateCell(_ item: MainDataGroup) {
+        self.item = item
         vLeft.backgroundColor = Base.baseColor
         lblName.textColor = vLeft.backgroundColor
-        lblName.text = item.name?.uppercased()
+        lblName.text = item.category.name?.uppercased()
+    
+        btnViewMore.touchUpInside(block: btnViewMore_Touched)
+    }
+    
+    func btnViewMore_Touched(sender: UIButton) {
+        guard let parentVCtrl = self.parentViewController else {
+            return
+        }
+    
+        let detail = CategoryDetailVCtrl(item.category)
+        parentVCtrl.navigationController?.pushViewController(detail, animated: true)
+
+        
     }
     
 }

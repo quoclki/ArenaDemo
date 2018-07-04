@@ -18,13 +18,9 @@ class BaseVCtrl: UIViewController {
     // MARK: - Private properties
     
     // MARK: - Properties
-    var isCreateBack = true {
-        didSet {
-            setupNavigation()
-        }
-    }
     var task: OAuthSwiftRequestHandle?
     var vBar: UIView!
+    var vSetSafeArea: UIView!
     
     // MARK: - Init
     public init() {
@@ -43,27 +39,38 @@ class BaseVCtrl: UIViewController {
         eventListener()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        configUIViewWillAppear()
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        configSafeArea()
     }
     
-    
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.navigationController?.navigationBar.isUserInteractionEnabled = true
-        setupNavigation()
-    }
-    
-    func setupNavigation() {
-        let interactive = navigationController?.interactivePopGestureRecognizer
-        interactive?.delegate = nil
-        if let vctrl = navigationController?.topViewController as? BaseVCtrl {
-            interactive?.isEnabled = vctrl.isCreateBack
+    // Config View for Safe Area With All ViewController
+    func configSafeArea() {
+        if #available(iOS 11.0, *) {
+            guard let vSetSafeArea = vSetSafeArea else {
+                return
+            }
+            guard let vBar = vBar else {
+                return
+            }
+            
+            // For Container
+            if let _ = vSetSafeArea.parentViewController?.parent as? ContainerVCtrl {
+                vSetSafeArea.originY = vBar.height
+                vSetSafeArea.height = view.height - vSetSafeArea.originY
+                return
+            }
+            let bottomPadding = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
+            vSetSafeArea.originY = vBar.height
+            vSetSafeArea.height = view.height - vSetSafeArea.originY - bottomPadding
         }
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configUIViewWillAppear()
+    }
     
     // MARK: - Layout UI
     func configUI() {
@@ -73,23 +80,26 @@ class BaseVCtrl: UIViewController {
         
     }
     
-    func createNavigationBar(title: String? = nil, vAdd: UIView? = nil) {
+    func createNavigationBar(title: String? = nil, searchBar: UISearchBar? = nil) {
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
         let v = UIView()
         v.backgroundColor = Base.baseColor
-        v.frame = CGRect(0, 0, UIScreen.main.bounds.width, 50)
+        v.frame = CGRect(0, 0, UIScreen.main.bounds.width, statusBarHeight + 50)
         
         if let title = title, !title.isEmpty {
             let label = UILabel()
             label.text = title
+            label.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.light)
             label.sizeToFit()
-            label.center = v.center
+            label.center = CGPoint(v.center.x, statusBarHeight + 25)
             label.textColor = .white
             v.addSubview(label)
         }
         
-        if let vAdd = vAdd {
-            vAdd.center = v.center
-            v.addSubview(vAdd)
+        if let searchBar = searchBar {
+            searchBar.width = v.width * 0.95
+            searchBar.center = CGPoint(v.center.x, statusBarHeight + 25)
+            v.addSubview(searchBar)
         }
         
         vBar = v
@@ -142,19 +152,10 @@ class BaseVCtrl: UIViewController {
     }
     
     /// show loading
-    func showLoadingView(_ isShow: Bool = true, frameLoading: CGRect = CGRect.zero, loadingBgColor color: UIColor = UIColor(hexString: "000000", a: 0.1), valueOfLoadingView value: String = "viewForLoading", lockLeftBarItem: Bool = true) {
-        //lock navigation
-        navigationController?.topViewController?.navigationItem.rightBarButtonItem?.customView?.isUserInteractionEnabled = !isShow
-        if lockLeftBarItem {
-            navigationController?.navigationBar.isUserInteractionEnabled = !isShow
-            navigationController?.topViewController?.navigationItem.leftBarButtonItem?.customView?.isUserInteractionEnabled = !isShow
-            
-        }
+    func showLoadingView(_ isShow: Bool = true, frameLoading: CGRect = CGRect.zero, loadingBgColor color: UIColor = UIColor(hexString: "000000", a: 0.1), valueOfLoadingView value: String = "viewForLoading") {
         
         if !isShow {
-            if let viewLoading = self.view.subviews.firstOrDefault({ $0.accessibilityValue == value }) {
-                viewLoading.removeFromSuperview()
-            }
+            self.view.subviews.first(where: { $0.accessibilityValue == value })?.removeFromSuperview()
             return
         }
         

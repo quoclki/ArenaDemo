@@ -9,10 +9,13 @@
 import UIKit
 import ArenaDemoAPI
 
-class ClvMainCell: UICollectionViewCell {
+class ClvProductCell: UICollectionViewCell {
 
-    @IBOutlet weak var lblName: UILabel!
     @IBOutlet weak var imv: UIImageView!
+    @IBOutlet weak var lblName: UILabel!
+    @IBOutlet weak var lblPrice: UILabel!
+    @IBOutlet weak var lblNormalPrice: UILabel!
+    @IBOutlet weak var vStar: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,6 +26,10 @@ class ClvMainCell: UICollectionViewCell {
         lblName.text = item.name
         ImageStore.shared.setImg(toImageView: imv, imgURL: item.images.first?.src)
         imv.contentMode = .scaleAspectFit
+        lblPrice.text = item.price?.toCurrencyString()
+        lblPrice.textColor = Base.baseColor
+        lblNormalPrice.text = item.price?.toCurrencyString()
+        
     }
 
 }

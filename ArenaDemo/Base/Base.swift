@@ -36,3 +36,21 @@ extension BaseVCtrl {
     }
     
 }
+
+extension Double {
+    func toCurrencyString() -> String {
+        let formater = NumberFormatter()
+        formater.locale = Locale(identifier: "vi_VN")
+        formater.numberStyle = .currencyISOCode
+        return formater.string(from: NSNumber(value: self)) ?? ""
+    }
+    
+}
+
+extension String {
+    func toCurrencyString() -> String {
+        let number = self.toDouble()
+        return number.toCurrencyString()
+    }
+}
+

@@ -11,6 +11,7 @@ import UIKit
 class ContainerVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
+    @IBOutlet weak var vContainer: UIView!
     @IBOutlet weak var vBody: UIView!
     @IBOutlet weak var vMenu: UIView!
     
@@ -26,12 +27,21 @@ class ContainerVCtrl: BaseVCtrl {
     // MARK: - Init
     
     // MARK: - UIViewController func
+    override func viewWillLayoutSubviews() {
+        if #available(iOS 11.0, *) {
+            let bottomPadding = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
+            vContainer.height = view.height - bottomPadding
+        }
+
+    }
     
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
         configNavigation()
         configMenu()
+        
+        
     }
     
     func configMenu() {
@@ -73,6 +83,8 @@ class ContainerVCtrl: BaseVCtrl {
     }
     
     func configNavigation() {
+
+        
         if let statusbar = UIApplication.shared.value(forKey: "statusBar") as? UIView {
             statusbar.backgroundColor = Base.baseColor
         }
@@ -126,7 +138,7 @@ class ContainerVCtrl: BaseVCtrl {
             }
             
             guard let label = v.subviews.first(where: { $0 is UILabel }) as? UILabel else {
-                return
+                continue
             }
             
             if v.tag == tab.rawValue {

@@ -23,13 +23,14 @@ class CategoryVCtrl: BaseVCtrl {
     // MARK: - Init
     
     // MARK: - UIViewController func
-    
+
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(vAdd: searchBar)
+        createNavigationBar(searchBar: searchBar)
         configSearchBar(searchBar)
         initCollectionView()
+        vSetSafeArea = clvCategory
     }
     
     override func configUIViewWillAppear() {
@@ -56,6 +57,8 @@ class CategoryVCtrl: BaseVCtrl {
         request.orderby = EProductCategoryOrderBy.name.rawValue
         
         _ = SEProduct.getListCategory(request, animation: { (isShow) in
+            self.showLoadingView(isShow)
+            self.vBar.isUserInteractionEnabled = !isShow
             
         }, completed: { (response) in
             if !self.checkResponse(response) {
@@ -110,6 +113,23 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = lstCategory[indexPath.row]
+        
+        let request = GetProductRequest(page: 1)
+        request.category = item.id
+
+        _ = SEProduct.getListProduct(request, animation: { (isShow) in
+            self.showLoadingView(isShow, frameLoading: collectionView.frame)
+            self.vBar.isUserInteractionEnabled = !isShow
+            
+        }, completed: { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            item.lstProduct = response.lstProduct
+            let detail = CategoryDetailVCtrl(item)
+            self.navigationController?.pushViewController(detail, animated: true)
+        })
         
     }
     
