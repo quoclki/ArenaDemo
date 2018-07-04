@@ -21,7 +21,7 @@ public extension BaseRequest {
     convenience init(page: Int) {
         self.init()
         self.page = page
-        self.per_page = 50
+        self.per_page = 99
         
     }
 }

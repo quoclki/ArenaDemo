@@ -73,38 +73,60 @@ class BaseVCtrl: UIViewController {
         
     }
     
-    func createNavigationBar(title: String) {
+    func createNavigationBar(title: String? = nil, vAdd: UIView? = nil) {
         let v = UIView()
         v.backgroundColor = Base.baseColor
         v.frame = CGRect(0, 0, UIScreen.main.bounds.width, 50)
         
-        let label = UILabel()
-        label.text = title
-        label.sizeToFit()
-        label.center = v.center
-        v.addSubview(label)
+        if let title = title, !title.isEmpty {
+            let label = UILabel()
+            label.text = title
+            label.sizeToFit()
+            label.center = v.center
+            label.textColor = .white
+            v.addSubview(label)
+        }
+        
+        if let vAdd = vAdd {
+            vAdd.center = v.center
+            v.addSubview(vAdd)
+        }
         
         vBar = v
+        self.view.addSubview(vBar)
         
     }
     
-    /// add a custom view to left item on navigation bar
-    public func addViewToLeftBarItem(view: UIView, isTranslate: Bool = true) {
-        if isTranslate {
-            view.findAndReplaceText()
+//    /// add a custom view to left item on navigation bar
+//    public func addViewToLeftBarItem(view: UIView, isTranslate: Bool = true) {
+//        if isTranslate {
+//            view.findAndReplaceText()
+//        }
+//        view.backgroundColor = navigationController?.navigationBar.barTintColor
+//        let barItem = UIBarButtonItem(customView: view)
+//        self.navigationItem.leftBarButtonItem = barItem
+//        isCreateBack = false
+//    }
+//
+//    /// add a custom view to right item on navigation bar
+//    public func addViewToRightBarItem(view: UIView) {
+//        view.findAndReplaceText()
+//        view.backgroundColor = navigationController?.navigationBar.barTintColor
+//        let barItem = UIBarButtonItem(customView: view)
+//        self.navigationItem.rightBarButtonItem = barItem
+//    }
+
+    // Config seach bar for Top Bar
+    func configSearchBar(_ searchBar: UISearchBar) {
+        searchBar.barTintColor = Base.baseColor
+        searchBar.backgroundImage = UIImage()
+        
+        if let textField = searchBar.value(forKey: "searchField") as? UITextField, let backgroundView = textField.subviews.first {
+            backgroundView.backgroundColor = Base.baseColor
+            backgroundView.layer.cornerRadius = 19
+            backgroundView.clipsToBounds = true
         }
-        view.backgroundColor = navigationController?.navigationBar.barTintColor
-        let barItem = UIBarButtonItem(customView: view)
-        self.navigationItem.leftBarButtonItem = barItem
-        isCreateBack = false
-    }
-    
-    /// add a custom view to right item on navigation bar
-    public func addViewToRightBarItem(view: UIView) {
-        view.findAndReplaceText()
-        view.backgroundColor = navigationController?.navigationBar.barTintColor
-        let barItem = UIBarButtonItem(customView: view)
-        self.navigationItem.rightBarButtonItem = barItem
+
     }
     
     // MARK: - Event Listerner
