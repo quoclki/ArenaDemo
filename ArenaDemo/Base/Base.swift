@@ -15,6 +15,9 @@ class Base {
     
     // Color
     static var baseColor: UIColor = UIColor(hexString: "D0021B")
+    static var logo: UIImage {
+        return UIImage(named: "img-Logo", in: Bundle(for: Base.self), compatibleWith: nil) ?? UIImage()
+    }
 }
 
 public extension BaseRequest {

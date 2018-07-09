@@ -186,6 +186,9 @@ enum EMenu: Int {
         case .category:
             return CategoryVCtrl()
             
+        case .account:
+            return AccountVCtrl()
+            
         default:
             return MainVCtrl()
         }

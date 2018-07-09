@@ -13,6 +13,16 @@ class Order {
     static var shared = Order()
     
     var orderDTO: OrderDTO = OrderDTO()
+    var cusDTO: CustomerDTO? {
+        didSet {
+            guard let cusDTO = self.cusDTO else {
+                return
+            }
+            orderDTO.customer_id = cusDTO.id
+            orderDTO.shipping = cusDTO.shipping
+            orderDTO.billing = cusDTO.billing
+        }
+    }
     
     var total: Double {
         return orderDTO.line_items.reduce(0, { (value, dto) -> Double in
@@ -26,7 +36,7 @@ class Order {
         })
     }
     
-    func orderProduct(dto: ProductDTO) {
+    func orderProduct(_ dto: ProductDTO) {
         if let item = orderDTO.line_items.first(where: { $0.product_id == dto.id }) {
             item.quantity = (item.quantity ) + 1
             item.calculateSubTotal()

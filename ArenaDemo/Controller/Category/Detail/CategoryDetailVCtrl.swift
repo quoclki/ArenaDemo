@@ -37,8 +37,8 @@ class CategoryDetailVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(title: categoryDTO.name?.uppercased()
-        initCollectionView()
+        createNavigationBar(title: categoryDTO.name?.uppercased())
+        configCollectionView()
         vSetSafeArea = clvCategoryDetail
     }
     
@@ -69,10 +69,6 @@ extension CategoryDetailVCtrl: UICollectionViewDataSource, UICollectionViewDeleg
     
     private var backgroundColor: UIColor {
         return UIColor(hexString: "F1F2F2")
-    }
-
-    func initCollectionView() {
-        configCollectionView()
     }
     
     func configCollectionView() {

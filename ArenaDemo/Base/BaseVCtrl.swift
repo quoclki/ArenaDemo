@@ -54,14 +54,14 @@ class BaseVCtrl: UIViewController {
                 return
             }
             
+            vSetSafeArea.originY = vBar.height
+
             // For Container
             if let _ = vSetSafeArea.parentViewController?.parent as? ContainerVCtrl {
-                vSetSafeArea.originY = vBar.height
                 vSetSafeArea.height = view.height - vSetSafeArea.originY
                 return
             }
             let bottomPadding = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
-            vSetSafeArea.originY = vBar.height
             vSetSafeArea.height = view.height - vSetSafeArea.originY - bottomPadding
         }
         
@@ -97,6 +97,7 @@ class BaseVCtrl: UIViewController {
         }
         
         if let searchBar = searchBar {
+            configSearchBar(searchBar)
             searchBar.width = v.width * 0.95
             searchBar.center = CGPoint(v.center.x, statusBarHeight + 25)
             v.addSubview(searchBar)

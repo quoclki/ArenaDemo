@@ -28,8 +28,7 @@ class CategoryVCtrl: BaseVCtrl {
     override func configUI() {
         super.configUI()
         createNavigationBar(searchBar: searchBar)
-        configSearchBar(searchBar)
-        initCollectionView()
+        configCollectionView()
         vSetSafeArea = clvCategory
     }
     
@@ -57,7 +56,11 @@ class CategoryVCtrl: BaseVCtrl {
         request.orderby = EProductCategoryOrderBy.name.rawValue
         
         _ = SEProduct.getListCategory(request, animation: { (isShow) in
-            self.showLoadingView(isShow)
+            guard let vBar = self.vBar else {
+                return
+            }
+            let frame = CGRect(0, vBar.height, self.view.width, self.view.height - vBar.height)
+            self.showLoadingView(isShow, frameLoading: frame)
             self.vBar.isUserInteractionEnabled = !isShow
             
         }, completed: { (response) in
@@ -78,11 +81,7 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
     private var cellID: String {
         return "clvCategoryCellID"
     }
-    
-    func initCollectionView() {
-        configCollectionView()
-    }
-    
+        
     func configCollectionView() {
         clvCategory.backgroundColor = .white
         clvCategory.register(UINib(nibName: String(describing: ClvCategoryCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)

@@ -29,10 +29,9 @@ class MainVCtrl: BaseVCtrl {
     override func configUI() {
         super.configUI()
         createNavigationBar(searchBar: searchBar)
-        configSearchBar(searchBar)
-        searchBar.delegate = self
-        initCollectionView()
         vSetSafeArea = vSafe
+        searchBar.delegate = self
+        configCollectionView()
     }
     
     override func configUIViewWillAppear() {
@@ -71,9 +70,16 @@ class MainVCtrl: BaseVCtrl {
         request.include = lstID
         
         _ = SEProduct.getListProduct(request, completed: { (response) in
-            guard let group = self.lstItem.first(where: { $0.type == .topSaller }) else { return }
-            group.category.lstProduct = response.lstProduct
-            self.clvMain.reloadData()
+            let category = CategoryDTO()
+            category.name = "Sản phẩm bán chạy"
+            category.isTopSaller = true
+            category.lstProduct = response.lstProduct
+            
+            let group = MainDataGroup()
+            group.category = category
+            group.type = .topSaller
+            self.lstItem.insert(group, at: 0)
+            self.clvMain.insertSections(IndexSet(integer: 0))
         })
     }
     
@@ -96,14 +102,17 @@ class MainVCtrl: BaseVCtrl {
         let request = GetProductRequest(page: 1)
         request.category = dto.id
         
-        let group = MainDataGroup()
-        group.type = .category
-        group.category = dto
-        
         _ = SEProduct.getListProduct(request, completed: { (response) in
-            group.category.lstProduct = response.lstProduct
-            self.lstItem.append(group)
-            self.clvMain.reloadData()
+            dto.lstProduct = response.lstProduct
+            
+            let group = MainDataGroup()
+            group.type = .category
+            group.category = dto
+            
+            let section = self.lstItem.count
+            self.lstItem.insert(group, at: section)
+            self.clvMain.insertSections(IndexSet(integer: section))
+
         })
         
     }
@@ -121,22 +130,7 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
     private var backgroundColor: UIColor {
         return UIColor(hexString: "F1F2F2")
     }
-    
-    func initCollectionView() {
-        initData()
-        configCollectionView()
-    }
-    
-    func initData() {
-        let category = CategoryDTO()
-        category.isTopSaller = true
-        category.name = "Sản phẩm bán chạy"
-        let group = MainDataGroup()
-        group.type = .topSaller
-        group.category = category
-        lstItem.append(group)
-    }
-    
+        
     func configCollectionView() {
         clvMain.backgroundColor = backgroundColor
         clvMain.register(UINib(nibName: String(describing: ClvProductCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
@@ -147,7 +141,7 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
         if let layout = clvMain.collectionViewLayout as? UICollectionViewFlowLayout {
             let padding: CGFloat = 15
             let width = Ratio.width
-            layout.headerReferenceSize = CGSize(width, 58)
+            layout.headerReferenceSize = CGSize(width, 54)
             layout.minimumInteritemSpacing = padding
             layout.minimumLineSpacing = padding
             layout.sectionInset.left = padding
