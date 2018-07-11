@@ -16,9 +16,7 @@ class OrderVCtrl: BaseVCtrl {
     @IBOutlet weak var clvOrder: UICollectionView!
     
     // MARK: - Private properties
-    private var order: OrderDTO {
-        return Order.shared.orderDTO
-    }
+    private var order: OrderDTO!
     private var lstItem: [OrderLineItemDTO] {
         return order.line_items
     }
@@ -26,6 +24,14 @@ class OrderVCtrl: BaseVCtrl {
     // MARK: - Properties
     
     // MARK: - Init
+    init(_ order: OrderDTO) {
+        super.init()
+        self.order = order
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - UIViewController func
     
@@ -34,7 +40,7 @@ class OrderVCtrl: BaseVCtrl {
         super.configUI()
         createNavigationBar(title: "GIỎ HÀNG CỦA TÔI")
         vSetSafeArea = vSafe
-
+        configCollectionView()
     }
     
     override func configUIViewWillAppear() {
@@ -81,7 +87,7 @@ extension OrderVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
             layout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
             
             let widthItem = width - padding * 2
-            layout.itemSize = CGSize(widthItem, 100)
+            layout.itemSize = CGSize(widthItem, 152)
         }
     }
     

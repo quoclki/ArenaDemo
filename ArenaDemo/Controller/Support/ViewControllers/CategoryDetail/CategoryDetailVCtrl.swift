@@ -40,6 +40,7 @@ class CategoryDetailVCtrl: BaseVCtrl {
         super.configUI()
         createNavigationBar(title: categoryDTO.name?.uppercased())
         vSetSafeArea = vSafe
+        addViewToLeftBarItem(createBackButton())
         configCollectionView()
     }
     

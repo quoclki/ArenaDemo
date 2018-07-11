@@ -185,7 +185,8 @@ enum EMenu: Int {
             return AccountVCtrl()
             
         case .order:
-            return OrderVCtrl()
+            let order = Order.shared.orderDTO
+            return OrderVCtrl(order)
             
         }
     }

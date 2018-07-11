@@ -125,6 +125,12 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
             if !self.checkResponse(response) {
                 return
             }
+            
+            if response.lstProduct.isEmpty {
+                _ = self.showWarningAlert(title: "Thông báo", message: "Không có sản phẩm nào trong danh mục này.")
+                return
+            }
+            
             item.lstProduct = response.lstProduct
             let detail = CategoryDetailVCtrl(item)
             self.navigationController?.pushViewController(detail, animated: true)

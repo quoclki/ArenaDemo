@@ -125,10 +125,11 @@ class BaseVCtrl: UIViewController {
         
     }
     
-    func createBackButton(_ width: CGFloat = 50, handleBack: ((UIButton) -> Void)? = nil) -> UIButton {
+    func createBackButton(_ width: CGFloat = 60, handleBack: ((UIButton) -> Void)? = nil) -> UIButton {
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
         let btn = UIButton(type: .system)
-        btn.frame = CGRect(15, statusBarHeight, width, vBar.height - statusBarHeight)
+        btn.frame = CGRect(0, statusBarHeight, width, vBar.height - statusBarHeight)
+        btn.imageEdgeInsets.left = 15
         btn.setImage(UIImage(named: "icon-back", in: Bundle(for: Base.self), compatibleWith: nil), for: .normal)
         btn.tintColor = Base.titleTintColor
         btn.backgroundColor = Base.baseColor
@@ -143,24 +144,32 @@ class BaseVCtrl: UIViewController {
         return btn
     }
     
-//    /// add a custom view to left item on navigation bar
-//    public func addViewToLeftBarItem(view: UIView, isTranslate: Bool = true) {
-//        if isTranslate {
-//            view.findAndReplaceText()
-//        }
-//        view.backgroundColor = navigationController?.navigationBar.barTintColor
-//        let barItem = UIBarButtonItem(customView: view)
-//        self.navigationItem.leftBarButtonItem = barItem
+    /// add a custom view to left item on navigation bar
+    public func addViewToLeftBarItem(_ view: UIView) {
+        guard let vBar = self.vBar else {
+            return
+        }
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        view.backgroundColor = vBar.backgroundColor
+        view.origin = CGPoint(0, statusBarHeight)
+        vBar.addSubview(view)
+        
 //        isCreateBack = false
-//    }
-//
-//    /// add a custom view to right item on navigation bar
-//    public func addViewToRightBarItem(view: UIView) {
-//        view.findAndReplaceText()
-//        view.backgroundColor = navigationController?.navigationBar.barTintColor
-//        let barItem = UIBarButtonItem(customView: view)
+    }
+
+    /// add a custom view to right item on navigation bar
+    public func addViewToRightBarItem(_ view: UIView) {
+        guard let vBar = self.vBar else {
+            return
+        }
+        
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        view.backgroundColor = vBar.backgroundColor
+        view.origin = CGPoint(vBar.width - view.width, statusBarHeight)
+        vBar.addSubview(view)
+
 //        self.navigationItem.rightBarButtonItem = barItem
-//    }
+    }
     
     // MARK: - Event Listerner
     func eventListener() {

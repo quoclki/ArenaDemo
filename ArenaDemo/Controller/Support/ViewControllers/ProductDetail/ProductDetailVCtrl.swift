@@ -16,13 +16,29 @@ class ProductDetailVCtrl: BaseVCtrl {
     @IBOutlet weak var clvProductDetail: UICollectionView!
     
     @IBOutlet var vHeader: UIView!
+    @IBOutlet weak var vSlideBorder: UIView!
+    @IBOutlet weak var btnFavourite: UIButton!
     @IBOutlet weak var vSlide: UIView!
     @IBOutlet weak var vPagePoint: UIView!
     @IBOutlet weak var lblNoPhoto: UILabel!
     
+    @IBOutlet weak var vProductInfo: UIView!
+    @IBOutlet weak var lblName: UILabel!
+    @IBOutlet weak var lblPrice: UILabel!
+    @IBOutlet weak var lblPriceNormal: UILabel!
+    @IBOutlet weak var lblQuantity: UILabel!
+    @IBOutlet weak var btnMinus: UIButton!
+    @IBOutlet weak var btnPlus: UIButton!
+    
     @IBOutlet weak var vDescribe: UIView!
     @IBOutlet weak var lblDescription: UILabel!
     @IBOutlet weak var vRelatedProduct: UIView!
+    
+    @IBOutlet var vRight: UIView!
+    @IBOutlet weak var btnCart: UIButton!
+    @IBOutlet weak var lblTotalOrder: UILabel!
+    
+    @IBOutlet weak var btnOrder: UIButton!
     
     // MARK: - Private properties
     fileprivate var product: ProductDTO = ProductDTO()
@@ -34,6 +50,19 @@ class ProductDetailVCtrl: BaseVCtrl {
     private var isNext: Bool = true
     private var lstImages: [Images] {
         return product.images
+    }
+    private var padding: CGFloat = 15
+    private var quantity: Int = 0 {
+        didSet {
+            product.itemLine?.quantity = quantity
+            lblQuantity.text = quantity.toString()
+            btnMinus.isEnabled = quantity > 1
+            
+            guard let stock_quantity = Int(product.stock_quantity ?? "") else {
+                return
+            }
+            btnPlus.isEnabled = quantity < stock_quantity
+        }
     }
     
     // MARK: - Properties
@@ -49,6 +78,31 @@ class ProductDetailVCtrl: BaseVCtrl {
     }
     
     // MARK: - UIViewController func
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        updateLayoutUI()
+        updateCart()
+        
+    }
+    
+    func updateLayoutUI() {
+        vSlideBorder.frame.size = CGSize(Ratio.width, Ratio.width)
+        vProductInfo.originY = vSlideBorder.frame.maxY
+        
+        lblDescription.attributedText = product.description?.htmlAttribute
+        lblDescription.sizeToFit()
+        vDescribe.height = lblDescription.frame.maxY
+        vDescribe.originY = vProductInfo.frame.maxY + padding
+        
+        vRelatedProduct.originY = vDescribe.frame.maxY + padding
+        
+        // Header for Collection View
+        let heightForViewHeader = vRelatedProduct.frame.maxY
+        vHeader.frame = CGRect(0, -heightForViewHeader, Ratio.width, vRelatedProduct.frame.maxY)
+        clvProductDetail.addSubview(vHeader)
+        clvProductDetail.contentInset.top = heightForViewHeader
+        
+    }
     
     // MARK: - Layout UI
     override func configUI() {
@@ -56,7 +110,22 @@ class ProductDetailVCtrl: BaseVCtrl {
         createNavigationBar(title: "CHI TIẾT SẢN PHẨM")
         vSetSafeArea = vSafe
         configCollectionView()
-
+        addViewToRightBarItem(vRight)
+        addViewToLeftBarItem(createBackButton())
+        mappingUI()
+    }
+    
+    func mappingUI() {
+        let itemLine = product.itemLine ?? OrderLineItemDTO()
+        itemLine.quantity = max(itemLine.quantity , 1)
+        itemLine.imageURL = product.images.first?.src
+        product.itemLine = itemLine
+        
+        lblName.text = product.name
+        lblPrice.text = product.price?.toCurrencyString()
+        lblPrice.textColor = Base.baseColor
+        lblPriceNormal.text = product.price?.toCurrencyString()
+        quantity = itemLine.quantity
     }
     
     override func configUIViewWillAppear() {
@@ -68,17 +137,38 @@ class ProductDetailVCtrl: BaseVCtrl {
     // MARK: - Event Listerner
     override func eventListener() {
         super.eventListener()
+        btnCart.touchUpInside(block: btnCart_Touched)
+        btnFavourite.touchUpInside(block: btnFavourite_Touched)
+        btnMinus.touchUpInside(block: btnMinus_Touched)
+        btnPlus.touchUpInside(block: btnPlus_Touched)
+        btnOrder.touchUpInside(block: btnOrder_Touched)
     }
     
     // MARK: - Event Handler
-    func btnRight_Touched(sender: UIButton) {
+    func btnCart_Touched(sender: UIButton) {
+        let order = Order.shared.orderDTO
+        let myOrder = OrderVCtrl(order)
+        navigationController?.pushViewController(myOrder, animated: true)
+        
+    }
 
+    func btnFavourite_Touched(sender: UIButton) {
+        
+    }
+
+    func btnMinus_Touched(sender: UIButton) {
+        quantity -= 1
     }
     
-    func btnOrder_Touched(sender: UIButton) {
-        Order.shared.orderProduct(self.product)
+    func btnPlus_Touched(sender: UIButton) {
+        quantity += 1
     }
 
+    func btnOrder_Touched(sender: UIButton) {
+        Order.shared.orderProduct(self.product)
+        navigationController?.popViewController(animated: true)
+    }
+    
     // MARK: - Func
     override func loadData() {
         super.loadData()
@@ -99,6 +189,13 @@ class ProductDetailVCtrl: BaseVCtrl {
         })
     }
     
+    func updateCart() {
+        let totalItem = Order.shared.totalItem
+        lblTotalOrder.text = totalItem.toString()
+        lblTotalOrder.isHidden = totalItem == 0
+        lblTotalOrder.layer.cornerRadius = lblTotalOrder.height / 2
+    }
+
 }
 
 extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -110,9 +207,6 @@ extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelega
     private var backgroundColor: UIColor {
         return UIColor(hexString: "F1F2F2")
     }
-    private var padding: CGFloat {
-        return 15
-    }
     
     func configCollectionView() {
         clvProductDetail.backgroundColor = backgroundColor
@@ -120,10 +214,13 @@ extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelega
         clvProductDetail.dataSource = self
         clvProductDetail.delegate = self
         
-        // Header for Collection View
-//        vHeader.frame = CGRect(0, -vHeader.height, clvProductDetail.width, vHeader.height)
-//        clvProductDetail.addSubview(vHeader)
-//        clvProductDetail.contentInset.top = vHeader.height
+        if let layout = clvProductDetail.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.minimumInteritemSpacing = padding
+            layout.minimumLineSpacing = padding
+            layout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
+            layout.itemSize = CGSize((Ratio.width -  padding * 3) / 2, 265 * Ratio.ratioWidth)
+        }
+
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -142,11 +239,6 @@ extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelega
         let detail = ProductDetailVCtrl(item)
         navigationController?.pushViewController(detail, animated: true)
 
-    }
-
-    // Flow layout delegate
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(collectionView.width, 40)
     }
     
 }
