@@ -1,0 +1,330 @@
+//
+//  ProductDetailVCtrl.swift
+//  ArenaDemo
+//
+//  Created by Lu Kien Quoc on 6/7/18.
+//  Copyright © 2018 Newstead Technologies VN. All rights reserved.
+//
+
+import UIKit
+import ArenaDemoAPI
+
+class ProductDetailVCtrl: BaseVCtrl {
+
+    // MARK: - Outlet
+    @IBOutlet weak var vSafe: UIView!
+    @IBOutlet weak var clvProductDetail: UICollectionView!
+    
+    @IBOutlet var vHeader: UIView!
+    @IBOutlet weak var vSlide: UIView!
+    @IBOutlet weak var vPagePoint: UIView!
+    @IBOutlet weak var lblNoPhoto: UILabel!
+    
+    @IBOutlet weak var vDescribe: UIView!
+    @IBOutlet weak var lblDescription: UILabel!
+    @IBOutlet weak var vRelatedProduct: UIView!
+    
+    // MARK: - Private properties
+    fileprivate var product: ProductDTO = ProductDTO()
+    private var lstItem: [ProductDTO] = []
+    
+    // Image Page View Controller
+    private var pageVCtrl: UIPageViewController!
+    private var timerSlide: Timer = Timer()
+    private var isNext: Bool = true
+    private var lstImages: [Images] {
+        return product.images
+    }
+    
+    // MARK: - Properties
+    
+    // MARK: - Init
+    init(_ product: ProductDTO) {
+        super.init()
+        self.product = product
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - UIViewController func
+    
+    // MARK: - Layout UI
+    override func configUI() {
+        super.configUI()
+        createNavigationBar(title: "CHI TIẾT SẢN PHẨM")
+        vSetSafeArea = vSafe
+        configCollectionView()
+
+    }
+    
+    override func configUIViewWillAppear() {
+        super.configUIViewWillAppear()
+        initPageViewController()
+
+    }
+    
+    // MARK: - Event Listerner
+    override func eventListener() {
+        super.eventListener()
+    }
+    
+    // MARK: - Event Handler
+    func btnRight_Touched(sender: UIButton) {
+
+    }
+    
+    func btnOrder_Touched(sender: UIButton) {
+        Order.shared.orderProduct(self.product)
+    }
+
+    // MARK: - Func
+    override func loadData() {
+        super.loadData()
+        getRalatedProduct()
+    }
+    
+    func getRalatedProduct() {
+        let request = GetProductRequest(page: 1)
+        request.include = self.product.related_ids
+        
+        task = SEProduct.getListProduct(request, completed: { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            
+            self.lstItem = response.lstProduct
+            self.clvProductDetail.reloadData()
+        })
+    }
+    
+}
+
+extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+
+    private var cellID: String {
+        return "clvProductDetailCellID"
+    }
+    
+    private var backgroundColor: UIColor {
+        return UIColor(hexString: "F1F2F2")
+    }
+    private var padding: CGFloat {
+        return 15
+    }
+    
+    func configCollectionView() {
+        clvProductDetail.backgroundColor = backgroundColor
+        clvProductDetail.register(UINib(nibName: String(describing: ClvProductCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
+        clvProductDetail.dataSource = self
+        clvProductDetail.delegate = self
+        
+        // Header for Collection View
+//        vHeader.frame = CGRect(0, -vHeader.height, clvProductDetail.width, vHeader.height)
+//        clvProductDetail.addSubview(vHeader)
+//        clvProductDetail.contentInset.top = vHeader.height
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return lstItem.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let item = lstItem[indexPath.row]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ClvProductCell
+        cell.updateCell(item)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = lstItem[indexPath.row]
+        let detail = ProductDetailVCtrl(item)
+        navigationController?.pushViewController(detail, animated: true)
+
+    }
+
+    // Flow layout delegate
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(collectionView.width, 40)
+    }
+    
+}
+
+// For Page ViewController
+extension ProductDetailVCtrl: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+    private var selectPagePointColor: UIColor {
+        return Base.baseColor
+    }
+    
+    private var unSelectPagePointColor: UIColor {
+        return .lightGray
+    }
+
+    private var selectedImage: Images? {
+        return (pageVCtrl?.viewControllers?.first as? SlideVCtrl)?.image
+    }
+    
+    func initPageViewController() {
+        lblNoPhoto.isHidden = false
+        if let image = product.images.first {
+            lblNoPhoto.isHidden = true
+            let imageSlide = SlideVCtrl(image: image)
+            pageVCtrl = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+            pageVCtrl.setViewControllers([imageSlide], direction: .forward, animated: false, completion: nil)
+            pageVCtrl.dataSource = self
+            pageVCtrl.delegate = self
+            pageVCtrl.view.frame = vSlide.bounds
+            addChildViewController(pageVCtrl)
+            vSlide.cleanSubViews()
+            vSlide.clipsToBounds = true
+            vSlide.addSubview(pageVCtrl.view)
+            initPagePoint()
+            formatViewSlide()
+        }
+    }
+    
+    func initPagePoint() {
+        let totalWidthPoint: CGFloat = vPagePoint.height * CGFloat(lstImages.count) * 0.7
+        var startXPoint: CGFloat = vPagePoint.center.x - totalWidthPoint / 2
+        vPagePoint.cleanSubViews()
+        for value in lstImages.enumerated() {
+            let btn = UIButton(type: .system)
+            btn.frame = CGRect(startXPoint, 0, vPagePoint.height * 0.7, vPagePoint.height)
+            btn.accessibilityValue = value.element.id?.toString()
+            btn.autoresizingMask = [.flexibleTopMargin, .flexibleLeftMargin, .flexibleRightMargin, .flexibleBottomMargin, .flexibleWidth, .flexibleHeight]
+            btn.touchUpInside(block: btnPoint_Touched)
+            
+            let v = UIView()
+            v.size = CGSize(btn.width / 2, btn.width / 2)
+            v.center = CGPoint(btn.width / 2, btn.height / 2)
+            v.backgroundColor = unSelectPagePointColor
+            v.setCircle = true
+            v.borderColor = unSelectPagePointColor
+            v.borderWidth = 0.5
+            btn.addSubview(v)
+            vPagePoint.addSubview(btn)
+            startXPoint += btn.width
+        }
+    }
+    
+    // UIPageViewController DataSource
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        if let v = viewController as? SlideVCtrl {
+            let image = v.image
+            let index = lstImages.index(where: { $0.id == image.id }) ?? -1
+            if index > 0 {
+                return SlideVCtrl(image: lstImages[index - 1])
+            }
+        }
+        return nil
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        if let v = viewController as? SlideVCtrl {
+            let image = v.image
+            let index = lstImages.index(where: { $0.id == image.id }) ?? lstImages.count
+            if index < lstImages.count - 1 {
+                return SlideVCtrl(image: lstImages[index + 1])
+            }
+        }
+        return nil
+    }
+    
+    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+        return lstImages.count
+    }
+    
+    // Sent when a gesture-initiated transition begins.
+    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+        //        btnPre.isUserInteractionEnabled = false
+        //        btnNext.isUserInteractionEnabled = false
+        
+        //auto slide
+        print("slide")
+        vPagePoint.isUserInteractionEnabled = false
+        invalidTimer()
+        
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        //        btnPre.isUserInteractionEnabled = true
+        //        btnNext.isUserInteractionEnabled = true
+        if finished { formatViewSlide() }
+        
+    }
+    
+    func preSlide() {
+        guard let index = lstImages.index(where: { $0.id == self.selectedImage?.id }), index > 0 else { return }
+        setAnimationPageViewController(index: index - 1, direction: .reverse)
+    }
+    
+    func nextSlide() {
+        guard let index = lstImages.index(where: { $0.id == self.selectedImage?.id }), index < lstImages.count - 1 else { return }
+        setAnimationPageViewController(index: index + 1, direction: .forward)
+    }
+    
+    func btnPoint_Touched(sender: UIButton) {
+        guard let index = vPagePoint.subviews.index(where: { $0.accessibilityValue == sender.accessibilityValue }) else { return }
+        let indexPrevious = vPagePoint.subviews.index(where: { $0.subviews.first?.backgroundColor == self.selectPagePointColor }) ?? -1
+        setAnimationPageViewController(index: index, direction: index > indexPrevious ? .forward : .reverse)
+    }
+    
+    func setAnimationPageViewController(index: Int, direction: UIPageViewControllerNavigationDirection) {
+        let image = lstImages[index]
+        let imageSlide = SlideVCtrl(image: image)
+        
+        self.view.isUserInteractionEnabled = false
+        invalidTimer()
+        pageVCtrl.setViewControllers([imageSlide], direction: direction, animated: true, completion: { finish in
+            self.view.isUserInteractionEnabled = true
+            if finish {
+                self.formatViewSlide()
+            }
+        })
+    }
+    
+    /// Format Label Page No
+    func formatViewSlide() {
+        guard let image = self.selectedImage else { return }
+        vPagePoint.isUserInteractionEnabled = true
+        vPagePoint.subviews.forEach { (v) in
+            guard let btn = v.subviews.first else { return }
+            btn.backgroundColor = Int(v.accessibilityValue ?? "") == image.id ? selectPagePointColor : unSelectPagePointColor
+        }
+        
+        //        guard let index = lstPromotion.index(where: { $0.id == promo.id }) else { return }
+        //        btnPre.isHidden = index == 0
+        //        btnNext.isHidden = index == lstPromotion.count - 1
+        invalidTimer()
+        
+    }
+    
+    func invalidTimer() {
+        if getVCtrlInNavigation(ProductDetailVCtrl.self) == nil {
+            timerSlide.invalidate()
+            return
+        }
+        
+        if lstImages.count == 1 { return }
+        timerSlide.invalidate()
+        timerSlide = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(handleTimer(_:)), userInfo: nil, repeats: false)
+        
+    }
+    
+    @objc func handleTimer(_ timer: Timer) {
+        guard let index = lstImages.index(where: { $0.id == self.selectedImage?.id }), vPagePoint.isUserInteractionEnabled else { return }
+        
+        if index == 0 {
+            self.isNext = true
+        }
+        if index == lstImages.count - 1 {
+            self.isNext = false
+        }
+        
+        isNext ? nextSlide() : preSlide()
+        
+    }
+}
+
+

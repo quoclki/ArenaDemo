@@ -7,18 +7,62 @@
 //
 
 import UIKit
+import ArenaDemoAPI
 
 class AccountVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var vSafe: UIView!
     @IBOutlet weak var vLogo: UIView!
     @IBOutlet weak var imvLogo: UIImageView!
     @IBOutlet weak var lblName: UILabel!
+    @IBOutlet weak var vBorder: UIView!
     @IBOutlet weak var tbvAccount: UITableView!
+    @IBOutlet var vSignUpSignIn: UIView!
+    
+    // View Sign In - Sign Up
+    @IBOutlet weak var btnSignUpDetail: UIButton!
+    @IBOutlet weak var btnSignInDetail: UIButton!
+    @IBOutlet weak var vMark: UIView!
+    
+    @IBOutlet weak var vSignUpDetail: UIView!
+    @IBOutlet weak var txtSignUpUserName: UITextField!
+    @IBOutlet weak var txtSignUpPassword: UITextField!
+    @IBOutlet weak var btnCheck: UIButton!
+    @IBOutlet weak var btnCheckRemember: UIButton!
+    @IBOutlet weak var btnForgetPassword: UIButton!
+    @IBOutlet weak var btnSignUpConfirm: UIButton!
+    
+    @IBOutlet weak var vSignInDetail: UIView!
+    @IBOutlet weak var txtSignInEmail: UITextField!
+    @IBOutlet weak var txtSignInPassword: UITextField!
+    @IBOutlet weak var txtSignInConfirmPassword: UITextField!
+    @IBOutlet weak var btnSignInConfirm: UIButton!
     
     // MARK: - Private properties
     private var lstItem: [EAccountMenu] = []
+    private var btnBack: UIButton!
+    private var isBack: Bool = false {
+        didSet {
+            btnBack.isHidden = !isBack
+            vSignUpSignIn.isHidden = btnBack.isHidden
+            tbvAccount.isHidden = !vSignUpSignIn.isHidden
+        }
+    }
+    
+    private var isSignUp: Bool = false {
+        didSet {
+            vMark.originX = isSignUp ? btnSignUpDetail.originX : btnSignInDetail.originX
+            vMark.originY = btnSignUpDetail.height
+            UIView.animate(withDuration: 0.3) {
+                self.vMark.originY = self.btnSignUpDetail.height - self.vMark.height
+            }
+            
+            vSignUpDetail.isHidden = !isSignUp
+            vSignInDetail.isHidden = !vSignUpDetail.isHidden
+        }
+    }
     
     // MARK: - Properties
     
@@ -29,6 +73,9 @@ class AccountVCtrl: BaseVCtrl {
         super.viewWillLayoutSubviews()
         vLogo.height = vLogo.width
         vLogo.cornerRadius = vLogo.width / 2
+        btnSignUpConfirm.cornerRadius = btnSignUpConfirm.height / 2
+        btnSignInConfirm.cornerRadius = btnSignInConfirm.height / 2
+        vMark.width = btnSignUpDetail.width
     }
     
     // MARK: - Layout UI
@@ -41,10 +88,25 @@ class AccountVCtrl: BaseVCtrl {
     }
     
     func setupUIForAccount() {
-        ImageStore.shared.setImg(toImageView: imvLogo, imgURL: Order.shared.cusDTO?.avatar_url, defaultImg: Base.logo)
+        btnBack = createBackButton(80) { sender in
+            self.isBack = false
+        }
+        vBar.addSubview(btnBack)
         imvLogo.contentMode = .scaleAspectFill
         
-        if let cusDTO = Order.shared.cusDTO {
+        vSignUpSignIn.size = vBorder.size
+        vMark.backgroundColor = Base.baseColor
+        vBorder.addSubview(vSignUpSignIn)
+        vBorder.clipsToBounds = true
+        vBorder.dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: vBorder.cornerRadius)
+        configDefaultAccount()
+    }
+    
+    func configDefaultAccount() {
+        isBack = false
+        ImageStore.shared.setImg(toImageView: imvLogo, imgURL: Order.shared.cusDTO.avatar_url, defaultImg: Base.logo)
+        let cusDTO = Order.shared.cusDTO
+        if let _ = Order.shared.cusDTO.id {
             lstItem = [.myOrder, .favourite, .address, .storeSystem, .orderCondition, .accSetting]
             lblName.text = [cusDTO.first_name ?? "", cusDTO.last_name ?? ""].joined(separator: " ")
         } else {
@@ -61,11 +123,14 @@ class AccountVCtrl: BaseVCtrl {
     // MARK: - Event Listerner
     override func eventListener() {
         super.eventListener()
-        
+        btnSignInDetail.touchUpInside(block: btnSignInDetail_Touched)
+        btnSignInConfirm.touchUpInside(block: btnSignInConfirm_Touched)
+        btnSignUpDetail.touchUpInside(block: btnSignUpDetail_Touched)
+        btnSignUpConfirm.touchUpInside(block: btnSignUpConfirm_Touched)
     }
     
     // MARK: - Event Handler
-    
+
     // MARK: - Func
     override func loadData() {
         super.loadData()
@@ -85,6 +150,8 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
         tbvAccount.delegate = self
         tbvAccount.isScrollEnabled = false
         tbvAccount.separatorInset.left = 15
+        tbvAccount.separatorInset.right = 15
+        tbvAccount.backgroundColor = .clear
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -103,7 +170,9 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        let item = lstItem[indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: item != .signInSignUp)
+        
         
     }
     
@@ -112,12 +181,140 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
 // Handle Sign in - Sign Up
 extension AccountVCtrl {
     func btnSignIn_Touched(sender: UIButton) {
+        isBack = true
+        isSignUp = false
+    }
+    
+    func btnSignInDetail_Touched(sender: UIButton) {
+        isSignUp = false
+    }
+    
+    func btnSignInConfirm_Touched(sender: UIButton) {
+        guard let email = txtSignInEmail.text?.trim(), !email.isEmpty else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập email", buttonTitle: "OK") {
+                self.txtSignInEmail.becomeFirstResponder()
+            }
+            return
+        }
+        
+        guard let password = txtSignInPassword.text, !password.isEmpty else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập mật khẩu", buttonTitle: "OK") {
+                self.txtSignInPassword.becomeFirstResponder()
+            }
+            return
+        }
+        
+        guard let confirmPassword = txtSignInConfirmPassword.text, !confirmPassword.isEmpty else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập xác nhận mật khẩu", buttonTitle: "OK") {
+                self.txtSignInConfirmPassword.becomeFirstResponder()
+            }
+            return
+        }
+        
+        if password != confirmPassword {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập xác nhận mật khẩu giống mật khẩu", buttonTitle: "OK")
+            return
+
+        }
+
+        let request = CustomerDTO()
+//        request.first_name = txtFirstName.text
+//        request.last_name = txtLastName.text
+        request.email = email
+        request.password = password
+        request.role = ECustomerRole.customer.rawValue
+        
+        task = SECustomer.createOrUpdate(request, animation: {
+            self.showLoadingView($0)
+            
+        }) { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            
+            guard let cusDTO = response.lstCustomer.first else { return }
+            Order.shared.cusDTO = cusDTO
+            _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG KÍ THÀNH CÔNG") {
+                self.configDefaultAccount()
+                self.tbvAccount.reloadData()
+                
+            }
+
+        }
+
         
     }
     
     func btnSignUp_Touched(sender: UIButton) {
+        isBack = true
+        isSignUp = true
         
     }
+    
+    func btnSignUpDetail_Touched(sender: UIButton) {
+        isSignUp = true
+    }
+    
+    func btnSignUpConfirm_Touched(sender: UIButton) {
+        guard let userName = txtSignUpUserName.text?.trim(), !userName.isEmpty else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập email", buttonTitle: "OK") {
+                self.txtSignUpUserName.becomeFirstResponder()
+            }
+            return
+        }
+        
+        guard let password = txtSignUpPassword.text, !password.isEmpty else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập mật khẩu", buttonTitle: "OK") {
+                self.txtSignUpPassword.becomeFirstResponder()
+            }
+            return
+        }
+
+        let request = GetAuthRequest()
+        request.username = userName
+        request.password = password
+        
+        task = SEAuth.authentication(request, animation: {
+            self.showLoadingView($0, frameLoading: self.vSafe.frame)
+            self.vBar.isUserInteractionEnabled = !$0
+            
+        }, completed: { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            
+            guard let email = response.authDTO?.user?.email else { return }
+            self.getCustomerDTO(email)
+        })
+
+    }
+ 
+    func getCustomerDTO(_ email: String) {
+        let request = GetCustomerRequest(page: 1)
+        request.email = email
+        request.role = ECustomerRole.all.rawValue
+        
+        task = SECustomer.getList(request, animation: {
+            self.showLoadingView($0, frameLoading: self.vSafe.frame)
+            self.vBar.isUserInteractionEnabled = !$0
+        }, completed: { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            
+            guard let cusDTO = response.lstCustomer.first else { return }
+            Order.shared.cusDTO = cusDTO
+            _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG NHẬP THÀNH CÔNG") {
+                self.configDefaultAccount()
+                self.tbvAccount.reloadData()
+                
+            }
+            
+            
+        })
+        
+    }
+
     
 }
 

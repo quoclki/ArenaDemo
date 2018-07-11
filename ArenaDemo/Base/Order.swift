@@ -13,17 +13,7 @@ class Order {
     static var shared = Order()
     
     var orderDTO: OrderDTO = OrderDTO()
-    var cusDTO: CustomerDTO? {
-        didSet {
-            guard let cusDTO = self.cusDTO else {
-                return
-            }
-            orderDTO.customer_id = cusDTO.id
-            orderDTO.shipping = cusDTO.shipping
-            orderDTO.billing = cusDTO.billing
-        }
-    }
-    
+    var cusDTO: CustomerDTO = CustomerDTO()
     var total: Double {
         return orderDTO.line_items.reduce(0, { (value, dto) -> Double in
             return value + (dto.total.toDouble() )
@@ -53,6 +43,13 @@ class Order {
         line.calculateSubTotal()
         orderDTO.line_items.append(line)
         
+    }
+    
+    func setUpCustomer() {
+        orderDTO.customer_id = cusDTO.id
+        orderDTO.shipping = cusDTO.shipping
+        orderDTO.billing = cusDTO.billing
+
     }
     
     func clearOrder() {

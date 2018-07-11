@@ -36,7 +36,7 @@ class MainVCtrl: BaseVCtrl {
     
     override func configUIViewWillAppear() {
         super.configUIViewWillAppear()
-        
+
     }
     
     // MARK: - Event Listerner
@@ -58,7 +58,7 @@ class MainVCtrl: BaseVCtrl {
         let request = GetReportRequest(page: 1)
         request.period = EReportPeriod.last_month.rawValue
         
-        _ = SEReport.getListTopSaller(request, completed: { (response) in
+        task = SEReport.getListTopSaller(request, completed: { (response) in
             let lstID = response.lstTop.map({ $0.product_id ?? -1 })
             self.getProduct(lstID)
         })
@@ -69,7 +69,7 @@ class MainVCtrl: BaseVCtrl {
         let request = GetProductRequest(page: 1)
         request.include = lstID
         
-        _ = SEProduct.getListProduct(request, completed: { (response) in
+        task = SEProduct.getListProduct(request, completed: { (response) in
             let category = CategoryDTO()
             category.name = "Sản phẩm bán chạy"
             category.isTopSaller = true
@@ -88,7 +88,7 @@ class MainVCtrl: BaseVCtrl {
         request.hide_empty = true
         request.per_page = 5
         
-        _ = SEProduct.getListCategory(request, completed: { (response) in
+        task = SEProduct.getListCategory(request, completed: { (response) in
             response.lstCategory.forEach({ (item) in
                 self.getProductByCategoryID(item)
             })
@@ -102,7 +102,7 @@ class MainVCtrl: BaseVCtrl {
         let request = GetProductRequest(page: 1)
         request.category = dto.id
         
-        _ = SEProduct.getListProduct(request, completed: { (response) in
+        task = SEProduct.getListProduct(request, completed: { (response) in
             dto.lstProduct = response.lstProduct
             
             let group = MainDataGroup()
@@ -119,7 +119,7 @@ class MainVCtrl: BaseVCtrl {
     
 }
 
-extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
+extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     private var headerCellID: String {
         return "clvMainHeaderCellID"
     }
@@ -140,13 +140,11 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
         
         if let layout = clvMain.collectionViewLayout as? UICollectionViewFlowLayout {
             let padding: CGFloat = 15
-            let width = Ratio.width
-            layout.headerReferenceSize = CGSize(width, 54)
             layout.minimumInteritemSpacing = padding
             layout.minimumLineSpacing = padding
             layout.sectionInset.left = padding
             layout.sectionInset.right = padding
-            layout.itemSize = CGSize((width -  padding * 3) / 2, 265 * Ratio.ratioWidth)
+            layout.itemSize = CGSize((Ratio.width -  padding * 3) / 2, 265 * Ratio.ratioWidth)
         }
     }
     
@@ -180,9 +178,15 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        let item = lstItem[indexPath.section].category.lstProduct[indexPath.row]
+        let detail = ProductDetailVCtrl(item)
+        navigationController?.pushViewController(detail, animated: true)
     }
-        
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(collectionView.width, 54)
+    }
+    
 }
 
 extension MainVCtrl: UISearchBarDelegate {

@@ -83,11 +83,6 @@ class ContainerVCtrl: BaseVCtrl {
     }
     
     func configNavigation() {
-
-        
-        if let statusbar = UIApplication.shared.value(forKey: "statusBar") as? UIView {
-            statusbar.backgroundColor = Base.baseColor
-        }
         guard let navBar = navigationController?.navigationBar else { return }
         navBar.isHidden = true
         navBar.isExclusiveTouch = false
@@ -189,8 +184,9 @@ enum EMenu: Int {
         case .account:
             return AccountVCtrl()
             
-        default:
-            return MainVCtrl()
+        case .order:
+            return OrderVCtrl()
+            
         }
     }
     

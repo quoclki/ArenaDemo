@@ -44,6 +44,11 @@ class BaseVCtrl: UIViewController {
         configSafeArea()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        task?.cancel()
+    }
+    
     // Config View for Safe Area With All ViewController
     func configSafeArea() {
         if #available(iOS 11.0, *) {
@@ -92,7 +97,7 @@ class BaseVCtrl: UIViewController {
             label.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.light)
             label.sizeToFit()
             label.center = CGPoint(v.center.x, statusBarHeight + 25)
-            label.textColor = .white
+            label.textColor = Base.titleTintColor
             v.addSubview(label)
         }
         
@@ -106,6 +111,36 @@ class BaseVCtrl: UIViewController {
         vBar = v
         self.view.addSubview(vBar)
         
+    }
+    
+    // Config seach bar for Top Bar
+    func configSearchBar(_ searchBar: UISearchBar) {
+        searchBar.backgroundImage = UIImage()
+        
+        if let textField = searchBar.value(forKey: "searchField") as? UITextField, let backgroundView = textField.subviews.first {
+            backgroundView.layer.cornerRadius = 19
+            backgroundView.clipsToBounds = true
+            backgroundView.height = 20
+        }
+        
+    }
+    
+    func createBackButton(_ width: CGFloat = 50, handleBack: ((UIButton) -> Void)? = nil) -> UIButton {
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        let btn = UIButton(type: .system)
+        btn.frame = CGRect(15, statusBarHeight, width, vBar.height - statusBarHeight)
+        btn.setImage(UIImage(named: "icon-back", in: Bundle(for: Base.self), compatibleWith: nil), for: .normal)
+        btn.tintColor = Base.titleTintColor
+        btn.backgroundColor = Base.baseColor
+        btn.contentHorizontalAlignment = .left
+        btn.touchUpInside { (sender) in
+            if let handleBack = handleBack {
+                handleBack(sender)
+                return
+            }
+            self.navigationController?.popViewController(animated: true)
+        }
+        return btn
     }
     
 //    /// add a custom view to left item on navigation bar
@@ -126,19 +161,6 @@ class BaseVCtrl: UIViewController {
 //        let barItem = UIBarButtonItem(customView: view)
 //        self.navigationItem.rightBarButtonItem = barItem
 //    }
-
-    // Config seach bar for Top Bar
-    func configSearchBar(_ searchBar: UISearchBar) {
-        searchBar.barTintColor = Base.baseColor
-        searchBar.backgroundImage = UIImage()
-        
-        if let textField = searchBar.value(forKey: "searchField") as? UITextField, let backgroundView = textField.subviews.first {
-            backgroundView.backgroundColor = Base.baseColor
-            backgroundView.layer.cornerRadius = 19
-            backgroundView.clipsToBounds = true
-        }
-
-    }
     
     // MARK: - Event Listerner
     func eventListener() {

@@ -42,6 +42,7 @@ class TbvAccountCell: UITableViewCell {
     }
     
     func updateCell(_ item: EAccountMenu) {
+        self.backgroundColor = .clear
         vSignInSignUp.isHidden = item != .signInSignUp
         vCell.isHidden = !vSignInSignUp.isHidden
         lblName.text = item.name

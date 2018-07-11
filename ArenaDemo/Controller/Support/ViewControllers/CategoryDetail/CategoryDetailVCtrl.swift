@@ -12,6 +12,7 @@ import ArenaDemoAPI
 class CategoryDetailVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
+    @IBOutlet weak var vSafe: UIView!
     @IBOutlet weak var clvCategoryDetail: UICollectionView!
     
     // MARK: - Private properties
@@ -38,8 +39,8 @@ class CategoryDetailVCtrl: BaseVCtrl {
     override func configUI() {
         super.configUI()
         createNavigationBar(title: categoryDTO.name?.uppercased())
+        vSetSafeArea = vSafe
         configCollectionView()
-        vSetSafeArea = clvCategoryDetail
     }
     
     override func configUIViewWillAppear() {
@@ -99,7 +100,10 @@ extension CategoryDetailVCtrl: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        let item = lstProduct[indexPath.row]
+        let detail = ProductDetailVCtrl(item)
+        navigationController?.pushViewController(detail, animated: true)
+
     }
     
 }

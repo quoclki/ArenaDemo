@@ -21,6 +21,11 @@ class ClvMainHeaderCell: UICollectionViewCell {
         super.awakeFromNib()
         // Initialization code
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        btnViewMore.touchUpInside(block: btnViewMore_Touched)
+    }
 
     func updateCell(_ item: MainDataGroup) {
         self.item = item
@@ -28,7 +33,6 @@ class ClvMainHeaderCell: UICollectionViewCell {
         lblName.textColor = vLeft.backgroundColor
         lblName.text = item.category.name?.uppercased()
     
-        btnViewMore.touchUpInside(block: btnViewMore_Touched)
     }
     
     func btnViewMore_Touched(sender: UIButton) {
@@ -39,7 +43,6 @@ class ClvMainHeaderCell: UICollectionViewCell {
         let detail = CategoryDetailVCtrl(item.category)
         parentVCtrl.navigationController?.pushViewController(detail, animated: true)
 
-        
     }
     
 }

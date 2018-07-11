@@ -15,6 +15,7 @@ class Base {
     
     // Color
     static var baseColor: UIColor = UIColor(hexString: "D0021B")
+    static var titleTintColor = UIColor.white
     static var logo: UIImage {
         return UIImage(named: "img-Logo", in: Bundle(for: Base.self), compatibleWith: nil) ?? UIImage()
     }
@@ -31,29 +32,12 @@ public extension BaseRequest {
 
 extension BaseVCtrl {
     func checkResponse<T: BaseResponse>(_ response: T) -> Bool {
-        if !response.success {
-            _ = showWarningAlert(message: response.message ?? "")
+        if !response.success && !response.isCancel {
+            _ = showWarningAlert(title: "Thông báo", message: response.message ?? "")
         }
         
         return response.success
     }
     
-}
-
-extension Double {
-    func toCurrencyString() -> String {
-        let formater = NumberFormatter()
-        formater.locale = Locale(identifier: "vi_VN")
-        formater.numberStyle = .currencyISOCode
-        return formater.string(from: NSNumber(value: self)) ?? ""
-    }
-    
-}
-
-extension String {
-    func toCurrencyString() -> String {
-        let number = self.toDouble()
-        return number.toCurrencyString()
-    }
 }
 

@@ -55,7 +55,7 @@ class CategoryVCtrl: BaseVCtrl {
         let request = GetCategoryRequest(page: 1)
         request.orderby = EProductCategoryOrderBy.name.rawValue
         
-        _ = SEProduct.getListCategory(request, animation: { (isShow) in
+        task = SEProduct.getListCategory(request, animation: { (isShow) in
             guard let vBar = self.vBar else {
                 return
             }
@@ -117,7 +117,7 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
         let request = GetProductRequest(page: 1)
         request.category = item.id
 
-        _ = SEProduct.getListProduct(request, animation: { (isShow) in
+        task = SEProduct.getListProduct(request, animation: { (isShow) in
             self.showLoadingView(isShow, frameLoading: collectionView.frame)
             self.vBar.isUserInteractionEnabled = !isShow
             
