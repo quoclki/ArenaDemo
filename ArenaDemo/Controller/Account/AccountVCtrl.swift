@@ -235,7 +235,7 @@ extension AccountVCtrl {
             
             guard let cusDTO = response.lstCustomer.first else { return }
             Order.shared.cusDTO = cusDTO
-            _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG KÍ THÀNH CÔNG") {
+            _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG KÍ THÀNH CÔNG", buttonTitle: "OK") {
                 self.configDefaultAccount()
                 self.tbvAccount.reloadData()
                 
@@ -305,7 +305,7 @@ extension AccountVCtrl {
             
             guard let cusDTO = response.lstCustomer.first else { return }
             Order.shared.cusDTO = cusDTO
-            _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG NHẬP THÀNH CÔNG") {
+            _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG NHẬP THÀNH CÔNG", buttonTitle: "OK") {
                 self.configDefaultAccount()
                 self.tbvAccount.reloadData()
                 

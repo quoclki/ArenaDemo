@@ -128,7 +128,7 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
             }
             
             if response.lstProduct.isEmpty {
-                _ = self.showWarningAlert(title: "Thông báo", message: "Không có sản phẩm nào trong danh mục này.")
+                _ = self.showWarningAlert(title: "Thông báo", message: "Không có sản phẩm nào trong danh mục này.", buttonTitle: "OK")
                 return
             }
             
