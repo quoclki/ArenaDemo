@@ -22,6 +22,7 @@ class OrderVCtrl: BaseVCtrl {
     }
     
     // MARK: - Properties
+    var isCreateBack: Bool = false
     
     // MARK: - Init
     init(_ order: OrderDTO) {
@@ -41,6 +42,9 @@ class OrderVCtrl: BaseVCtrl {
         createNavigationBar(title: "GIỎ HÀNG CỦA TÔI")
         vSetSafeArea = vSafe
         configCollectionView()
+        if isCreateBack {
+            addViewToLeftBarItem(createBackButton())
+        }
     }
     
     override func configUIViewWillAppear() {
@@ -63,13 +67,17 @@ class OrderVCtrl: BaseVCtrl {
     }
 }
 
-extension OrderVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
+extension OrderVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     private var cellID: String {
         return "clvOrderCellID"
     }
     
     private var paymentCellID: String {
         return "clvOrderPaymentCellID"
+    }
+    
+    private var padding: CGFloat {
+        return 15
     }
     
     func configCollectionView() {
@@ -80,33 +88,56 @@ extension OrderVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
         clvOrder.delegate = self
         
         if let layout = clvOrder.collectionViewLayout as? UICollectionViewFlowLayout {
-            let padding: CGFloat = 15
-            let width = Ratio.width
             layout.minimumInteritemSpacing = padding
             layout.minimumLineSpacing = padding
             layout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
             
-            let widthItem = width - padding * 2
-            layout.itemSize = CGSize(widthItem, 152)
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return lstItem.count
+        return lstItem.isEmpty ? 0 : lstItem.count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if indexPath.row == lstItem.count {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: paymentCellID, for: indexPath) as! ClvOrderPaymentCell
+            cell.updateCell()
+            return cell
+        }
+        
         let item = lstItem[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ClvOrderCell
         cell.updateCell(item)
         return cell
     }
     
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let item = lstItem[indexPath.row]
-//        
-//        
-//    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.row == lstItem.count {
+            return
+        }
+        
+        let item = lstItem[indexPath.row]
+        
+        
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = Ratio.width
+        let widthItem = width - padding * 2
+        return CGSize(widthItem, indexPath.row == lstItem.count ? 102 : 152)
+
+    }
+    
+    func handleDelete(_ collectionView: UICollectionView, indexPath: IndexPath) {
+        _ = showAlert(title: "Cảnh báo", message: "Bạn có chắc chắn muốn xoá món hàng này?", leftBtnTitle: "Không", rightBtnTitle: "Có", rightBtnStyle: .destructive, rightAction: {
+            self.order.line_items.remove(at: indexPath.row)
+            collectionView.reloadData()
+            
+        })
+        
+    }
     
 }
 

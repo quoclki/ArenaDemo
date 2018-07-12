@@ -8,6 +8,7 @@
 
 import UIKit
 import ArenaDemoAPI
+import CustomControl
 
 class ProductDetailVCtrl: BaseVCtrl {
 
@@ -54,7 +55,6 @@ class ProductDetailVCtrl: BaseVCtrl {
     private var padding: CGFloat = 15
     private var quantity: Int = 0 {
         didSet {
-            product.itemLine?.quantity = quantity
             lblQuantity.text = quantity.toString()
             btnMinus.isEnabled = quantity > 1
             
@@ -64,13 +64,15 @@ class ProductDetailVCtrl: BaseVCtrl {
             btnPlus.isEnabled = quantity < stock_quantity
         }
     }
+    private var lineItem: OrderLineItemDTO!
     
     // MARK: - Properties
     
     // MARK: - Init
-    init(_ product: ProductDTO) {
+    init(_ product: ProductDTO, lineItem: OrderLineItemDTO? = nil) {
         super.init()
         self.product = product
+        self.lineItem = lineItem ?? OrderLineItemDTO()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -101,7 +103,14 @@ class ProductDetailVCtrl: BaseVCtrl {
         vHeader.frame = CGRect(0, -heightForViewHeader, Ratio.width, vRelatedProduct.frame.maxY)
         clvProductDetail.addSubview(vHeader)
         clvProductDetail.contentInset.top = heightForViewHeader
-        
+        clvProductDetail.contentOffset.y = -heightForViewHeader
+    }
+    
+    func updateCart() {
+        let totalItem = Order.shared.totalItem
+        lblTotalOrder.text = totalItem.toString()
+        lblTotalOrder.isHidden = totalItem == 0
+        lblTotalOrder.cornerRadius = lblTotalOrder.height / 2
     }
     
     // MARK: - Layout UI
@@ -116,16 +125,16 @@ class ProductDetailVCtrl: BaseVCtrl {
     }
     
     func mappingUI() {
-        let itemLine = product.itemLine ?? OrderLineItemDTO()
-        itemLine.quantity = max(itemLine.quantity , 1)
-        itemLine.imageURL = product.images.first?.src
-        product.itemLine = itemLine
-        
         lblName.text = product.name
         lblPrice.text = product.price?.toCurrencyString()
         lblPrice.textColor = Base.baseColor
         lblPriceNormal.text = product.price?.toCurrencyString()
-        quantity = itemLine.quantity
+        
+        quantity = max(self.lineItem.quantity, 1)
+        lineItem.product_id = product.id
+        lineItem.name = product.name
+        lineItem.price = product.price
+        lineItem.productDTO = self.product
     }
     
     override func configUIViewWillAppear() {
@@ -148,6 +157,7 @@ class ProductDetailVCtrl: BaseVCtrl {
     func btnCart_Touched(sender: UIButton) {
         let order = Order.shared.orderDTO
         let myOrder = OrderVCtrl(order)
+        myOrder.isCreateBack = true
         navigationController?.pushViewController(myOrder, animated: true)
         
     }
@@ -165,7 +175,8 @@ class ProductDetailVCtrl: BaseVCtrl {
     }
 
     func btnOrder_Touched(sender: UIButton) {
-        Order.shared.orderProduct(self.product)
+        lineItem.quantity = quantity
+        Order.shared.updateOrderLineItem(lineItem)
         navigationController?.popViewController(animated: true)
     }
     
@@ -189,13 +200,6 @@ class ProductDetailVCtrl: BaseVCtrl {
         })
     }
     
-    func updateCart() {
-        let totalItem = Order.shared.totalItem
-        lblTotalOrder.text = totalItem.toString()
-        lblTotalOrder.isHidden = totalItem == 0
-        lblTotalOrder.layer.cornerRadius = lblTotalOrder.height / 2
-    }
-
 }
 
 extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {

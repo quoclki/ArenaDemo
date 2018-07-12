@@ -1,42 +1,29 @@
 //
-//  SlideVCtrl.swift
+//  PaymentVCtrl.swift
 //  ArenaDemo
 //
-//  Created by Lu Kien Quoc on 6/11/18.
-//  Copyright © 2018 Newstead Technologies VN. All rights reserved.
+//  Created by Lu Kien Quoc on 7/12/18.
+//  Copyright © 2018 Arena Design VN. All rights reserved.
 //
 
 import UIKit
-import ArenaDemoAPI
-import CustomControl
 
-class SlideVCtrl: BaseVCtrl {
+class PaymentVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
-    @IBOutlet weak var imvPhoto: UIImageView!
     
     // MARK: - Private properties
-    var image: Images = Images()
     
     // MARK: - Properties
     
     // MARK: - Init
-    init(image: Images) {
-        super.init()
-        self.image = image
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     // MARK: - UIViewController func
     
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        ImageStore.shared.setImg(toImageView: imvPhoto, imgURL: image.src)
-        imvPhoto.contentMode = .scaleAspectFit
+        
     }
     
     override func configUIViewWillAppear() {
@@ -57,5 +44,4 @@ class SlideVCtrl: BaseVCtrl {
         super.loadData()
         
     }
-    
 }

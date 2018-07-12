@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ArenaDemoAPI
 
 class ContainerVCtrl: BaseVCtrl {
 
@@ -39,46 +40,6 @@ class ContainerVCtrl: BaseVCtrl {
     override func configUI() {
         super.configUI()
         configNavigation()
-        configMenu()
-        
-        
-    }
-    
-    func configMenu() {
-        let lstMenu = [EMenu.home, .category, .order, .account]
-        let width = Ratio.width / CGFloat(lstMenu.count)
-        for (index, element) in lstMenu.enumerated() {
-            let v = UIView()
-            v.frame = CGRect(width * CGFloat(index), 0, width, self.vMenu.height)
-            v.tag = index
-            v.clipsToBounds = true
-            
-            let btn = UIButton(type: .system)
-            btn.frame.size = v.frame.size
-            btn.frame.origin = CGPoint.zero
-            btn.tag = v.tag
-            btn.touchUpInside(block: btnMenu_Touched)
-            v.addSubview(btn)
-
-            let imv = UIImageView()
-            imv.frame.size = CGSize(20, 20)
-            imv.image = element.icon
-            imv.originY = 7
-            imv.center.x = btn.center.x
-            v.addSubview(imv)
-            
-            let label = UILabel()
-            label.font = UIFont.systemFont(ofSize: 10, weight: UIFont.Weight.light)
-            label.text = element.name
-            label.sizeToFit()
-            label.originY = imv.frame.maxY + 3
-            label.center.x = btn.center.x
-            v.addSubview(label)
-            
-            vMenu.addSubview(v)
-        }
-        
-        self.tab = .home
         
     }
     
@@ -115,6 +76,63 @@ class ContainerVCtrl: BaseVCtrl {
     // MARK: - Func
     override func loadData() {
         super.loadData()
+        getSystemSetting()
+    }
+    
+    func getSystemSetting() {
+        _ = SESystemSetting.get({
+            self.showLoadingView($0)
+            
+        }, completed: { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            
+            guard let settings = response.systemSettingDTO?.settings else {
+                return
+            }
+            
+            Base.settings = settings
+            self.setupMenuBotton()
+        })
+        
+    }
+    
+    func setupMenuBotton() {
+        let lstMenu = [EMenu.home, .category, .order, .account]
+        let width = Ratio.width / CGFloat(lstMenu.count)
+        for (index, element) in lstMenu.enumerated() {
+            let v = UIView()
+            v.frame = CGRect(width * CGFloat(index), 0, width, self.vMenu.height)
+            v.tag = index
+            v.clipsToBounds = true
+            
+            let btn = UIButton(type: .system)
+            btn.frame.size = v.frame.size
+            btn.frame.origin = CGPoint.zero
+            btn.tag = v.tag
+            btn.touchUpInside(block: btnMenu_Touched)
+            v.addSubview(btn)
+            
+            let imv = UIImageView()
+            imv.frame.size = CGSize(20, 20)
+            imv.image = element.icon
+            imv.originY = 7
+            imv.center.x = btn.center.x
+            v.addSubview(imv)
+            
+            let label = UILabel()
+            label.font = UIFont.systemFont(ofSize: 10, weight: UIFont.Weight.light)
+            label.text = element.name
+            label.sizeToFit()
+            label.originY = imv.frame.maxY + 3
+            label.center.x = btn.center.x
+            v.addSubview(label)
+            
+            vMenu.addSubview(v)
+        }
+        
+        self.tab = .home
         
     }
     

@@ -26,22 +26,15 @@ class Order {
         })
     }
     
-    func orderProduct(_ dto: ProductDTO) {
-        if let item = orderDTO.line_items.first(where: { $0.product_id == dto.id }) {
-            item.quantity = (item.quantity ) + 1
-            item.calculateSubTotal()
+    func updateOrderLineItem(_ item: OrderLineItemDTO) {
+        item.calculateSubTotal()
+
+        if let index = orderDTO.line_items.index(where: { $0.product_id == item.product_id }) {
+            orderDTO.line_items[index] = item
             return
         }
-        
-        let line = OrderLineItemDTO()
-        line.product_id = dto.id
-        line.quantity = 1
-        line.name = dto.name
-        line.sku = dto.sku
-        line.price = dto.price
-        line.imageURL = dto.images.first?.src
-        line.calculateSubTotal()
-        orderDTO.line_items.append(line)
+
+        orderDTO.line_items.append(item)
         
     }
     

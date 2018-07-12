@@ -8,6 +8,7 @@
 
 import UIKit
 import ArenaDemoAPI
+import CustomControl
 
 class AccountVCtrl: BaseVCtrl {
 
@@ -27,17 +28,17 @@ class AccountVCtrl: BaseVCtrl {
     @IBOutlet weak var vMark: UIView!
     
     @IBOutlet weak var vSignUpDetail: UIView!
-    @IBOutlet weak var txtSignUpUserName: UITextField!
-    @IBOutlet weak var txtSignUpPassword: UITextField!
+    @IBOutlet weak var txtSignUpUserName: CustomUITextField!
+    @IBOutlet weak var txtSignUpPassword: CustomUITextField!
     @IBOutlet weak var btnCheck: UIButton!
     @IBOutlet weak var btnCheckRemember: UIButton!
     @IBOutlet weak var btnForgetPassword: UIButton!
     @IBOutlet weak var btnSignUpConfirm: UIButton!
     
     @IBOutlet weak var vSignInDetail: UIView!
-    @IBOutlet weak var txtSignInEmail: UITextField!
-    @IBOutlet weak var txtSignInPassword: UITextField!
-    @IBOutlet weak var txtSignInConfirmPassword: UITextField!
+    @IBOutlet weak var txtSignInEmail: CustomUITextField!
+    @IBOutlet weak var txtSignInPassword: CustomUITextField!
+    @IBOutlet weak var txtSignInConfirmPassword: CustomUITextField!
     @IBOutlet weak var btnSignInConfirm: UIButton!
     
     // MARK: - Private properties

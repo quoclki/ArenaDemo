@@ -8,6 +8,7 @@
 
 import UIKit
 import ArenaDemoAPI
+import CustomControl
 
 class ClvProductCell: UICollectionViewCell {
 

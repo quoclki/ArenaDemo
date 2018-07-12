@@ -88,8 +88,21 @@ public extension String {
 extension Double {
     func toCurrencyString() -> String {
         let formater = NumberFormatter()
-        formater.locale = Locale(identifier: "vi_VN")
-        formater.numberStyle = .currencyISOCode
+        formater.numberStyle = .currency
+        formater.currencySymbol = ""
+        formater.currencyCode = Base.settings.currency
+        formater.currencyGroupingSeparator = Base.settings.thousand_separator
+        formater.currencyDecimalSeparator = Base.settings.decimal_separator
+        formater.minimumFractionDigits = Base.settings.number_of_decimals ?? 2
+        formater.maximumFractionDigits = Base.settings.number_of_decimals ?? 2
+        if let currency_position = Base.settings.currency_position, let currency = formater.currencyCode, !currency_position.isEmpty {
+            if currency_position.lowercased() == "left" {
+                formater.positiveSuffix = " " + currency
+            } else {
+                formater.positivePrefix = currency + " "
+            }
+        }
+        
         return formater.string(from: NSNumber(value: self)) ?? ""
     }
     
