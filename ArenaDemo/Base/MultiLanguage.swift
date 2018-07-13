@@ -90,16 +90,25 @@ extension Double {
         let formater = NumberFormatter()
         formater.numberStyle = .currency
         formater.currencySymbol = ""
-        formater.currencyCode = Base.settings.currency
-        formater.currencyGroupingSeparator = Base.settings.thousand_separator
-        formater.currencyDecimalSeparator = Base.settings.decimal_separator
-        formater.minimumFractionDigits = Base.settings.number_of_decimals ?? 2
-        formater.maximumFractionDigits = Base.settings.number_of_decimals ?? 2
-        if let currency_position = Base.settings.currency_position, let currency = formater.currencyCode, !currency_position.isEmpty {
-            if currency_position.lowercased() == "left" {
-                formater.positiveSuffix = " " + currency
-            } else {
-                formater.positivePrefix = currency + " "
+        formater.currencyGroupingSeparator = SettingConfig.shared.thousandSeparator.value ?? ","
+        formater.currencyDecimalSeparator = SettingConfig.shared.deciamlSeparator.value ?? "."
+        formater.minimumFractionDigits = Int(SettingConfig.shared.numOfDecimals.value ?? "") ?? 0
+        formater.maximumFractionDigits = Int(SettingConfig.shared.numOfDecimals.value ?? "") ?? 0
+
+        if let symbol = SettingConfig.shared.currency.symbol, let currencyPos = ECurrencyPosOption(rawValue: SettingConfig.shared.currencyPos.value ?? "") {
+            switch currencyPos {
+            case .left:
+                formater.positivePrefix = symbol
+
+            case .left_space:
+                formater.positivePrefix = symbol + " "
+
+            case .right:
+                formater.positiveSuffix = symbol
+
+            case .right_space:
+                formater.positiveSuffix = " " + symbol
+
             }
         }
         

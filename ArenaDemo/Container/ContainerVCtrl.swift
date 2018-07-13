@@ -76,24 +76,37 @@ class ContainerVCtrl: BaseVCtrl {
     // MARK: - Func
     override func loadData() {
         super.loadData()
-        getSystemSetting()
+        getGeneralSetting()
     }
     
-    func getSystemSetting() {
-        _ = SESystemSetting.get({
+    func getGeneralSetting() {
+        func updateSetting(lstSetting: [GeneralDTO]) {
+            SettingConfig.shared.lstGeneralSetting = lstSetting
+            self.setupMenuBotton()
+        }
+        
+//        if let array = UserDefaults.standard.array(forKey: EUserDefaultKey.generalSetting.rawValue) as? [String], !array.isEmpty {
+//            var lstSetting: [GeneralDTO] = []
+//            array.forEach { (jsonString) in
+//                if let dto = GeneralDTO.fromJson(jsonString) {
+//                    lstSetting.append(dto)
+//                }
+//            }
+//            updateSetting(lstSetting: lstSetting)
+//            return
+//        }
+
+        _ = SESetting.getGeneral({
             self.showLoadingView($0)
             
         }, completed: { (response) in
             if !self.checkResponse(response) {
                 return
             }
-            
-            guard let settings = response.systemSettingDTO?.settings else {
-                return
-            }
-            
-            Base.settings = settings
-            self.setupMenuBotton()
+
+            let lstSetting = response.lstSetting
+            UserDefaults.standard.setValue(lstSetting.map({ $0.toJson() }), forKey: EUserDefaultKey.generalSetting.rawValue)
+            updateSetting(lstSetting: lstSetting)
         })
         
     }

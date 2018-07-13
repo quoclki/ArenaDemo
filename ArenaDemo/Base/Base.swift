@@ -12,7 +12,6 @@ import ArenaDemoAPI
 class Base {
     static var container: ContainerVCtrl!
     static var lstPayment: [PaymentMethodDTO] = []
-    static var settings: SettingDTO!
     
     // Color
     static var baseColor: UIColor = UIColor(hexString: "D0021B")

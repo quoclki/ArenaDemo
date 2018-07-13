@@ -46,7 +46,6 @@ class BaseVCtrl: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        task?.cancel()
     }
     
     // Config View for Safe Area With All ViewController

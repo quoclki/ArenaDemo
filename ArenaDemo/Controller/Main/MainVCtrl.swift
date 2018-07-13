@@ -70,6 +70,10 @@ class MainVCtrl: BaseVCtrl {
         request.include = lstID
         
         task = SEProduct.getListProduct(request, completed: { (response) in
+            if !response.success {
+                return
+            }
+            
             let category = CategoryDTO()
             category.name = "Sản phẩm bán chạy"
             category.isTopSaller = true
@@ -89,6 +93,10 @@ class MainVCtrl: BaseVCtrl {
         request.per_page = 5
         
         task = SEProduct.getListCategory(request, completed: { (response) in
+            if !response.success {
+                return
+            }
+
             response.lstCategory.forEach({ (item) in
                 self.getProductByCategoryID(item)
             })
@@ -103,6 +111,10 @@ class MainVCtrl: BaseVCtrl {
         request.category = dto.id
         
         task = SEProduct.getListProduct(request, completed: { (response) in
+            if !response.success {
+                return
+            }
+
             dto.lstProduct = response.lstProduct
             
             let group = MainDataGroup()

@@ -98,7 +98,6 @@ class AccountVCtrl: BaseVCtrl {
         vSignUpSignIn.size = vBorder.size
         vMark.backgroundColor = Base.baseColor
         vBorder.addSubview(vSignUpSignIn)
-        vBorder.clipsToBounds = true
         vBorder.dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: vBorder.cornerRadius)
         configDefaultAccount()
     }
