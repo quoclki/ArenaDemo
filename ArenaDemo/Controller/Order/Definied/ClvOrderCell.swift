@@ -37,13 +37,14 @@ class ClvOrderCell: UICollectionViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         btnMinus.touchUpInside(block: btnMinus_Touched)
         btnPlus.touchUpInside(block: btnPlus_Touched)
         btnFavourite.touchUpInside(block: btnFavourite_Touched)
         btnDelete.touchUpInside(block: btnDelete_Touched)
+        dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: self.cornerRadius)
     }
     
     func updateCell(_ item: OrderLineItemDTO) {
@@ -54,7 +55,6 @@ class ClvOrderCell: UICollectionViewCell {
         lblPrice.textColor = .red
         lblPriceNormal.text = item.price?.toCurrencyString()
         quantity = item.quantity
-        dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: self.cornerRadius)
 
     }
     

@@ -77,6 +77,7 @@ class AccountVCtrl: BaseVCtrl {
         btnSignUpConfirm.cornerRadius = btnSignUpConfirm.height / 2
         btnSignInConfirm.cornerRadius = btnSignInConfirm.height / 2
         vMark.width = btnSignUpDetail.width
+        vBorder.dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: vBorder.cornerRadius)
     }
     
     // MARK: - Layout UI
@@ -98,7 +99,6 @@ class AccountVCtrl: BaseVCtrl {
         vSignUpSignIn.size = vBorder.size
         vMark.backgroundColor = Base.baseColor
         vBorder.addSubview(vSignUpSignIn)
-        vBorder.dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: vBorder.cornerRadius)
         configDefaultAccount()
     }
     

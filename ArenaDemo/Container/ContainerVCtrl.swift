@@ -77,6 +77,16 @@ class ContainerVCtrl: BaseVCtrl {
     override func loadData() {
         super.loadData()
         getGeneralSetting()
+        getPayment()
+    }
+    
+    func getPayment() {
+        let request = BaseRequest(page: 1)
+        
+        _ = SEPaymentMethod.getList(request, completed: { (response) in
+            Base.lstPayment = response.lstPayment
+        })
+        
     }
     
     func getGeneralSetting() {
@@ -85,16 +95,16 @@ class ContainerVCtrl: BaseVCtrl {
             self.setupMenuBotton()
         }
         
-//        if let array = UserDefaults.standard.array(forKey: EUserDefaultKey.generalSetting.rawValue) as? [String], !array.isEmpty {
-//            var lstSetting: [GeneralDTO] = []
-//            array.forEach { (jsonString) in
-//                if let dto = GeneralDTO.fromJson(jsonString) {
-//                    lstSetting.append(dto)
-//                }
-//            }
-//            updateSetting(lstSetting: lstSetting)
-//            return
-//        }
+        if let array = UserDefaults.standard.array(forKey: EUserDefaultKey.generalSetting.rawValue) as? [String], !array.isEmpty {
+            var lstSetting: [GeneralDTO] = []
+            array.forEach { (jsonString) in
+                if let dto = GeneralDTO.fromJson(jsonString) {
+                    lstSetting.append(dto)
+                }
+            }
+            updateSetting(lstSetting: lstSetting)
+            return
+        }
 
         _ = SESetting.getGeneral({
             self.showLoadingView($0)

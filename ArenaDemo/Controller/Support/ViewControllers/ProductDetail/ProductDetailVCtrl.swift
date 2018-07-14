@@ -33,7 +33,6 @@ class ProductDetailVCtrl: BaseVCtrl {
     
     @IBOutlet weak var vDescribe: UIView!
     @IBOutlet weak var lblDescription: UILabel!
-    @IBOutlet weak var vRelatedProduct: UIView!
     
     @IBOutlet var vRight: UIView!
     @IBOutlet weak var btnCart: UIButton!
@@ -96,11 +95,9 @@ class ProductDetailVCtrl: BaseVCtrl {
         vDescribe.height = lblDescription.frame.maxY
         vDescribe.originY = vProductInfo.frame.maxY + padding
         
-        vRelatedProduct.originY = vDescribe.frame.maxY + padding
-        
         // Header for Collection View
-        let heightForViewHeader = vRelatedProduct.frame.maxY
-        vHeader.frame = CGRect(0, -heightForViewHeader, Ratio.width, vRelatedProduct.frame.maxY)
+        let heightForViewHeader = vDescribe.frame.maxY + padding
+        vHeader.frame = CGRect(0, -heightForViewHeader, Ratio.width, heightForViewHeader)
         clvProductDetail.addSubview(vHeader)
         clvProductDetail.contentInset.top = heightForViewHeader
         clvProductDetail.contentOffset.y = -heightForViewHeader
@@ -125,6 +122,7 @@ class ProductDetailVCtrl: BaseVCtrl {
     }
     
     func mappingUI() {
+        self.view.backgroundColor = backgroundColor
         lblName.text = product.name
         lblPrice.text = product.price?.toCurrencyString()
         lblPrice.textColor = Base.baseColor
@@ -182,7 +180,7 @@ class ProductDetailVCtrl: BaseVCtrl {
     func btnOrder_Touched(sender: UIButton) {
         lineItem.quantity = quantity
         Order.shared.updateOrderLineItem(lineItem)
-        navigationController?.popViewController(animated: true)
+        navigationController?.popToRootViewController(animated: true)
     }
     
     // MARK: - Func
@@ -213,6 +211,10 @@ extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelega
         return "clvProductDetailCellID"
     }
     
+    private var headerCellID: String {
+        return "clvProductHeaderCellID"
+    }
+    
     private var backgroundColor: UIColor {
         return UIColor(hexString: "F1F2F2")
     }
@@ -220,6 +222,7 @@ extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelega
     func configCollectionView() {
         clvProductDetail.backgroundColor = backgroundColor
         clvProductDetail.register(UINib(nibName: String(describing: ClvProductCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
+        clvProductDetail.register(UINib(nibName: String(describing: ClvProductHeaderCell.self), bundle: Bundle(for: type(of: self))), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerCellID)
         clvProductDetail.dataSource = self
         clvProductDetail.delegate = self
         
@@ -228,10 +231,23 @@ extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelega
             layout.minimumLineSpacing = padding
             layout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
             layout.itemSize = CGSize((Ratio.width -  padding * 3) / 2, 265 * Ratio.ratioWidth)
+            layout.headerReferenceSize = CGSize(Ratio.width, 40)
         }
 
     }
     
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionElementKindSectionHeader:
+            let v = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerCellID, for: indexPath) as! ClvProductHeaderCell
+            v.updateCell("SẢN PHẨM LIÊN QUAN")
+            return v
+            
+        default: fatalError("Unexpected element kind")
+        }
+    }
+    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return lstItem.count
     }

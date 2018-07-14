@@ -154,8 +154,7 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICol
             let padding: CGFloat = 15
             layout.minimumInteritemSpacing = padding
             layout.minimumLineSpacing = padding
-            layout.sectionInset.left = padding
-            layout.sectionInset.right = padding
+            layout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
             layout.itemSize = CGSize((Ratio.width -  padding * 3) / 2, 265 * Ratio.ratioWidth)
         }
     }
@@ -196,7 +195,7 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(collectionView.width, 54)
+        return CGSize(collectionView.width, section == 0 ? 40 : 25)
     }
     
 }

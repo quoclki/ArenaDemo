@@ -14,6 +14,7 @@ class OrderVCtrl: BaseVCtrl {
     // MARK: - Outlet
     @IBOutlet weak var vSafe: UIView!
     @IBOutlet weak var clvOrder: UICollectionView!
+    @IBOutlet weak var btnPayment: UIButton!
     
     // MARK: - Private properties
     private var order: OrderDTO!
@@ -55,10 +56,14 @@ class OrderVCtrl: BaseVCtrl {
     // MARK: - Event Listerner
     override func eventListener() {
         super.eventListener()
-        
+        btnPayment.touchUpInside(block: btnPayment_Touched)
     }
     
     // MARK: - Event Handler
+    func btnPayment_Touched(sender: UIButton) {
+        let payment = PaymentVCtrl(order)
+        navigationController?.pushViewController(payment, animated: true)
+    }
     
     // MARK: - Func
     override func loadData() {
@@ -117,9 +122,7 @@ extension OrderVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICo
             return
         }
         
-        let item = lstItem[indexPath.row]
-        
-        
+//        let item = lstItem[indexPath.row]
         
     }
     

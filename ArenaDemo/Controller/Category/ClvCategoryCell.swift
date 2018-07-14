@@ -23,6 +23,8 @@ class ClvCategoryCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         imv.cornerRadius = imv.width / 2
+        dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: self.cornerRadius)
+
     }
 
     func updateCell(_ item: CategoryDTO) {
@@ -30,7 +32,6 @@ class ClvCategoryCell: UICollectionViewCell {
         imv.contentMode = .scaleAspectFit
         lblName.text = item.name?.uppercased()
         self.cornerRadius = 5
-        dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: self.cornerRadius)
     }
     
 }

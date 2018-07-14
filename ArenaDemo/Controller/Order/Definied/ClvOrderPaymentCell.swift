@@ -31,10 +31,10 @@ class ClvOrderPaymentCell: UICollectionViewCell {
         super.layoutSubviews()
         txtCoupon.addTarget(self, action: #selector(self.handleChangeText(_ :)), for: .editingChanged)
         txtCoupon.delegate = self
+        dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: self.cornerRadius)
     }
     
     func updateCell() {
-        dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: self.cornerRadius)
         lblTotal.text = Order.shared.total.toCurrencyString()
         
         coupon = ""
