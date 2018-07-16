@@ -14,7 +14,7 @@ class PaymentVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
     @IBOutlet weak var vSafe: UIView!
-    @IBOutlet weak var clvOrder: UICollectionView!
+    @IBOutlet weak var tbvOrder: UITableView!
     @IBOutlet weak var btnOrder: UIButton!
 
     @IBOutlet var vPayment: UIView!
@@ -30,6 +30,7 @@ class PaymentVCtrl: BaseVCtrl {
     
     @IBOutlet var vPaymentFooter: UIView!
     @IBOutlet weak var lblTotal: UILabel!
+    @IBOutlet weak var vMethod: UIView!
     
     // MARK: - Private properties
     
@@ -57,10 +58,10 @@ class PaymentVCtrl: BaseVCtrl {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         updateLayoutUI()
+        
     }
 
     func updateLayoutUI() {
-        self.view.backgroundColor = UIColor(hexString: "F1F2F2")
         if Order.shared.cusDTO.id != nil {
             Order.shared.setUpCustomer()
             vSignUp.isHidden = true
@@ -68,13 +69,9 @@ class PaymentVCtrl: BaseVCtrl {
         }
         
         vPayment.height = vInfoPayment.frame.maxY + padding
+        tbvOrder.tableHeaderView = vPayment
+        tbvOrder.backgroundColor = UIColor(hexString: "F1F2F2")
         
-        // Header for Collection View
-        let heightForViewHeader = vPayment.height
-        vPayment.frame = CGRect(0, -heightForViewHeader, Ratio.width, heightForViewHeader)
-        clvOrder.addSubview(vPayment)
-        clvOrder.contentInset.top = heightForViewHeader
-        clvOrder.contentOffset.y = -heightForViewHeader
     }
 
     // MARK: - Layout UI
@@ -83,10 +80,10 @@ class PaymentVCtrl: BaseVCtrl {
         createNavigationBar(title: "THANH TOÁN")
         vSetSafeArea = vSafe
         addViewToLeftBarItem(createBackButton())
-        configCollectionView()
+        configTableView()
 
-        updateLayoutUI()
         mappingUI()
+        
     }
     
     func mappingUI() {
@@ -94,12 +91,17 @@ class PaymentVCtrl: BaseVCtrl {
         txtPhone.text = order.billing?.phone
         txtEmail.text = order.billing?.email
         txtAddress.text = order.billing?.address_1
+        [txtName, txtPhone, txtEmail, txtAddress].forEach({
+            $0?.delegate = self
+        })
+        
     }
     
     override func configUIViewWillAppear() {
         super.configUIViewWillAppear()
-        
+
     }
+    
     
     // MARK: - Event Listerner
     override func eventListener() {
@@ -116,7 +118,7 @@ class PaymentVCtrl: BaseVCtrl {
     }
 }
 
-extension PaymentVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
     private var cellID: String {
         return "clvPaymentOrderCellID"
     }
@@ -133,75 +135,93 @@ extension PaymentVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UI
         return 15
     }
     
-    func configCollectionView() {
-        clvOrder.backgroundColor = .white
-        clvOrder.register(UINib(nibName: String(describing: ClvOrderCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
-        clvOrder.register(UINib(nibName: String(describing: ClvOrderPaymentCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: paymentCellID)
-        clvOrder.register(UINib(nibName: String(describing: ClvProductHeaderCell.self), bundle: Bundle(for: type(of: self))), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerCellID)
-        clvOrder.dataSource = self
-        clvOrder.delegate = self
-        
-        if let layout = clvOrder.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.minimumInteritemSpacing = padding
-            layout.minimumLineSpacing = padding
-            layout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
-            layout.headerReferenceSize = CGSize(Ratio.width, 40)
+    func configTableView() {
+        tbvOrder.backgroundColor = .white
+        tbvOrder.register(UINib(nibName: String(describing: TbvOrderCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: cellID)
+        tbvOrder.register(UINib(nibName: String(describing: TbvOrderPaymentCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: paymentCellID)
+        tbvOrder.dataSource = self
+        tbvOrder.delegate = self
+        tbvOrder.separatorStyle = .none
+    
+        let v = UIView()
+        v.frame.size = CGSize(Ratio.width, padding)
+        v.backgroundColor = .white
+        tbvOrder.tableFooterView = v
 
-        }
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return lstItem.isEmpty ? 0 : lstItem.count + 1
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case UICollectionElementKindSectionHeader:
-            let v = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerCellID, for: indexPath) as! ClvProductHeaderCell
-            v.updateCell("ĐƠN HÀNG CỦA BẠN")
-            return v
-            
-        default: fatalError("Unexpected element kind")
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == lstItem.count {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: paymentCellID, for: indexPath) as! ClvOrderPaymentCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: paymentCellID) as! TbvOrderPaymentCell
+            cell.vBorder.originY = padding
             cell.updateCell()
             return cell
         }
         
         let item = lstItem[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ClvOrderCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! TbvOrderCell
+        cell.vBorder.originY = padding
         cell.updateCell(item)
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == lstItem.count {
-            return
+            return 118
         }
-        
-        //        let item = lstItem[indexPath.row]
-        
+        let item = lstItem[indexPath.row]
+        return max(item.cellHeight, 167)
+
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = Ratio.width
-        let widthItem = width - padding * 2
-        return CGSize(widthItem, indexPath.row == lstItem.count ? 102 : 152)
-        
-    }
-    
-    func handleDelete(_ collectionView: UICollectionView, indexPath: IndexPath) {
+
+    func handleDelete(_ tableView: UITableView, indexPath: IndexPath) {
         _ = showAlert(title: "Cảnh báo", message: "Bạn có chắc chắn muốn xoá món hàng này?", leftBtnTitle: "Không", rightBtnTitle: "Có", rightBtnStyle: .destructive, rightAction: {
             self.order.line_items.remove(at: indexPath.row)
-            collectionView.reloadData()
+            tableView.reloadData()
             
         })
         
     }
     
 }
+
+extension PaymentVCtrl: UITextFieldDelegate, UITextViewDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return true
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        return true
+    }
+    
+}
+
+extension PaymentVCtrl: HandleKeyboardProtocol {
+    func handleKeyboard(willShow notify: NSNotification) {
+
+    }
+    
+    func handleKeyboard(willHide notify: NSNotification) {
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        handleKeyboard(register: true)
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        handleKeyboard(register: false)
+    }
+}
+
+
+
 

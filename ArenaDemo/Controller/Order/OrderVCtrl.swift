@@ -13,7 +13,7 @@ class OrderVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
     @IBOutlet weak var vSafe: UIView!
-    @IBOutlet weak var clvOrder: UICollectionView!
+    @IBOutlet weak var tbvOrder: UITableView!
     @IBOutlet weak var btnPayment: UIButton!
     
     // MARK: - Private properties
@@ -42,7 +42,7 @@ class OrderVCtrl: BaseVCtrl {
         super.configUI()
         createNavigationBar(title: "GIỎ HÀNG CỦA TÔI")
         vSetSafeArea = vSafe
-        configCollectionView()
+        configTableView()
         if isCreateBack {
             addViewToLeftBarItem(createBackButton())
         }
@@ -72,7 +72,7 @@ class OrderVCtrl: BaseVCtrl {
     }
 }
 
-extension OrderVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension OrderVCtrl: UITableViewDataSource, UITableViewDelegate {
     private var cellID: String {
         return "clvOrderCellID"
     }
@@ -85,58 +85,50 @@ extension OrderVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICo
         return 15
     }
     
-    func configCollectionView() {
-        clvOrder.backgroundColor = .white
-        clvOrder.register(UINib(nibName: String(describing: ClvOrderCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
-        clvOrder.register(UINib(nibName: String(describing: ClvOrderPaymentCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: paymentCellID)
-        clvOrder.dataSource = self
-        clvOrder.delegate = self
+    func configTableView() {
+        tbvOrder.backgroundColor = .white
+        tbvOrder.register(UINib(nibName: String(describing: TbvOrderCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: cellID)
+        tbvOrder.register(UINib(nibName: String(describing: TbvOrderPaymentCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: paymentCellID)
+        tbvOrder.dataSource = self
+        tbvOrder.delegate = self
+        tbvOrder.separatorStyle = .none
         
-        if let layout = clvOrder.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.minimumInteritemSpacing = padding
-            layout.minimumLineSpacing = padding
-            layout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
-            
-        }
+        let v = UIView()
+        v.frame.size = CGSize(Ratio.width, padding)
+        tbvOrder.tableFooterView = v
+
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return lstItem.isEmpty ? 0 : lstItem.count + 1
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == lstItem.count {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: paymentCellID, for: indexPath) as! ClvOrderPaymentCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: paymentCellID) as! TbvOrderPaymentCell
             cell.updateCell()
             return cell
         }
         
         let item = lstItem[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ClvOrderCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! TbvOrderCell
         cell.updateCell(item)
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == lstItem.count {
-            return
+            return 118
         }
-        
-//        let item = lstItem[indexPath.row]
+        let item = lstItem[indexPath.row]
+        return max(item.cellHeight, 167)
         
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = Ratio.width
-        let widthItem = width - padding * 2
-        return CGSize(widthItem, indexPath.row == lstItem.count ? 102 : 152)
 
-    }
-    
-    func handleDelete(_ collectionView: UICollectionView, indexPath: IndexPath) {
+    func handleDelete(_ tableView: UITableView, indexPath: IndexPath) {
         _ = showAlert(title: "Cảnh báo", message: "Bạn có chắc chắn muốn xoá món hàng này?", leftBtnTitle: "Không", rightBtnTitle: "Có", rightBtnStyle: .destructive, rightAction: {
             self.order.line_items.remove(at: indexPath.row)
-            collectionView.reloadData()
+            tableView.reloadData()
             
         })
         

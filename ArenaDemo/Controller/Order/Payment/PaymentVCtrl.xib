@@ -14,14 +14,15 @@
             <connections>
                 <outlet property="btnOrder" destination="hLT-Pu-qX8" id="c2r-Lf-D6y"/>
                 <outlet property="btnSignUp" destination="Yux-7y-xDi" id="mYw-by-asd"/>
-                <outlet property="clvOrder" destination="UiF-R6-IXr" id="nZQ-ZF-tQN"/>
                 <outlet property="lblTotal" destination="Fa9-4i-oJQ" id="m3J-jP-1lF"/>
+                <outlet property="tbvOrder" destination="X7k-aF-fXC" id="r8N-X9-J5r"/>
                 <outlet property="txtAddress" destination="KHX-76-5Y3" id="MVK-y2-3q3"/>
                 <outlet property="txtEmail" destination="Og4-sB-fmg" id="XRk-dG-skA"/>
                 <outlet property="txtName" destination="fqz-cx-euW" id="cTQ-PS-AiO"/>
                 <outlet property="txtPhone" destination="vVd-cv-gYp" id="1Kd-pf-L0r"/>
                 <outlet property="txvNote" destination="DPq-K4-brr" id="p0T-DW-8rD"/>
                 <outlet property="vInfoPayment" destination="jZ1-8O-wgm" id="SJ2-67-FfR"/>
+                <outlet property="vMethod" destination="3tw-gY-0qZ" id="TeR-Xz-Elm"/>
                 <outlet property="vPayment" destination="XgF-no-L2k" id="Qpq-q5-hTh"/>
                 <outlet property="vPaymentFooter" destination="v34-QY-Y3t" id="Mfc-g0-Z9z"/>
                 <outlet property="vSafe" destination="xkw-gR-qst" id="vqd-ch-khb"/>
@@ -38,17 +39,6 @@
                     <rect key="frame" x="0.0" y="70" width="375" height="597"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="UiF-R6-IXr">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="557"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="S6I-qn-FCb">
-                                <size key="itemSize" width="50" height="50"/>
-                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            </collectionViewFlowLayout>
-                        </collectionView>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hLT-Pu-qX8">
                             <rect key="frame" x="0.0" y="557" width="375" height="40"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
@@ -57,6 +47,11 @@
                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
                         </button>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="X7k-aF-fXC">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="557"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </tableView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
@@ -122,7 +117,7 @@
                         </view>
                         <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Họ tên*" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fqz-cx-euW" customClass="CustomUITextField" customModule="CustomControl">
                             <rect key="frame" x="15" y="55" width="345" height="40"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <nil key="textColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
@@ -143,7 +138,7 @@
                         </textField>
                         <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Điện thoại*" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vVd-cv-gYp" customClass="CustomUITextField" customModule="CustomControl">
                             <rect key="frame" x="15" y="110" width="345" height="40"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <nil key="textColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
@@ -164,7 +159,7 @@
                         </textField>
                         <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email*" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Og4-sB-fmg" customClass="CustomUITextField" customModule="CustomControl">
                             <rect key="frame" x="15" y="165" width="345" height="40"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <nil key="textColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
@@ -185,7 +180,7 @@
                         </textField>
                         <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Địa chỉ*" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KHX-76-5Y3" customClass="CustomUITextField" customModule="CustomControl">
                             <rect key="frame" x="15" y="220" width="345" height="40"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <nil key="textColor"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
@@ -206,7 +201,7 @@
                         </textField>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="DPq-K4-brr">
                             <rect key="frame" x="15" y="275" width="345" height="191"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.97254901960784312" green="0.97254901960784312" blue="0.97254901960784312" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -279,7 +274,7 @@
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jGb-Iv-3n3">
-                            <rect key="frame" x="15" y="55" width="346" height="161"/>
+                            <rect key="frame" x="15" y="55" width="345" height="161"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
@@ -288,7 +283,7 @@
             </subviews>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="LTE-LW-iue"/>
-            <point key="canvasLocation" x="450.5" y="-129.5"/>
+            <point key="canvasLocation" x="457" y="-57"/>
         </view>
     </objects>
 </document>
