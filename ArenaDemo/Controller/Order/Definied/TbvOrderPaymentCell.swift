@@ -12,10 +12,13 @@ import CustomControl
 class TbvOrderPaymentCell: UITableViewCell {
     
     @IBOutlet weak var vBorder: UIView!
-    @IBOutlet weak var lblTotal: UILabel!
+    @IBOutlet weak var lblTempTotal: UILabel!
     @IBOutlet weak var txtCoupon: CustomUITextField!
     @IBOutlet weak var btnApply: UIButton!
     
+    @IBOutlet weak var vTotal: UIView!
+    @IBOutlet weak var lblTotal: UILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -36,8 +39,9 @@ class TbvOrderPaymentCell: UITableViewCell {
     }
     
     func updateCell() {
+        lblTempTotal.text = Order.shared.total.toCurrencyString()
         lblTotal.text = Order.shared.total.toCurrencyString()
-        
+
         coupon = ""
     }
     

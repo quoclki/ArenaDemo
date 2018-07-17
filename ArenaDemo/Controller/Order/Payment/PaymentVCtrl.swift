@@ -17,29 +17,24 @@ class PaymentVCtrl: BaseVCtrl {
     @IBOutlet weak var tbvOrder: UITableView!
     @IBOutlet weak var btnOrder: UIButton!
 
-    @IBOutlet var vPayment: UIView!
-    @IBOutlet weak var vInfoPayment: UIView!
-    @IBOutlet weak var vSignUp: UIView!
+    @IBOutlet var vSignUp: UIView!
     @IBOutlet weak var btnSignUp: UIButton!
-    
-    @IBOutlet weak var txtName: CustomUITextField!
-    @IBOutlet weak var txtPhone: CustomUITextField!
-    @IBOutlet weak var txtEmail: CustomUITextField!
-    @IBOutlet weak var txtAddress: CustomUITextField!
-    @IBOutlet weak var txvNote: UITextView!
     
     @IBOutlet var vPaymentFooter: UIView!
     @IBOutlet weak var lblTotal: UILabel!
     @IBOutlet weak var vMethod: UIView!
     
     // MARK: - Private properties
+    private var lstItem: [EPaymentHeaderType] = []
+    private var lstPayemnt: [PaymentMethodDTO] = []
     
     // MARK: - Properties
     private var order: OrderDTO!
-    private var lstItem: [OrderLineItemDTO] {
+    private var lstItemOrder: [OrderLineItemDTO] {
         return order.line_items
     }
     
+
     // MARK: - Properties
     
     // MARK: - Init
@@ -57,22 +52,9 @@ class PaymentVCtrl: BaseVCtrl {
     // MARK: - UIViewController func
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        updateLayoutUI()
         
     }
 
-    func updateLayoutUI() {
-        if Order.shared.cusDTO.id != nil {
-            Order.shared.setUpCustomer()
-            vSignUp.isHidden = true
-            vInfoPayment.originY = 0
-        }
-        
-        vPayment.height = vInfoPayment.frame.maxY + padding
-        tbvOrder.tableHeaderView = vPayment
-        tbvOrder.backgroundColor = UIColor(hexString: "F1F2F2")
-        
-    }
 
     // MARK: - Layout UI
     override func configUI() {
@@ -81,22 +63,29 @@ class PaymentVCtrl: BaseVCtrl {
         vSetSafeArea = vSafe
         addViewToLeftBarItem(createBackButton())
         configTableView()
+        updateLayoutUI()
+        
+    }
+    
+    func updateLayoutUI() {
+        lstPayemnt.removeAll()
+        Base.lstPayment.forEach { (method) in
+            if let dto = PaymentMethodDTO.fromJson(method.toJson()), dto.enabled == true {
+                lstPayemnt.append(dto)
+            }
+        }
+        lstPayemnt.first?.isCheck = true
+        order.lstPayment = lstPayemnt
+        
+        if Order.shared.cusDTO.id == nil {
+            tbvOrder.tableHeaderView = vSignUp
+            return
+        }
+        
+        Order.shared.setUpCustomer()
+        
+    }
 
-        mappingUI()
-        
-    }
-    
-    func mappingUI() {
-        txtName.text = [order.billing?.first_name ?? "", order.billing?.last_name ?? ""].filter({ !$0.isEmpty }).joined(separator: " ")
-        txtPhone.text = order.billing?.phone
-        txtEmail.text = order.billing?.email
-        txtAddress.text = order.billing?.address_1
-        [txtName, txtPhone, txtEmail, txtAddress].forEach({
-            $0?.delegate = self
-        })
-        
-    }
-    
     override func configUIViewWillAppear() {
         super.configUIViewWillAppear()
 
@@ -119,6 +108,10 @@ class PaymentVCtrl: BaseVCtrl {
 }
 
 extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
+        private var paymentInfoCellID: String {
+        return "clvPaymentInfoCellID"
+    }
+
     private var cellID: String {
         return "clvPaymentOrderCellID"
     }
@@ -127,7 +120,8 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
         return "clvPaymentPaymentCellID"
     }
     
-    private var headerCellID: String {
+    
+    private var paymentMethodCellID: String {
         return "clvPaymentHeaderCellID"
     }
     
@@ -136,46 +130,100 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
     }
     
     func configTableView() {
-        tbvOrder.backgroundColor = .white
+        lstItem = [.paymentInfo, .myOrder, .paymentMethod]
         tbvOrder.register(UINib(nibName: String(describing: TbvOrderCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: cellID)
         tbvOrder.register(UINib(nibName: String(describing: TbvOrderPaymentCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: paymentCellID)
+        tbvOrder.register(UINib(nibName: String(describing: TbvPaymentInfoCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: paymentInfoCellID)
+        tbvOrder.register(UINib(nibName: String(describing: TbvPaymentMethodCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: paymentMethodCellID)
         tbvOrder.dataSource = self
         tbvOrder.delegate = self
         tbvOrder.separatorStyle = .none
-    
-        let v = UIView()
-        v.frame.size = CGSize(Ratio.width, padding)
-        v.backgroundColor = .white
-        tbvOrder.tableFooterView = v
+        tbvOrder.backgroundColor = UIColor(hexString: "F1F2F2")
+        tbvOrder.allowsSelection = false
 
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return lstItem.count
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let vHeader = UIView()
+        vHeader.frame = CGRect(0, 0, tableView.width, 40)
+        vHeader.backgroundColor = .white
+        vHeader.borderColor = tableView.backgroundColor ?? .white
+        vHeader.borderWidth = 1
+        
+        let label = UILabel()
+        label.frame = CGRect(padding, 0, vHeader.width - padding * 2, vHeader.height)
+        label.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.light)
+        label.text = lstItem[section].name
+        vHeader.addSubview(label)
+
+        return vHeader
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return lstItem.isEmpty ? 0 : lstItem.count + 1
+        let header = lstItem[section]
+        if [.paymentInfo, .paymentMethod].contains(header) {
+            return 1
+        }
+        return lstItemOrder.isEmpty ? 0 : lstItemOrder.count + 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == lstItem.count {
-            let cell = tableView.dequeueReusableCell(withIdentifier: paymentCellID) as! TbvOrderPaymentCell
-            cell.vBorder.originY = padding
-            cell.updateCell()
+        let header = lstItem[indexPath.section]
+        
+        if header == .paymentInfo {
+            let cell = tableView.dequeueReusableCell(withIdentifier: paymentInfoCellID) as! TbvPaymentInfoCell
+            cell.updateCell(order.billing)
             return cell
         }
-        
-        let item = lstItem[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! TbvOrderCell
-        cell.vBorder.originY = padding
-        cell.updateCell(item)
+
+        if header == .myOrder {
+            if indexPath.row == lstItemOrder.count {
+                let cell = tableView.dequeueReusableCell(withIdentifier: paymentCellID) as! TbvOrderPaymentCell
+                cell.vBorder.originY = padding
+                cell.updateCell()
+                return cell
+            }
+            
+            let item = lstItemOrder[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! TbvOrderCell
+            cell.vBorder.originY = padding
+            cell.updateCell(item)
+            return cell
+
+        }
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: paymentMethodCellID) as! TbvPaymentMethodCell
+        cell.updateCell(order)
+        cell.backgroundColor = tableView.backgroundColor
         return cell
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == lstItem.count {
-            return 118
+        let headerData = lstItem[indexPath.section]
+        if headerData == .paymentInfo {
+            return 442
         }
-        let item = lstItem[indexPath.row]
-        return max(item.cellHeight, 167)
+        
+        if headerData == .myOrder {
+            if indexPath.row == lstItemOrder.count {
+                return 205
+            }
+            let item = lstItemOrder[indexPath.row]
+            return max(item.cellHeight, 167)
 
+        }
+        
+        return order.payment_method_cellHeight
+        
     }
 
     func handleDelete(_ tableView: UITableView, indexPath: IndexPath) {
@@ -222,6 +270,23 @@ extension PaymentVCtrl: HandleKeyboardProtocol {
     }
 }
 
-
-
+enum EPaymentHeaderType: Int {
+    case paymentInfo
+    case myOrder
+    case paymentMethod
+    
+    var name: String {
+        switch self {
+        case .paymentInfo:
+            return "THÔNG TIN THANH TOÁN"
+        
+        case .myOrder:
+            return "ĐƠN HÀNG CỦA BẠN"
+            
+        case .paymentMethod:
+            return "PHƯƠNG THỨC THANH TOÁN"
+            
+        }
+    }
+}
 
