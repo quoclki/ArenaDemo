@@ -19,18 +19,24 @@ class TbvOrderCell: UITableViewCell {
     @IBOutlet weak var lblPriceNormal: UILabel!
     @IBOutlet weak var btnFavourite: UIButton!
     @IBOutlet weak var btnDelete: UIButton!
+    
+    @IBOutlet weak var vActionQuantity: UIView!
     @IBOutlet weak var btnMinus: UIButton!
     @IBOutlet weak var lblQuantity: UILabel!
     @IBOutlet weak var btnPlus: UIButton!
+    @IBOutlet weak var lblPaymentQuantity: UILabel!
     
     private var itemLine: OrderLineItemDTO!
+    private var isPayment: Bool = false
     
     private var quantity: Int = 0 {
         didSet {
             itemLine.quantity = quantity
             itemLine.calculateSubTotal()
             lblQuantity.text = quantity.toString()
+            lblPaymentQuantity.text = "Số lượng: \( quantity.toString() )"
             btnMinus.isEnabled = quantity > 1
+            
         }
     }
     
@@ -52,12 +58,18 @@ class TbvOrderCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        vBorder.dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: vBorder.cornerRadius)
-        
+        vBorder.layer.applySketchShadow(blur: vBorder.cornerRadius)
+
     }
     
-    func updateCell(_ item: OrderLineItemDTO) {
+    func updateCell(_ item: OrderLineItemDTO, isPayment: Bool = false) {
         self.itemLine = item
+        self.isPayment = isPayment
+        vActionQuantity.isHidden = isPayment
+        btnFavourite.isHidden = vActionQuantity.isHidden
+        lblPaymentQuantity.isHidden = !vActionQuantity.isHidden
+        btnDelete.originX = isPayment ? btnFavourite.originX : btnDelete.originX
+        
         ImageStore.shared.setImg(toImageView: imv, imgURL: item.productDTO?.images.first?.src)
         lblName.text = item.name
         lblPrice.text = item.price?.toCurrencyString()
@@ -82,11 +94,15 @@ class TbvOrderCell: UITableViewCell {
             return
         }
 
-        guard let parentVCtrl = self.parentViewController as? OrderVCtrl else {
+        if let parentVCtrl = self.parentViewController as? OrderVCtrl {
+            parentVCtrl.handleDelete(tableView, indexPath: indexPath)
             return
         }
 
-        parentVCtrl.handleDelete(tableView, indexPath: indexPath)
+        if let parentVCtrl = self.parentViewController as? PaymentVCtrl {
+            parentVCtrl.handleDelete(tableView, indexPath: indexPath)
+            return
+        }
     }
     
     func btnMinus_Touched(sender: UIButton) {

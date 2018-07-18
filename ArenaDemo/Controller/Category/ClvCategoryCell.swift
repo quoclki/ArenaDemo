@@ -23,7 +23,7 @@ class ClvCategoryCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         imv.cornerRadius = imv.width / 2
-        dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: self.cornerRadius)
+        self.layer.applySketchShadow(blur: self.cornerRadius)
 
     }
 

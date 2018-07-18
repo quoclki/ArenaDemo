@@ -19,6 +19,7 @@ class Base {
     static var logo: UIImage {
         return UIImage(named: "img-Logo", in: Bundle(for: Base.self), compatibleWith: nil) ?? UIImage()
     }
+    
 }
 
 public extension BaseRequest {
@@ -39,5 +40,30 @@ extension BaseVCtrl {
         return response.success
     }
  
+}
+
+extension CALayer {
+    func applySketchShadow (
+        color: UIColor = UIColor(hexString: "DAD8DA"),
+        alpha: Float = 0.5,
+        x: CGFloat = 0,
+        y: CGFloat = 2,
+        blur: CGFloat = 8,
+        spread: CGFloat = 0)
+    {
+        shadowColor = color.cgColor
+        shadowOpacity = alpha
+        shadowOffset = CGSize(width: x, height: y)
+        shadowRadius = blur / 2.0
+        if spread == 0 {
+            shadowPath = nil
+        } else {
+            let dx = -spread
+            let rect = bounds.insetBy(dx: dx, dy: dx)
+            shadowPath = UIBezierPath(rect: rect).cgPath
+        }
+    }
+
+
 }
 

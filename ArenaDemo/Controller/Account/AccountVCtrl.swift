@@ -79,6 +79,7 @@ class AccountVCtrl: BaseVCtrl {
         btnSignInConfirm.cornerRadius = btnSignInConfirm.height / 2
         vMark.width = btnSignUpDetail.width
         vBorder.dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: vBorder.cornerRadius)
+        vBorder.layer.applySketchShadow(blur: vBorder.cornerRadius)
     }
     
     // MARK: - Layout UI
@@ -130,22 +131,13 @@ class AccountVCtrl: BaseVCtrl {
         btnSignUpDetail.touchUpInside(block: btnSignUpDetail_Touched)
         btnSignUpConfirm.touchUpInside(block: btnSignUpConfirm_Touched)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTapScrollView(_ :)))
-        tapGesture.numberOfTapsRequired = 1
-        tapGesture.numberOfTouchesRequired = 1
-        scrollView.addGestureRecognizer(tapGesture)
-        
         [txtSignUpUserName, txtSignUpPassword, txtSignInEmail, txtSignInPassword, txtSignInConfirmPassword].forEach({
             $0?.delegate = self
         })
     }
     
     // MARK: - Event Handler
-    @objc func handleTapScrollView(_ sender: UITapGestureRecognizer) {
-        scrollView.setContentOffset(CGPoint(0, self.yOffset), animated: true)
-        self.view.endEditing(true)
-    }
-
+    
     // MARK: - Func
     override func loadData() {
         super.loadData()
@@ -177,6 +169,7 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as! TbvAccountCell
         let item = lstItem[indexPath.row]
         cell.updateCell(item)
+        cell.selectionStyle = item == .signInSignUp ? .none : .blue
         return cell
     }
     
@@ -345,6 +338,11 @@ extension AccountVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
     
     func handleKeyboard(willHide notify: NSNotification) {
         scrollView.setContentOffset(CGPoint(0, self.yOffset), animated: true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.endEditing(true)
+        return true
     }
     
     override func viewWillAppear(_ animated: Bool) {

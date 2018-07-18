@@ -42,12 +42,12 @@ class TbvPaymentInfoCell: UITableViewCell {
         
     }
     
-    func updateCell(_ item: AddressDTO?) {
+    func updateCell(_ item: AddressDTO) {
         self.item = item
-        txtName.text = [item?.first_name ?? "", item?.last_name ?? ""].filter({ !$0.isEmpty }).joined(separator: " ")
-        txtPhone.text = item?.phone
-        txtEmail.text = item?.email
-        txtAddress.text = item?.address_1
+        txtName.text = [item.first_name , item.last_name ].filter({ !$0.isEmpty }).joined(separator: " ")
+        txtPhone.text = item.phone
+        txtEmail.text = item.email
+        txtAddress.text = item.address_1
 
     }
     

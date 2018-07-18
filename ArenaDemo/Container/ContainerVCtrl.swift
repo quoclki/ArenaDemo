@@ -17,7 +17,7 @@ class ContainerVCtrl: BaseVCtrl {
     @IBOutlet weak var vMenu: UIView!
     
     // MARK: - Private properties
-    private var tab: EMenu! {
+    var tab: EMenu = .home {
         didSet {
             selectedTab()
         }
@@ -207,7 +207,7 @@ enum EMenu: Int {
             return "Danh mục"
             
         case .order:
-            return "Giỏ"
+            return "Giỏ hàng"
             
         case .account:
             return "Tài khoản"

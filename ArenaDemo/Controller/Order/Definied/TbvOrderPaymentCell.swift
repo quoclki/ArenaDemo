@@ -35,7 +35,7 @@ class TbvOrderPaymentCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        vBorder.dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: vBorder.cornerRadius)
+        vBorder.layer.applySketchShadow(blur: vBorder.cornerRadius)
     }
     
     func updateCell() {

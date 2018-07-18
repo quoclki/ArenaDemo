@@ -40,7 +40,6 @@ class PaymentVCtrl: BaseVCtrl {
     init(_ order: OrderDTO) {
         super.init()
         self.order = order
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -50,11 +49,6 @@ class PaymentVCtrl: BaseVCtrl {
     // MARK: - Init
     
     // MARK: - UIViewController func
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-    }
-    
     
     // MARK: - Layout UI
     override func configUI() {
@@ -95,24 +89,33 @@ class PaymentVCtrl: BaseVCtrl {
     // MARK: - Event Listerner
     override func eventListener() {
         super.eventListener()
-        
+        btnOrder.touchUpInside(block: btnOrder_Touched)
     }
     
     // MARK: - Event Handler
     func btnOrder_Touched(sender: UIButton) {
-        guard let requset = order else {
+        guard let paymentSelected = order.lstPayment.first(where: { $0.isCheck }) else {
             return
         }
         
+        guard let request = order else {
+            return
+        }
         
-        _ = SEOrder.createOrUpdate(requset, animation: {
+        request.payment_method = paymentSelected.id
+        request.payment_method_title = paymentSelected.title
+        request.status = EOrderStatus.processing.rawValue
+
+        _ = SEOrder.createOrUpdate(request, animation: {
             self.showLoadingView($0)
             
         }, completed: { (response) in
             if !self.checkResponse(response) {
                 return
             }
-            
+          
+            let complete = ContinueOrderVCtrl(false)
+            self.navigationController?.pushViewController(complete, animated: true)
         })
     }
     
@@ -135,7 +138,6 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
     private var paymentCellID: String {
         return "clvPaymentPaymentCellID"
     }
-    
     
     private var paymentMethodCellID: String {
         return "clvPaymentHeaderCellID"
@@ -196,7 +198,7 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
         
         if header == .paymentInfo {
             let cell = tableView.dequeueReusableCell(withIdentifier: paymentInfoCellID) as! TbvPaymentInfoCell
-            cell.updateCell(order.billing)
+            cell.updateCell(order.billing ?? AddressDTO())
             return cell
         }
         
@@ -211,7 +213,7 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
             let item = lstItemOrder[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! TbvOrderCell
             cell.vBorder.originY = padding
-            cell.updateCell(item)
+            cell.updateCell(item, isPayment: true)
             return cell
             
         }
@@ -246,6 +248,10 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
         _ = showAlert(title: "Cảnh báo", message: "Bạn có chắc chắn muốn xoá món hàng này?", leftBtnTitle: "Không", rightBtnTitle: "Có", rightBtnStyle: .destructive, rightAction: {
             self.order.line_items.remove(at: indexPath.row)
             tableView.reloadData()
+            
+            if self.lstItemOrder.isEmpty {
+                self.navigationController?.popViewController(animated: true)
+            }
             
         })
         

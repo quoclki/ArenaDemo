@@ -27,7 +27,7 @@ class TbvPaymentMethodCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        vBorder.dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: vBorder.cornerRadius)
+        vBorder.layer.applySketchShadow(blur: vBorder.cornerRadius)
     }
     
     override func prepareForReuse() {
@@ -75,7 +75,6 @@ class TbvPaymentMethodCell: UITableViewCell {
         vBorder.height = heightForViewBorder + startY
         order.payment_method_cellHeight = vBorder.frame.maxY + vBorder.originY
         
-        
     }
     
     func btnCheck_Touched(sender: UIButton) {
@@ -96,8 +95,8 @@ class TbvPaymentMethodCell: UITableViewCell {
             payment.isCheck = payment.id == sender.accessibilityValue
         }
         
-        tableView.reloadRows(at: [indexPath], with: .none)
-        tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+        tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
         
     }
     

@@ -47,11 +47,22 @@ class OrderVCtrl: BaseVCtrl {
         if isCreateBack {
             addViewToLeftBarItem(createBackButton())
         }
+        
+    }
+    
+    func addContinueVCtrl() {
+        if lstItem.isEmpty {
+            let _continue = ContinueOrderVCtrl(true)
+            _continue.view.frame.size = view.size
+            addChildViewController(_continue)
+            view.addSubview(_continue.view)
+        }
     }
     
     override func configUIViewWillAppear() {
         super.configUIViewWillAppear()
-        
+        addContinueVCtrl()
+
     }
     
     // MARK: - Event Listerner
@@ -127,7 +138,7 @@ extension OrderVCtrl: UITableViewDataSource, UITableViewDelegate {
         _ = showAlert(title: "Cảnh báo", message: "Bạn có chắc chắn muốn xoá món hàng này?", leftBtnTitle: "Không", rightBtnTitle: "Có", rightBtnStyle: .destructive, rightAction: {
             self.order.line_items.remove(at: indexPath.row)
             tableView.reloadData()
-            
+            self.addContinueVCtrl()
         })
         
     }
