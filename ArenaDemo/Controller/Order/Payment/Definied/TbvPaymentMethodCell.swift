@@ -96,7 +96,7 @@ class TbvPaymentMethodCell: UITableViewCell {
             payment.isCheck = payment.id == sender.accessibilityValue
         }
         
-        tableView.reloadRows(at: [indexPath], with: .automatic)
+        tableView.reloadRows(at: [indexPath], with: .none)
         tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
         
     }

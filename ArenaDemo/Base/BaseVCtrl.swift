@@ -19,9 +19,12 @@ class BaseVCtrl: UIViewController {
     
     // MARK: - Properties
     var task: OAuthSwiftRequestHandle?
+    var vFocusInput: UIView?
     var vBar: UIView!
     var vSetSafeArea: UIView!
-    
+
+    var yOffset: CGFloat = 0
+
     // MARK: - Init
     public init() {
         super.init(nibName: String(describing: type(of: self)), bundle: Bundle(for: type(of: self)))
@@ -228,5 +231,41 @@ class BaseVCtrl: UIViewController {
     }
 
     
+    
 }
+
+/// For Keyboard Only
+extension BaseVCtrl {
+    func handleFocusInputView(_ focusView: UIView) {
+        self.vFocusInput = focusView
+    }
+    
+    func handleKeyboard(willShow notify: NSNotification, scv: UIScrollView) {
+        guard let keyboardFrame: NSValue = notify.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else {
+            return
+        }
+        
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        
+        guard let vFocus = self.vFocusInput else {
+            return
+        }
+        
+        guard let frame = vFocus.superview?.convert(vFocus.frame, to: self.view) else {
+            return
+        }
+        
+        if frame.maxY > keyboardRectangle.origin.y {
+            let cal = frame.maxY - keyboardRectangle.origin.y + 10
+            scv.setContentOffset(CGPoint(0, scv.contentOffset.y + cal), animated: true)
+            self.yOffset = scv.contentOffset.y
+        }
+        
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.yOffset = scrollView.contentOffset.y
+    }
+
+    }
 

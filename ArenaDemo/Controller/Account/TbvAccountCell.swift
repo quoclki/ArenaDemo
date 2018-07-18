@@ -20,6 +20,7 @@ class TbvAccountCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -32,13 +33,12 @@ class TbvAccountCell: UITableViewCell {
         super.layoutSubviews()
         btnSignIn.cornerRadius = btnSignIn.height / 2
         btnSignUp.cornerRadius = btnSignUp.height / 2
-        
         guard let account = self.parentViewController as? AccountVCtrl else {
             return
         }
         btnSignIn.touchUpInside(block: account.btnSignIn_Touched)
         btnSignUp.touchUpInside(block: account.btnSignUp_Touched)
-        
+
     }
     
     func updateCell(_ item: EAccountMenu) {

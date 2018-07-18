@@ -20,11 +20,11 @@ class ClvMainHeaderCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        btnViewMore.touchUpInside(block: btnViewMore_Touched)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        btnViewMore.touchUpInside(block: btnViewMore_Touched)
     }
 
     func updateCell(_ item: MainDataGroup) {

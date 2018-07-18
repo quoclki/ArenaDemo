@@ -37,6 +37,11 @@ class TbvOrderCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        btnMinus.touchUpInside(block: btnMinus_Touched)
+        btnPlus.touchUpInside(block: btnPlus_Touched)
+        btnFavourite.touchUpInside(block: btnFavourite_Touched)
+        btnDelete.touchUpInside(block: btnDelete_Touched)
+
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -47,10 +52,6 @@ class TbvOrderCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        btnMinus.touchUpInside(block: btnMinus_Touched)
-        btnPlus.touchUpInside(block: btnPlus_Touched)
-        btnFavourite.touchUpInside(block: btnFavourite_Touched)
-        btnDelete.touchUpInside(block: btnDelete_Touched)
         vBorder.dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: vBorder.cornerRadius)
         
     }

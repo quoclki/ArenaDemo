@@ -8,6 +8,7 @@
 
 import UIKit
 import ArenaDemoAPI
+import CustomControl
 
 class OrderVCtrl: BaseVCtrl {
 
@@ -132,4 +133,27 @@ extension OrderVCtrl: UITableViewDataSource, UITableViewDelegate {
     }
     
 }
+
+extension OrderVCtrl: HandleKeyboardProtocol {
+    func handleKeyboard(willShow notify: NSNotification) {
+        self.handleKeyboard(willShow: notify, scv: self.tbvOrder)
+    }
+    
+    func handleKeyboard(willHide notify: NSNotification) {
+        tbvOrder.setContentOffset(CGPoint(0, self.yOffset), animated: true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        handleKeyboard(register: true)
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        handleKeyboard(register: false)
+    }
+    
+}
+
 

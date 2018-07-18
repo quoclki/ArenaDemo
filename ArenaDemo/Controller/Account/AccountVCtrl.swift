@@ -54,6 +54,7 @@ class AccountVCtrl: BaseVCtrl {
     
     private var isSignUp: Bool = false {
         didSet {
+            self.view.endEditing(true)
             vMark.originX = isSignUp ? btnSignUpDetail.originX : btnSignInDetail.originX
             vMark.originY = btnSignUpDetail.height
             UIView.animate(withDuration: 0.3) {
@@ -87,6 +88,7 @@ class AccountVCtrl: BaseVCtrl {
         vSetSafeArea = vSafe
         setupUIForAccount()
         configTableView()
+        scrollView.delegate = self
     }
     
     func setupUIForAccount() {
@@ -127,9 +129,22 @@ class AccountVCtrl: BaseVCtrl {
         btnSignInConfirm.touchUpInside(block: btnSignInConfirm_Touched)
         btnSignUpDetail.touchUpInside(block: btnSignUpDetail_Touched)
         btnSignUpConfirm.touchUpInside(block: btnSignUpConfirm_Touched)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTapScrollView(_ :)))
+        tapGesture.numberOfTapsRequired = 1
+        tapGesture.numberOfTouchesRequired = 1
+        scrollView.addGestureRecognizer(tapGesture)
+        
+        [txtSignUpUserName, txtSignUpPassword, txtSignInEmail, txtSignInPassword, txtSignInConfirmPassword].forEach({
+            $0?.delegate = self
+        })
     }
     
     // MARK: - Event Handler
+    @objc func handleTapScrollView(_ sender: UITapGestureRecognizer) {
+        scrollView.setContentOffset(CGPoint(0, self.yOffset), animated: true)
+        self.view.endEditing(true)
+    }
 
     // MARK: - Func
     override func loadData() {
@@ -317,6 +332,34 @@ extension AccountVCtrl {
 
     
 }
+
+extension AccountVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        handleFocusInputView(textField)
+        return true
+    }
+
+    func handleKeyboard(willShow notify: NSNotification) {
+        self.handleKeyboard(willShow: notify, scv: self.scrollView)
+    }
+    
+    func handleKeyboard(willHide notify: NSNotification) {
+        scrollView.setContentOffset(CGPoint(0, self.yOffset), animated: true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        handleKeyboard(register: true)
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        handleKeyboard(register: false)
+    }
+    
+}
+
 
 enum EAccountMenu: Int {
     case myOrder

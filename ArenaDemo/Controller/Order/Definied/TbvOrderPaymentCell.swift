@@ -22,6 +22,8 @@ class TbvOrderPaymentCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        txtCoupon.addTarget(self, action: #selector(self.handleChangeText(_ :)), for: .editingChanged)
+        txtCoupon.delegate = self
     }
     
     private var coupon: String? = nil {
@@ -33,8 +35,6 @@ class TbvOrderPaymentCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        txtCoupon.addTarget(self, action: #selector(self.handleChangeText(_ :)), for: .editingChanged)
-        txtCoupon.delegate = self
         vBorder.dropShadow(color: UIColor(hexString: "DEDEDE"), offSet: CGSize(5,5), radius: vBorder.cornerRadius)
     }
     
@@ -57,4 +57,18 @@ extension TbvOrderPaymentCell: UITextFieldDelegate {
         parentViewController?.view.endEditing(true)
         return true
     }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if let parent = self.parentViewController as? OrderVCtrl {
+            parent.handleFocusInputView(textField)
+        }
+        
+        if let parent = self.parentViewController as? PaymentVCtrl {
+            parent.handleFocusInputView(textField)
+        }
+
+        return true
+    }
+    
 }
+

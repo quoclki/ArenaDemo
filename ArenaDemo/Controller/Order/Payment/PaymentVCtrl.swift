@@ -11,12 +11,12 @@ import ArenaDemoAPI
 import CustomControl
 
 class PaymentVCtrl: BaseVCtrl {
-
+    
     // MARK: - Outlet
     @IBOutlet weak var vSafe: UIView!
     @IBOutlet weak var tbvOrder: UITableView!
     @IBOutlet weak var btnOrder: UIButton!
-
+    
     @IBOutlet var vSignUp: UIView!
     @IBOutlet weak var btnSignUp: UIButton!
     
@@ -29,18 +29,18 @@ class PaymentVCtrl: BaseVCtrl {
     private var lstPayemnt: [PaymentMethodDTO] = []
     
     // MARK: - Properties
-    private var order: OrderDTO!
     private var lstItemOrder: [OrderLineItemDTO] {
         return order.line_items
     }
     
-
     // MARK: - Properties
+    var order: OrderDTO!
     
     // MARK: - Init
     init(_ order: OrderDTO) {
         super.init()
         self.order = order
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -54,8 +54,8 @@ class PaymentVCtrl: BaseVCtrl {
         super.viewWillLayoutSubviews()
         
     }
-
-
+    
+    
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
@@ -85,10 +85,10 @@ class PaymentVCtrl: BaseVCtrl {
         Order.shared.setUpCustomer()
         
     }
-
+    
     override func configUIViewWillAppear() {
         super.configUIViewWillAppear()
-
+        
     }
     
     
@@ -99,6 +99,22 @@ class PaymentVCtrl: BaseVCtrl {
     }
     
     // MARK: - Event Handler
+    func btnOrder_Touched(sender: UIButton) {
+        guard let requset = order else {
+            return
+        }
+        
+        
+        _ = SEOrder.createOrUpdate(requset, animation: {
+            self.showLoadingView($0)
+            
+        }, completed: { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            
+        })
+    }
     
     // MARK: - Func
     override func loadData() {
@@ -108,10 +124,10 @@ class PaymentVCtrl: BaseVCtrl {
 }
 
 extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
-        private var paymentInfoCellID: String {
+    private var paymentInfoCellID: String {
         return "clvPaymentInfoCellID"
     }
-
+    
     private var cellID: String {
         return "clvPaymentOrderCellID"
     }
@@ -140,7 +156,7 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
         tbvOrder.separatorStyle = .none
         tbvOrder.backgroundColor = UIColor(hexString: "F1F2F2")
         tbvOrder.allowsSelection = false
-
+        
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -159,7 +175,7 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
         label.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.light)
         label.text = lstItem[section].name
         vHeader.addSubview(label)
-
+        
         return vHeader
     }
     
@@ -183,7 +199,7 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
             cell.updateCell(order.billing)
             return cell
         }
-
+        
         if header == .myOrder {
             if indexPath.row == lstItemOrder.count {
                 let cell = tableView.dequeueReusableCell(withIdentifier: paymentCellID) as! TbvOrderPaymentCell
@@ -197,9 +213,9 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
             cell.vBorder.originY = padding
             cell.updateCell(item)
             return cell
-
+            
         }
-
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: paymentMethodCellID) as! TbvPaymentMethodCell
         cell.updateCell(order)
         cell.backgroundColor = tableView.backgroundColor
@@ -219,13 +235,13 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
             }
             let item = lstItemOrder[indexPath.row]
             return max(item.cellHeight, 167)
-
+            
         }
         
         return order.payment_method_cellHeight
         
     }
-
+    
     func handleDelete(_ tableView: UITableView, indexPath: IndexPath) {
         _ = showAlert(title: "Cảnh báo", message: "Bạn có chắc chắn muốn xoá món hàng này?", leftBtnTitle: "Không", rightBtnTitle: "Có", rightBtnStyle: .destructive, rightAction: {
             self.order.line_items.remove(at: indexPath.row)
@@ -234,28 +250,16 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
         })
         
     }
-    
-}
-
-extension PaymentVCtrl: UITextFieldDelegate, UITextViewDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        return true
-    }
-    
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        return true
-    }
-    
+        
 }
 
 extension PaymentVCtrl: HandleKeyboardProtocol {
     func handleKeyboard(willShow notify: NSNotification) {
-
+        self.handleKeyboard(willShow: notify, scv: tbvOrder)
     }
     
     func handleKeyboard(willHide notify: NSNotification) {
-        
+        tbvOrder.setContentOffset(CGPoint(0, self.yOffset), animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -268,6 +272,7 @@ extension PaymentVCtrl: HandleKeyboardProtocol {
         super.viewWillDisappear(animated)
         handleKeyboard(register: false)
     }
+    
 }
 
 enum EPaymentHeaderType: Int {
@@ -279,7 +284,7 @@ enum EPaymentHeaderType: Int {
         switch self {
         case .paymentInfo:
             return "THÔNG TIN THANH TOÁN"
-        
+            
         case .myOrder:
             return "ĐƠN HÀNG CỦA BẠN"
             
