@@ -201,6 +201,16 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICol
 }
 
 extension MainVCtrl: UISearchBarDelegate {
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.showsCancelButton = true
+        return true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        searchBar.showsCancelButton = false
+    }
+    
     
 }
 

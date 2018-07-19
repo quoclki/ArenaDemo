@@ -63,17 +63,24 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Đã có tài khoản?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QgU-7a-64d">
-                            <rect key="frame" x="16" y="0.0" width="134" height="45"/>
+                            <rect key="frame" x="16" y="0.0" width="126" height="45"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
-                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yux-7y-xDi">
-                            <rect key="frame" x="150" y="0.0" width="190" height="45"/>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yux-7y-xDi">
+                            <rect key="frame" x="142" y="0.0" width="190" height="45"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES"/>
-                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                            <state key="normal" title="Ấn vào đây để đăng nhập"/>
+                            <state key="normal" title="Ấn vào đây để đăng nhập">
+                                <attributedString key="attributedTitle">
+                                    <fragment content="Ấn vào đây để đăng nhập">
+                                        <attributes>
+                                            <font key="NSFont" size="15" name=".SFNSText"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                            </state>
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -81,7 +88,7 @@
             </subviews>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="sQQ-VR-37E"/>
-            <point key="canvasLocation" x="-377" y="-172"/>
+            <point key="canvasLocation" x="-377.5" y="-172.5"/>
         </view>
         <view contentMode="scaleToFill" id="v34-QY-Y3t">
             <rect key="frame" x="0.0" y="0.0" width="375" height="303"/>

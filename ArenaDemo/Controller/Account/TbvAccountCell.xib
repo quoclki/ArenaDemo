@@ -28,12 +28,16 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eGA-l7-KtU">
-                                <rect key="frame" x="50" y="0.0" width="277" height="63"/>
+                                <rect key="frame" x="50" y="0.0" width="247" height="63"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="icon-next" translatesAutoresizingMaskIntoConstraints="NO" id="CDg-DQ-cte">
+                                <rect key="frame" x="305" y="0.0" width="25" height="63"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
                         </subviews>
                     </view>
                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DSg-EX-Sm9">
@@ -71,7 +75,10 @@
                 <outlet property="vCell" destination="XMI-6i-P6F" id="w1g-B5-pNX"/>
                 <outlet property="vSignInSignUp" destination="DSg-EX-Sm9" id="eeo-tF-Mau"/>
             </connections>
-            <point key="canvasLocation" x="34.5" y="54"/>
+            <point key="canvasLocation" x="34.5" y="53.5"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="icon-next" width="10" height="15"/>
+    </resources>
 </document>

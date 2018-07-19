@@ -29,8 +29,8 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q7W-5O-Rx5">
-                            <rect key="frame" x="62" y="130" width="251" height="263"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                            <rect key="frame" x="62" y="167" width="251" height="263"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="img-Like" translatesAutoresizingMaskIntoConstraints="NO" id="bcQ-m7-HHc">
                                     <rect key="frame" x="71" y="20" width="109" height="109"/>

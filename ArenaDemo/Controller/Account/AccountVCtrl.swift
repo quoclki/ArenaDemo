@@ -181,7 +181,34 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
         let item = lstItem[indexPath.row]
         tableView.deselectRow(at: indexPath, animated: item != .signInSignUp)
         
-        
+        switch item {
+        case .myOrder:
+            return
+            
+        case .favourite:
+            return
+            
+        case .orderCondition:
+            return
+            
+        case .storeSystem:
+            return
+            
+        case .contactInfo:
+            return
+            
+        case .address:
+            let address = AccountAddressVCtrl()
+            navigationController?.pushViewController(address, animated: true)
+            
+        case .accSetting:
+            let setting = AccountSettingVCtrl()
+            navigationController?.pushViewController(setting, animated: true)
+            
+        default:
+            break
+            
+        }
     }
     
 }

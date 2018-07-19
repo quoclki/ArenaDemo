@@ -18,7 +18,7 @@ class TbvPaymentInfoCell: UITableViewCell {
     @IBOutlet weak var txtAddress: CustomUITextField!
     @IBOutlet weak var txvNote: UITextView!
     
-    private var item: AddressDTO!
+    private var item: OrderDTO!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -42,12 +42,13 @@ class TbvPaymentInfoCell: UITableViewCell {
         
     }
     
-    func updateCell(_ item: AddressDTO) {
+    func updateCell(_ item: OrderDTO) {
         self.item = item
-        txtName.text = [item.first_name , item.last_name ].filter({ !$0.isEmpty }).joined(separator: " ")
-        txtPhone.text = item.phone
-        txtEmail.text = item.email
-        txtAddress.text = item.address_1
+        let billingAddress = item.billing
+        txtName.text = [billingAddress?.first_name ?? "" , billingAddress?.last_name ?? "" ].filter({ !$0.isEmpty }).joined(separator: " ")
+        txtPhone.text = billingAddress?.phone
+        txtEmail.text = billingAddress?.email
+        txtAddress.text = billingAddress?.address_1
 
     }
     
@@ -76,23 +77,25 @@ extension TbvPaymentInfoCell: UITextFieldDelegate, UITextViewDelegate {
             return
         }
         
+        self.item.billing = self.item.billing ?? AddressDTO()
+        
         if textField == txtName {
-            self.item.first_name = text
+            self.item.billing?.first_name = text
             return
         }
         
         if textField == txtPhone {
-            self.item.phone = text
+            self.item.billing?.phone = text
             return
         }
         
         if textField == txtEmail {
-            self.item.email = text
+            self.item.billing?.email = text
             return
         }
         
         if textField == txtAddress {
-            self.item.address_1 = text
+            self.item.billing?.address_1 = text
             return
         }
         

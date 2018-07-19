@@ -80,16 +80,11 @@ class PaymentVCtrl: BaseVCtrl {
         
     }
     
-    override func configUIViewWillAppear() {
-        super.configUIViewWillAppear()
-        
-    }
-    
-    
     // MARK: - Event Listerner
     override func eventListener() {
         super.eventListener()
         btnOrder.touchUpInside(block: btnOrder_Touched)
+        btnSignUp.touchUpInside(block: btnSignUp_Touched)
     }
     
     // MARK: - Event Handler
@@ -117,6 +112,14 @@ class PaymentVCtrl: BaseVCtrl {
             let complete = ContinueOrderVCtrl(false)
             self.navigationController?.pushViewController(complete, animated: true)
         })
+    }
+    
+    func btnSignUp_Touched(sender: UIButton) {
+        UIView.animate(withDuration: 0) {
+            self.tbvOrder.tableHeaderView?.height = (self.tbvOrder.tableHeaderView?.height ?? 0) + 10
+            
+        }
+        
     }
     
     // MARK: - Func
@@ -147,6 +150,10 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
         return 15
     }
     
+    private var headerHeight: CGFloat {
+        return 45
+    }
+    
     func configTableView() {
         lstItem = [.paymentInfo, .myOrder, .paymentMethod]
         tbvOrder.register(UINib(nibName: String(describing: TbvOrderCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: cellID)
@@ -167,7 +174,7 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let vHeader = UIView()
-        vHeader.frame = CGRect(0, 0, tableView.width, 40)
+        vHeader.frame = CGRect(0, 0, tableView.width, headerHeight)
         vHeader.backgroundColor = .white
         vHeader.borderColor = tableView.backgroundColor ?? .white
         vHeader.borderWidth = 1
@@ -182,7 +189,7 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        return headerHeight
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -198,7 +205,7 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
         
         if header == .paymentInfo {
             let cell = tableView.dequeueReusableCell(withIdentifier: paymentInfoCellID) as! TbvPaymentInfoCell
-            cell.updateCell(order.billing ?? AddressDTO())
+            cell.updateCell(order)
             return cell
         }
         
