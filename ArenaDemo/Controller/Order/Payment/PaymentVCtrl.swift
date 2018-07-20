@@ -53,8 +53,7 @@ class PaymentVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(title: "THANH TOÁN")
-        vSetSafeArea = vSafe
+        createNavigationBar(vSafe, title: "THANH TOÁN")
         addViewToLeftBarItem(createBackButton())
         configTableView()
         updateLayoutUI()
@@ -272,7 +271,7 @@ extension PaymentVCtrl: HandleKeyboardProtocol {
     }
     
     func handleKeyboard(willHide notify: NSNotification) {
-        tbvOrder.setContentOffset(CGPoint(0, self.yOffset), animated: true)
+        self.handleKeyboard(willHide: notify, scv: self.tbvOrder)
     }
     
     override func viewWillAppear(_ animated: Bool) {

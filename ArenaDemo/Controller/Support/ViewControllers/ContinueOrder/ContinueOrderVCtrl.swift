@@ -39,8 +39,7 @@ class ContinueOrderVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(title: _isCart ? "GIỎ HÀNG" : "ĐẶT HÀNG THÀNH CÔNG")
-        vSetSafeArea = vSafe
+        createNavigationBar(vSafe, title: _isCart ? "GIỎ HÀNG" : "ĐẶT HÀNG THÀNH CÔNG")
         lblDes.text = _isCart ? "HIỆN TẠI GIỎ HÀNG CỦA BẠN ĐANG TRỐNG" : "ĐƠN HÀNG ĐÃ ĐẶT THÀNH CÔNG"
         imv.image = UIImage(named: _isCart ? "img-Cart" : "img-Like", in: Bundle(for: type(of: self)), compatibleWith: nil)
         

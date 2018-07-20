@@ -11,5 +11,5 @@ import Foundation
 
 enum EUserDefaultKey: String {
     case generalSetting = "generalSetting"
-    
+    case customerInfo = "customerInfo"
 }

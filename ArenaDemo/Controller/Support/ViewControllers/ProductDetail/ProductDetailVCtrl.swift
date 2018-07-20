@@ -113,8 +113,7 @@ class ProductDetailVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(title: "CHI TIẾT SẢN PHẨM")
-        vSetSafeArea = vSafe
+        createNavigationBar(vSafe, title: "CHI TIẾT SẢN PHẨM")
         configCollectionView()
         addViewToRightBarItem(vRight)
         addViewToLeftBarItem(createBackButton())

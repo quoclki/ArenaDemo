@@ -78,6 +78,7 @@ class ContainerVCtrl: BaseVCtrl {
         super.loadData()
         getGeneralSetting()
         getPayment()
+        getCustomerInfo()
     }
     
     func getPayment() {
@@ -188,6 +189,18 @@ class ContainerVCtrl: BaseVCtrl {
 
         }
         
+    }
+    
+    func getCustomerInfo() {
+        guard let jsonString = UserDefaults.standard.value(forKey: EUserDefaultKey.customerInfo.rawValue) as? String else {
+            return
+        }
+        
+        guard let dto = CustomerDTO.fromJson(jsonString) else {
+            return
+        }
+        
+        Order.shared.cusDTO = dto
     }
     
 }

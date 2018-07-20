@@ -45,7 +45,7 @@ class TbvPaymentInfoCell: UITableViewCell {
     func updateCell(_ item: OrderDTO) {
         self.item = item
         let billingAddress = item.billing
-        txtName.text = [billingAddress?.first_name ?? "" , billingAddress?.last_name ?? "" ].filter({ !$0.isEmpty }).joined(separator: " ")
+        txtName.text = billingAddress?.first_name
         txtPhone.text = billingAddress?.phone
         txtEmail.text = billingAddress?.email
         txtAddress.text = billingAddress?.address_1

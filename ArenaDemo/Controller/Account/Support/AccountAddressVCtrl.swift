@@ -40,30 +40,38 @@ class AccountAddressVCtrl: BaseVCtrl {
     // MARK: - Init
     
     // MARK: - UIViewController func
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        configUIViewInfo()
+    }
+    
+    func configUIViewInfo() {
+        vShippingTitle.layer.applySketchShadow(blur: 4)
+        vBillingTitle.layer.applySketchShadow(blur: 4)
+        vInfo.origin = CGPoint.zero
+        vInfo.width = self.scrollView.width
+        if vInfo.height < scrollView.height {
+            vInfo.height = scrollView.height
+        }
+        
+        self.scrollView.addSubview(vInfo)
+        self.scrollView.contentSize.height = vInfo.height
+    }
     
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(title: "ĐỊA CHỈ")
-        vSetSafeArea = vSafe
+        createNavigationBar(vSafe, title: "ĐỊA CHỈ")
         addViewToLeftBarItem(createBackButton())
-        setupViewInfo()
-        
+        mappingViewInfo()
     }
     
-    func setupViewInfo() {
-        vInfo.width = self.scrollView.width
-        vInfo.origin = CGPoint.zero
-        self.scrollView.addSubview(vInfo)
-        self.scrollView.contentSize.height = vInfo.height
-        
-        vShippingTitle.layer.applySketchShadow(blur: 4)
+    func mappingViewInfo() {        
         txtShippingName.text = cusDTO.shipping?.first_name
         txtShippingPhone.text = cusDTO.shipping?.phone
         txtShippingEmail.text = cusDTO.shipping?.email
         txtShippingAddress.text = cusDTO.shipping?.address_1
         
-        vBillingTitle.layer.applySketchShadow(blur: 4)
         txtBillingName.text = cusDTO.billing?.first_name
         txtBillingPhone.text = cusDTO.billing?.phone
         txtBillingEmail.text = cusDTO.billing?.email
@@ -80,6 +88,11 @@ class AccountAddressVCtrl: BaseVCtrl {
     override func eventListener() {
         super.eventListener()
         btnSave.touchUpInside(block: btnSave_Touched)
+        
+        [txtShippingName, txtShippingPhone, txtShippingEmail, txtShippingAddress, txtBillingName, txtBillingPhone, txtBillingEmail, txtBillingAddress].forEach({
+            $0?.delegate = self
+        })
+
     }
     
     // MARK: - Event Handler
@@ -130,3 +143,37 @@ class AccountAddressVCtrl: BaseVCtrl {
         
     }
 }
+
+extension AccountAddressVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        handleFocusInputView(textField)
+        return true
+    }
+    
+    func handleKeyboard(willShow notify: NSNotification) {
+        self.handleKeyboard(willShow: notify, scv: self.scrollView)
+    }
+    
+    func handleKeyboard(willHide notify: NSNotification) {
+        self.handleKeyboard(willHide: notify, scv: self.scrollView)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.endEditing(true)
+        return true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        handleKeyboard(register: true)
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        handleKeyboard(register: false)
+    }
+    
+    
+}
+

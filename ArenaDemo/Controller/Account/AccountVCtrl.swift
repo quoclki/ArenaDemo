@@ -46,6 +46,7 @@ class AccountVCtrl: BaseVCtrl {
     private var btnBack: UIButton!
     private var isBack: Bool = false {
         didSet {
+            self.view.endEditing(true)
             btnBack.isHidden = !isBack
             vSignUpSignIn.isHidden = btnBack.isHidden
             tbvAccount.isHidden = !vSignUpSignIn.isHidden
@@ -85,8 +86,7 @@ class AccountVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(title: "TÀI KHOẢN")
-        vSetSafeArea = vSafe
+        createNavigationBar(vSafe, title: "TÀI KHOẢN")
         setupUIForAccount()
         configTableView()
         scrollView.delegate = self
@@ -111,7 +111,7 @@ class AccountVCtrl: BaseVCtrl {
         let cusDTO = Order.shared.cusDTO
         if let _ = Order.shared.cusDTO.id {
             lstItem = [.myOrder, .favourite, .address, .storeSystem, .orderCondition, .accSetting]
-            lblName.text = [cusDTO.first_name ?? "", cusDTO.last_name ?? ""].joined(separator: " ")
+            lblName.text = cusDTO.first_name
         } else {
             lstItem = [.myOrder, .favourite, .orderCondition, .storeSystem, .contactInfo, .signInSignUp]
             lblName.text = "APP BÁN HÀNG"
@@ -253,8 +253,6 @@ extension AccountVCtrl {
         }
 
         let request = CustomerDTO()
-//        request.first_name = txtFirstName.text
-//        request.last_name = txtLastName.text
         request.email = email
         request.password = password
         request.role = ECustomerRole.customer.rawValue
@@ -338,13 +336,17 @@ extension AccountVCtrl {
             }
             
             guard let cusDTO = response.lstCustomer.first else { return }
+            cusDTO.password = self.txtSignUpPassword.text
             Order.shared.cusDTO = cusDTO
+            if self.btnCheck.isSelected {
+                UserDefaults.standard.set(cusDTO.toJson(), forKey: EUserDefaultKey.customerInfo.rawValue)
+            }
+            
             _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG NHẬP THÀNH CÔNG", buttonTitle: "OK") {
                 self.configDefaultAccount()
                 self.tbvAccount.reloadData()
                 
             }
-            
             
         })
         
@@ -364,7 +366,7 @@ extension AccountVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
     }
     
     func handleKeyboard(willHide notify: NSNotification) {
-        scrollView.setContentOffset(CGPoint(0, self.yOffset), animated: true)
+        self.handleKeyboard(willHide: notify, scv: self.scrollView)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

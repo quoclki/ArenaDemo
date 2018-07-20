@@ -38,8 +38,7 @@ class CategoryDetailVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(title: categoryDTO.name?.uppercased())
-        vSetSafeArea = vSafe
+        createNavigationBar(vSafe, title: categoryDTO.name?.uppercased())
         addViewToLeftBarItem(createBackButton())
         configCollectionView()
     }

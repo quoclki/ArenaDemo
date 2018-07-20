@@ -16,14 +16,12 @@ class BaseVCtrl: UIViewController {
     // MARK: - Outlet
     
     // MARK: - Private properties
-    
+
     // MARK: - Properties
     var task: OAuthSwiftRequestHandle?
     var vFocusInput: UIView?
     var vBar: UIView!
     var vSetSafeArea: UIView!
-
-    var yOffset: CGFloat = 0
 
     // MARK: - Init
     public init() {
@@ -87,7 +85,8 @@ class BaseVCtrl: UIViewController {
         
     }
     
-    func createNavigationBar(title: String? = nil, searchBar: UISearchBar? = nil) {
+    func createNavigationBar(_ vSafe: UIView, title: String? = nil, searchBar: UISearchBar? = nil) {
+        self.vSetSafeArea = vSafe
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
         let v = UIView()
         v.backgroundColor = Base.baseColor
@@ -235,7 +234,7 @@ class BaseVCtrl: UIViewController {
 }
 
 /// For Keyboard Only
-extension BaseVCtrl {
+extension BaseVCtrl: UIScrollViewDelegate {
     func handleFocusInputView(_ focusView: UIView) {
         self.vFocusInput = focusView
     }
@@ -258,14 +257,17 @@ extension BaseVCtrl {
         if frame.maxY > keyboardRectangle.origin.y {
             let cal = frame.maxY - keyboardRectangle.origin.y + 10
             scv.setContentOffset(CGPoint(0, scv.contentOffset.y + cal), animated: true)
-            self.yOffset = scv.contentOffset.y
         }
         
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.yOffset = scrollView.contentOffset.y
+    func handleKeyboard(willHide notify: NSNotification, scv: UIScrollView) {
+        let totalHeightScroll = scv.contentOffset.y + scv.height
+        let heightContentSize = max(scv.contentSize.height, scv.height)
+        if totalHeightScroll > heightContentSize {
+            scv.setContentOffset(CGPoint(0, scv.contentOffset.y - (totalHeightScroll - heightContentSize)), animated: true)
+        }
     }
-
-    }
+    
+}
 

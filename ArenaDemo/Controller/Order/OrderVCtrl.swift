@@ -41,8 +41,7 @@ class OrderVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(title: "GIỎ HÀNG CỦA TÔI")
-        vSetSafeArea = vSafe
+        createNavigationBar(vSafe, title: "GIỎ HÀNG CỦA TÔI")
         configTableView()
         if isCreateBack {
             addViewToLeftBarItem(createBackButton())
@@ -151,7 +150,7 @@ extension OrderVCtrl: HandleKeyboardProtocol {
     }
     
     func handleKeyboard(willHide notify: NSNotification) {
-        tbvOrder.setContentOffset(CGPoint(0, self.yOffset), animated: true)
+        self.handleKeyboard(willHide: notify, scv: self.tbvOrder)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -164,7 +163,7 @@ extension OrderVCtrl: HandleKeyboardProtocol {
         super.viewWillDisappear(animated)
         handleKeyboard(register: false)
     }
-    
+
 }
 
 

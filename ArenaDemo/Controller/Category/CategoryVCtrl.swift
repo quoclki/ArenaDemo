@@ -14,6 +14,7 @@ class CategoryVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
     @IBOutlet var searchBar: UISearchBar!
+    @IBOutlet weak var vSafe: UIView!
     @IBOutlet weak var clvCategory: UICollectionView!
     
     // MARK: - Private properties
@@ -28,9 +29,8 @@ class CategoryVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(searchBar: searchBar)
+        createNavigationBar(vSafe, searchBar: searchBar)
         configCollectionView()
-        vSetSafeArea = clvCategory
     }
     
     override func configUIViewWillAppear() {

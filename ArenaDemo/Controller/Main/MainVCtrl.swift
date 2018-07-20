@@ -28,8 +28,7 @@ class MainVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(searchBar: searchBar)
-        vSetSafeArea = vSafe
+        createNavigationBar(vSafe, searchBar: searchBar)
         searchBar.delegate = self
         configCollectionView()
     }
