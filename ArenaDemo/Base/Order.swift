@@ -45,6 +45,15 @@ class Order {
 
     }
     
+    func updateCusDTO(_ cusDTO: CustomerDTO, isSaveUserDefault: Bool = false) {
+        self.cusDTO = cusDTO
+
+        if isSaveUserDefault || UserDefaults.standard.value(forKey: EUserDefaultKey.customerInfo.rawValue) != nil {
+            UserDefaults.standard.set(cusDTO.toJson(), forKey: EUserDefaultKey.customerInfo.rawValue)
+        }
+
+    }
+    
     func clearOrder() {
         orderDTO = OrderDTO()
     }

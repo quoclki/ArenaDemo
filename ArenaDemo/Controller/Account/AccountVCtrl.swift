@@ -28,7 +28,7 @@ class AccountVCtrl: BaseVCtrl {
     @IBOutlet weak var vMark: UIView!
     
     @IBOutlet weak var vSignUpDetail: UIView!
-    @IBOutlet weak var txtSignUpUserName: CustomUITextField!
+    @IBOutlet weak var txtSignUpName: CustomUITextField!
     @IBOutlet weak var txtSignUpPassword: CustomUITextField!
     @IBOutlet weak var btnCheck: UIButton!
     @IBOutlet weak var btnCheckRemember: UIButton!
@@ -116,6 +116,11 @@ class AccountVCtrl: BaseVCtrl {
             lstItem = [.myOrder, .favourite, .orderCondition, .storeSystem, .contactInfo, .signInSignUp]
             lblName.text = "APP BÁN HÀNG"
         }
+        [txtSignUpName, txtSignUpPassword, txtSignInEmail, txtSignInPassword, txtSignInConfirmPassword].forEach({
+            $0?.text = ""
+        })
+        btnCheck.isSelected = false
+        self.tbvAccount.reloadData()
     }
     
     override func configUIViewWillAppear() {
@@ -131,7 +136,7 @@ class AccountVCtrl: BaseVCtrl {
         btnSignUpDetail.touchUpInside(block: btnSignUpDetail_Touched)
         btnSignUpConfirm.touchUpInside(block: btnSignUpConfirm_Touched)
         
-        [txtSignUpUserName, txtSignUpPassword, txtSignInEmail, txtSignInPassword, txtSignInConfirmPassword].forEach({
+        [txtSignUpName, txtSignUpPassword, txtSignInEmail, txtSignInPassword, txtSignInConfirmPassword].forEach({
             $0?.delegate = self
         })
     }
@@ -203,6 +208,7 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
             
         case .accSetting:
             let setting = AccountSettingVCtrl()
+            setting.handleCompleted = configDefaultAccount
             navigationController?.pushViewController(setting, animated: true)
             
         default:
@@ -265,8 +271,11 @@ extension AccountVCtrl {
                 return
             }
             
-            guard let cusDTO = response.lstCustomer.first else { return }
-            Order.shared.cusDTO = cusDTO
+            guard let cusDTO = response.lstCustomer.first else {
+                _ = self.showWarningAlert(title: "Cảnh báo", message: "Không thể đăng kí thông tin!")
+                return
+            }
+            Order.shared.updateCusDTO(cusDTO)
             _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG KÍ THÀNH CÔNG", buttonTitle: "OK") {
                 self.configDefaultAccount()
                 self.tbvAccount.reloadData()
@@ -289,9 +298,9 @@ extension AccountVCtrl {
     }
     
     func btnSignUpConfirm_Touched(sender: UIButton) {
-        guard let userName = txtSignUpUserName.text?.trim(), !userName.isEmpty else {
+        guard let name = txtSignUpName.text?.trim(), !name.isEmpty else {
             _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập email", buttonTitle: "OK") {
-                self.txtSignUpUserName.becomeFirstResponder()
+                self.txtSignUpName.becomeFirstResponder()
             }
             return
         }
@@ -303,8 +312,25 @@ extension AccountVCtrl {
             return
         }
 
+        if name.isEmail {
+            self.getCustomerDTO(name) { (dto) in
+                self.getAuthDTO(dto.username, password: password, completed: { (authDTO) in
+                    self.loginSuccess(dto)
+                })
+            }
+            return
+        }
+
+        self.getAuthDTO(name, password: password) { (authDTO) in
+            self.getCustomerDTO(authDTO.user?.email, completed: { (dto) in
+                self.loginSuccess(dto)
+            })
+        }
+    }
+ 
+    func getAuthDTO(_ username: String?, password: String?, completed: @escaping ((AuthDTO) -> Void)) {
         let request = GetAuthRequest()
-        request.username = userName
+        request.username = username
         request.password = password
         
         task = SEAuth.authentication(request, animation: {
@@ -316,13 +342,17 @@ extension AccountVCtrl {
                 return
             }
             
-            guard let email = response.authDTO?.user?.email else { return }
-            self.getCustomerDTO(email)
+            guard let dto = response.authDTO else {
+                _ = self.showWarningAlert(title: "Cảnh báo", message: "Không thể xác thực!")
+                return
+            }
+            
+            completed(dto)
         })
 
     }
- 
-    func getCustomerDTO(_ email: String) {
+    
+    func getCustomerDTO(_ email: String?, completed: @escaping ((CustomerDTO) -> Void)) {
         let request = GetCustomerRequest(page: 1)
         request.email = email
         request.role = ECustomerRole.all.rawValue
@@ -335,23 +365,29 @@ extension AccountVCtrl {
                 return
             }
             
-            guard let cusDTO = response.lstCustomer.first else { return }
-            cusDTO.password = self.txtSignUpPassword.text
-            Order.shared.cusDTO = cusDTO
-            if self.btnCheck.isSelected {
-                UserDefaults.standard.set(cusDTO.toJson(), forKey: EUserDefaultKey.customerInfo.rawValue)
+            guard let dto = response.lstCustomer.first else {
+                _ = self.showWarningAlert(title: "Cảnh báo", message: "Không tốn tại thông tin user!")
+                return
             }
             
-            _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG NHẬP THÀNH CÔNG", buttonTitle: "OK") {
-                self.configDefaultAccount()
-                self.tbvAccount.reloadData()
-                
-            }
+            completed(dto)
             
         })
         
     }
 
+    func loginSuccess(_ cusDTO: CustomerDTO) {
+        cusDTO.password = self.txtSignUpPassword.text
+        Order.shared.updateCusDTO(cusDTO, isSaveUserDefault: self.btnCheck.isSelected)
+        
+        _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG NHẬP THÀNH CÔNG", buttonTitle: "OK") {
+            self.configDefaultAccount()
+            self.tbvAccount.reloadData()
+            
+        }
+
+    }
+    
     
 }
 

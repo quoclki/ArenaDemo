@@ -129,11 +129,10 @@ class AccountAddressVCtrl: BaseVCtrl {
                 return
             }
             
-            Order.shared.cusDTO = dto
+            Order.shared.updateCusDTO(dto)
             self.navigationController?.popViewController(animated: true)
             
         })
-        
         
     }
     

@@ -25,8 +25,8 @@
                 <outlet property="txtSignInConfirmPassword" destination="3Jr-uc-FSX" id="yqw-uS-HYx"/>
                 <outlet property="txtSignInEmail" destination="e7Q-9U-vs4" id="woe-xf-6JZ"/>
                 <outlet property="txtSignInPassword" destination="mdx-bq-a1U" id="Gz6-8d-RwT"/>
+                <outlet property="txtSignUpName" destination="mMY-Nk-XFW" id="Ikg-57-GsL"/>
                 <outlet property="txtSignUpPassword" destination="GH3-8Q-WTr" id="q3T-CL-tUT"/>
-                <outlet property="txtSignUpUserName" destination="mMY-Nk-XFW" id="iHQ-vu-FIx"/>
                 <outlet property="vBorder" destination="uQL-wA-Ucf" id="hzz-qD-iMb"/>
                 <outlet property="vLogo" destination="S4f-xX-9bt" id="vig-08-gvL"/>
                 <outlet property="vMark" destination="TFo-Dt-wOr" id="Brz-cJ-vLM"/>
@@ -146,14 +146,14 @@
                             <rect key="frame" x="0.0" y="0.0" width="345" height="265"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tài khoản" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1fd-ub-gSO">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tài khoản / Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1fd-ub-gSO">
                                     <rect key="frame" x="15" y="26" width="148" height="21"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="tài khoản" textAlignment="natural" minimumFontSize="17" id="mMY-Nk-XFW" customClass="CustomUITextField" customModule="CustomControl">
+                                <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="tài khoản / email" textAlignment="natural" minimumFontSize="17" id="mMY-Nk-XFW" customClass="CustomUITextField" customModule="CustomControl">
                                     <rect key="frame" x="15" y="56" width="315" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     <nil key="textColor"/>

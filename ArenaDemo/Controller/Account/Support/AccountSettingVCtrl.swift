@@ -32,6 +32,7 @@ class AccountSettingVCtrl: BaseVCtrl {
     }
     
     // MARK: - Properties
+    var handleCompleted: (() -> Void)? = nil
     
     // MARK: - Init
     
@@ -86,13 +87,109 @@ class AccountSettingVCtrl: BaseVCtrl {
     
     // MARK: - Event Handler
     func btnSave_Touched(sender: UIButton) {
+        guard let name = txtName.text, !name.isEmpty else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập họ tên", buttonTitle: "OK", action: {
+                self.txtName.text = ""
+                self.txtName.becomeFirstResponder()
+            })
+            return
+        }
+        
+        guard let email = txtEmail.text, !email.isEmpty else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập email", buttonTitle: "OK", action: {
+                self.txtEmail.text = ""
+                self.txtEmail.becomeFirstResponder()
+            })
+            return
+        }
+
+        guard let pass = txtPassword.text, !pass.isEmpty else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập mật khẩu hiện tại", buttonTitle: "OK", action: {
+                self.txtPassword.text = ""
+                self.txtPassword.becomeFirstResponder()
+            })
+            return
+        }
+
+        guard let passNew = txtPasswordNew.text, !passNew.isEmpty else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập mật khẩu mới", buttonTitle: "OK", action: {
+                self.txtPasswordNew.text = ""
+                self.txtPasswordNew.becomeFirstResponder()
+            })
+            return
+        }
+
+        guard let passNewConfirm = txtPasswordNewConfirm.text, !passNewConfirm.isEmpty else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập xác nhận mật khẩu", buttonTitle: "OK", action: {
+                self.txtPasswordNewConfirm.text = ""
+                self.txtPasswordNewConfirm.becomeFirstResponder()
+            })
+            return
+        }
+
+        if passNewConfirm != passNew {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập xác nhận mật khẩu giống mật khẩu mới", buttonTitle: "OK", action: {
+                self.txtPasswordNewConfirm.text = ""
+                self.txtPasswordNewConfirm.becomeFirstResponder()
+            })
+            return
+        }
+
+        func updateAccount() {
+            guard let request = CustomerDTO.fromJson(cusDTO.toJson()) else {
+                return
+            }
+            
+            request.first_name = name
+            request.email = email
+            request.password = passNew
+            
+            _ = SECustomer.createOrUpdate(request, animation: {
+                self.showLoadingView($0, frameLoading: self.vSafe.frame)
+                self.vBar.isUserInteractionEnabled = !$0
+
+            }, completed: { (response) in
+                if !self.checkResponse(response) {
+                    return
+                }
+
+                guard let cusDTO = response.lstCustomer.first else {
+                    _ = self.showWarningAlert(title: "Cảnh báo", message: "Không thể lưu thông tin!")
+                    return
+                }
+                
+                Order.shared.updateCusDTO(cusDTO)
+                self.navigationController?.popViewController(animated: true)
+                self.handleCompleted?()
+            })
+            
+        }
+        
+        let request = GetAuthRequest()
+        request.username = cusDTO.username
+        request.password = pass
+        
+        _ = SEAuth.authentication(request, animation: {
+            self.showLoadingView($0, frameLoading: self.vSafe.frame)
+            self.vBar.isUserInteractionEnabled = !$0
+            
+        }, completed: { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            
+            updateAccount()
+            
+        })
         
     }
     
+    
     func btnSignOut_Touched(sender: UIButton) {
-        
-        
-        
+        Order.shared.cusDTO = CustomerDTO()
+        UserDefaults.standard.removeObject(forKey: EUserDefaultKey.customerInfo.rawValue)
+        navigationController?.popViewController(animated: true)
+        handleCompleted?()
     }
     
     // MARK: - Func
