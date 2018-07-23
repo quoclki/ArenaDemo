@@ -104,7 +104,7 @@ class ProductDetailVCtrl: BaseVCtrl {
     }
     
     func updateCart() {
-        let totalItem = Order.shared.totalItem
+        let totalItem = Order.shared.orderDTO.totalItem
         lblTotalOrder.text = totalItem.toString()
         lblTotalOrder.isHidden = totalItem == 0
         lblTotalOrder.cornerRadius = lblTotalOrder.height / 2

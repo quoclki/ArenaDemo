@@ -19,7 +19,22 @@ class CategoryVCtrl: BaseVCtrl {
     
     // MARK: - Private properties
     private var lstCategory: [CategoryDTO] = []
-    
+    private var lstCategory_Display: [CategoryDTO] = []
+
+    private var searchText: String = "" {
+        didSet {
+            if searchText.trim().isEmpty {
+                lstCategory_Display = lstCategory
+                clvCategory.reloadData()
+                return
+            }
+            
+            lstCategory_Display = lstCategory.filter({ $0.name?.contains(s: searchText) ?? false })
+            clvCategory.reloadData()
+            
+        }
+    }
+
     // MARK: - Properties
     
     // MARK: - Init
@@ -31,6 +46,7 @@ class CategoryVCtrl: BaseVCtrl {
         super.configUI()
         createNavigationBar(vSafe, searchBar: searchBar)
         configCollectionView()
+        searchBar.delegate = self
     }
     
     override func configUIViewWillAppear() {
@@ -57,11 +73,7 @@ class CategoryVCtrl: BaseVCtrl {
         request.orderby = EProductCategoryOrderBy.name.rawValue
         
         task = SEProduct.getListCategory(request, animation: { (isShow) in
-            guard let vBar = self.vBar else {
-                return
-            }
-            let frame = CGRect(0, vBar.height, self.view.width, self.view.height - vBar.height)
-            self.showLoadingView(isShow, frameLoading: frame)
+            self.showLoadingView(isShow, frameLoading: self.vSafe.frame)
             self.vBar.isUserInteractionEnabled = !isShow
             
         }, completed: { (response) in
@@ -70,7 +82,7 @@ class CategoryVCtrl: BaseVCtrl {
             }
 
             self.lstCategory = response.lstCategory
-            self.clvCategory.reloadData()
+            self.searchText = ""
             
         })
         
@@ -102,24 +114,24 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return lstCategory.count
+        return lstCategory_Display.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let item = lstCategory[indexPath.row]
+        let item = lstCategory_Display[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ClvCategoryCell
         cell.updateCell(item)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item = lstCategory[indexPath.row]
+        let item = lstCategory_Display[indexPath.row]
         
         let request = GetProductRequest(page: 1)
         request.category = item.id
 
         task = SEProduct.getListProduct(request, animation: { (isShow) in
-            self.showLoadingView(isShow, frameLoading: collectionView.frame)
+            self.showLoadingView(isShow, frameLoading: self.vSafe.frame)
             self.vBar.isUserInteractionEnabled = !isShow
             
         }, completed: { (response) in
@@ -138,6 +150,27 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
         })
         
     }
+    
+}
+
+
+extension CategoryVCtrl: UISearchBarDelegate {
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.showsCancelButton = true
+        return true
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.searchText = searchText
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        self.searchText = ""
+    }
+    
     
 }
 

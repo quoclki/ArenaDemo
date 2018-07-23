@@ -14,17 +14,6 @@ class Order {
     
     var orderDTO: OrderDTO = OrderDTO()
     var cusDTO: CustomerDTO = CustomerDTO()
-    var total: Double {
-        return orderDTO.line_items.reduce(0, { (value, dto) -> Double in
-            return value + (dto.total.toDouble() )
-        })
-    }
-    
-    var totalItem: Int {
-        return orderDTO.line_items.reduce(0, { (value, dto) -> Int in
-            return value + (dto.quantity )
-        })
-    }
     
     func updateOrderLineItem(_ item: OrderLineItemDTO) {
         item.calculateSubTotal()
@@ -58,6 +47,21 @@ class Order {
         orderDTO = OrderDTO()
     }
     
+}
+
+extension OrderDTO {
+    var total: Double {
+        return line_items.reduce(0, { (value, dto) -> Double in
+            return value + (dto.total.toDouble() )
+        })
+    }
+    
+    var totalItem: Int {
+        return line_items.reduce(0, { (value, dto) -> Int in
+            return value + (dto.quantity )
+        })
+    }
+
 }
 
 extension OrderLineItemDTO {

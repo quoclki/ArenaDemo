@@ -202,9 +202,11 @@
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
                                 </textField>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="rZH-yg-Kio">
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="rZH-yg-Kio">
                                     <rect key="frame" x="18" y="202" width="30" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                    <state key="normal" image="icon-remember-notCheck"/>
+                                    <state key="selected" image="icon-remember_check"/>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="iPH-HR-qST">
                                     <rect key="frame" x="53" y="202" width="121" height="30"/>
@@ -355,4 +357,8 @@
             <point key="canvasLocation" x="435.5" y="-68"/>
         </view>
     </objects>
+    <resources>
+        <image name="icon-remember-notCheck" width="20" height="20"/>
+        <image name="icon-remember_check" width="18" height="18"/>
+    </resources>
 </document>

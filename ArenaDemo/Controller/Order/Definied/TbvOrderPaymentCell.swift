@@ -39,8 +39,8 @@ class TbvOrderPaymentCell: UITableViewCell {
     }
     
     func updateCell() {
-        lblTempTotal.text = Order.shared.total.toCurrencyString()
-        lblTotal.text = Order.shared.total.toCurrencyString()
+        lblTempTotal.text = Order.shared.orderDTO.total.toCurrencyString()
+        lblTotal.text = Order.shared.orderDTO.total.toCurrencyString()
 
         coupon = ""
     }

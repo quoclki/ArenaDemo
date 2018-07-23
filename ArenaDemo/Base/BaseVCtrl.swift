@@ -106,6 +106,7 @@ class BaseVCtrl: UIViewController {
             configSearchBar(searchBar)
             searchBar.width = v.width * 0.95
             searchBar.center = CGPoint(v.center.x, statusBarHeight + 25)
+            searchBar.tintColor = .white
             v.addSubview(searchBar)
         }
         

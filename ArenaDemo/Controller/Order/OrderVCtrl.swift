@@ -41,7 +41,7 @@ class OrderVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(vSafe, title: "GIỎ HÀNG CỦA TÔI")
+        createNavigationBar(vSafe, title: "GIỎ HÀNG CỦA TÔI (\( order.totalItem.toString() ))")
         configTableView()
         if isCreateBack {
             addViewToLeftBarItem(createBackButton())
@@ -103,6 +103,7 @@ extension OrderVCtrl: UITableViewDataSource, UITableViewDelegate {
         tbvOrder.dataSource = self
         tbvOrder.delegate = self
         tbvOrder.separatorStyle = .none
+        tbvOrder.allowsSelection = false
         
     }
     

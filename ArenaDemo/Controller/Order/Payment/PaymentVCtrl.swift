@@ -57,7 +57,6 @@ class PaymentVCtrl: BaseVCtrl {
         addViewToLeftBarItem(createBackButton())
         configTableView()
         updateLayoutUI()
-        
     }
     
     func updateLayoutUI() {
@@ -114,10 +113,6 @@ class PaymentVCtrl: BaseVCtrl {
     }
     
     func btnSignUp_Touched(sender: UIButton) {
-        UIView.animate(withDuration: 0) {
-            self.tbvOrder.tableHeaderView?.height = (self.tbvOrder.tableHeaderView?.height ?? 0) + 10
-            
-        }
         
     }
     

@@ -139,9 +139,15 @@ class AccountVCtrl: BaseVCtrl {
         [txtSignUpName, txtSignUpPassword, txtSignInEmail, txtSignInPassword, txtSignInConfirmPassword].forEach({
             $0?.delegate = self
         })
+        
+        btnCheck.touchUpInside(block: btnCheck_Touched)
+        btnCheckRemember.touchUpInside(block: btnCheck_Touched)
     }
     
     // MARK: - Event Handler
+    func btnCheck_Touched(sender: UIButton) {
+        btnCheck.isSelected = !btnCheck.isSelected
+    }
     
     // MARK: - Func
     override func loadData() {
@@ -188,7 +194,12 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
         
         switch item {
         case .myOrder:
-            return
+            if Order.shared.cusDTO.id == nil {
+                Base.container.tab = .order
+                return
+            }
+            
+            pushMyOrder()
             
         case .favourite:
             return
@@ -215,6 +226,34 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
             break
             
         }
+    }
+    
+    func pushMyOrder() {
+        guard let id = Order.shared.cusDTO.id else {
+            return
+        }
+        
+        let request = GetOrderRequest(page: 1)
+        request.customer = id
+        
+        _ = SEOrder.getList(request, animation: {
+            self.showLoadingView($0)
+            
+        }, completed: { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            
+            if response.lstOrder.isEmpty {
+                _ = self.showWarningAlert(title: "Thông báo", message: "Bạn chưa tạo đơn hàng nào", buttonTitle: "OK")
+                return
+            }
+            
+            let myOrder = MyOrderVCtrl(response.lstOrder)
+            self.navigationController?.pushViewController(myOrder, animated: true)
+            
+        })
+        
     }
     
 }

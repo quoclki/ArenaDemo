@@ -18,6 +18,48 @@ class MainVCtrl: BaseVCtrl {
     
     // MARK: - Private properties
     private var lstItem: [MainDataGroup] = []
+    private var lstItem_Display: [MainDataGroup] = []
+    
+    private var searchText: String = "" {
+        didSet {
+            if searchText.trim().isEmpty {
+                lstItem_Display = lstItem
+                clvMain.reloadData()
+                return
+            }
+            
+            lstItem_Display.removeAll()
+            lstItem.forEach { (item) in
+                if let category = CategoryDTO.fromJson(item.category.toJson()) {
+                    category.lstProduct = item.category.lstProduct.filter({ $0.name?.contains(s: searchText) ?? false })
+
+                    if !category.lstProduct.isEmpty {
+                        let group = MainDataGroup()
+                        group.type = item.type
+                        group.category = category
+                        self.lstItem_Display.append(group)
+                    }
+                }
+            }
+            
+            clvMain.reloadData()
+            
+        }
+    }
+    
+    private var totalGetService: Int = 0 {
+        didSet {
+            print("Total get service: \( totalGetService )")
+            if totalGetService == 0 {
+                searchBar.isUserInteractionEnabled = false
+                return
+            }
+            
+            if totalGetService == lstItem.count || totalGetService == 2 {
+                searchBar.isUserInteractionEnabled = true
+            }
+        }
+    }
     
     // MARK: - Properties
     
@@ -49,6 +91,7 @@ class MainVCtrl: BaseVCtrl {
     // MARK: - Func
     override func loadData() {
         super.loadData()
+        totalGetService = 0
         getListTopSales()
         getListProductCategory()
     }
@@ -58,6 +101,11 @@ class MainVCtrl: BaseVCtrl {
         request.period = EReportPeriod.last_month.rawValue
         
         task = SEReport.getListTopSaller(request, completed: { (response) in
+            if !response.success {
+                self.totalGetService += 1
+                return
+            }
+
             let lstID = response.lstTop.map({ $0.product_id ?? -1 })
             self.getProduct(lstID)
         })
@@ -73,6 +121,15 @@ class MainVCtrl: BaseVCtrl {
                 return
             }
             
+            if let last = response.lstProduct.last, response.lstProduct.count % 2 == 1 {
+                response.lstProduct.remove(last)
+            }
+            
+            if response.lstProduct.isEmpty {
+                return
+            }
+            
+            self.totalGetService += 1
             let category = CategoryDTO()
             category.name = "Sản phẩm bán chạy"
             category.isTopSaller = true
@@ -82,6 +139,7 @@ class MainVCtrl: BaseVCtrl {
             group.category = category
             group.type = .topSaller
             self.lstItem.insert(group, at: 0)
+            self.lstItem_Display = self.lstItem
             self.clvMain.insertSections(IndexSet(integer: 0))
         })
     }
@@ -93,6 +151,7 @@ class MainVCtrl: BaseVCtrl {
         
         task = SEProduct.getListCategory(request, completed: { (response) in
             if !response.success {
+                self.totalGetService += 1
                 return
             }
 
@@ -101,7 +160,6 @@ class MainVCtrl: BaseVCtrl {
             })
             
         })
-        
         
     }
     
@@ -113,7 +171,16 @@ class MainVCtrl: BaseVCtrl {
             if !response.success {
                 return
             }
+            
+            if let last = response.lstProduct.last, response.lstProduct.count % 2 == 1 {
+                response.lstProduct.remove(last)
+            }
+            
+            if response.lstProduct.isEmpty {
+                return
+            }
 
+            self.totalGetService += 1
             dto.lstProduct = response.lstProduct
             
             let group = MainDataGroup()
@@ -122,6 +189,7 @@ class MainVCtrl: BaseVCtrl {
             
             let section = self.lstItem.count
             self.lstItem.insert(group, at: section)
+            self.lstItem_Display = self.lstItem
             self.clvMain.insertSections(IndexSet(integer: section))
 
         })
@@ -159,18 +227,17 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICol
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return lstItem.count
+        return lstItem_Display.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let count = lstItem[section].category.lstProduct.count
-        return count % 2 == 0 ? count : count - 1
+        return lstItem_Display[section].category.lstProduct.count
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionElementKindSectionHeader:
-            let item = lstItem[indexPath.section]
+            let item = lstItem_Display[indexPath.section]
             let v = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerCellID, for: indexPath) as! ClvMainHeaderCell
             v.backgroundColor = .clear
             v.updateCell(item)
@@ -181,14 +248,14 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let item = lstItem[indexPath.section].category.lstProduct[indexPath.row]
+        let item = lstItem_Display[indexPath.section].category.lstProduct[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ClvProductCell
         cell.updateCell(item)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item = lstItem[indexPath.section].category.lstProduct[indexPath.row]
+        let item = lstItem_Display[indexPath.section].category.lstProduct[indexPath.row]
         let detail = ProductDetailVCtrl(item)
         navigationController?.pushViewController(detail, animated: true)
     }
@@ -205,9 +272,15 @@ extension MainVCtrl: UISearchBarDelegate {
         return true
     }
     
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        self.searchText = searchText
+    }
+    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         searchBar.showsCancelButton = false
+        searchBar.text = ""
+        self.searchText = ""
     }
     
     
