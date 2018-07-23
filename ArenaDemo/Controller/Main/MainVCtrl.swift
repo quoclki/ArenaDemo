@@ -200,10 +200,10 @@ class MainVCtrl: BaseVCtrl {
 
 extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     private var headerCellID: String {
-        return "clvMainHeaderCellID"
+        return String(describing: ClvMainHeaderCell.self)
     }
     private var cellID: String {
-        return "clvMainCellID"
+        return String(describing: ClvProductCell.self)
     }
     
     private var backgroundColor: UIColor {
@@ -212,8 +212,8 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICol
         
     func configCollectionView() {
         clvMain.backgroundColor = backgroundColor
-        clvMain.register(UINib(nibName: String(describing: ClvProductCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
-        clvMain.register(UINib(nibName: String(describing: ClvMainHeaderCell.self), bundle: Bundle(for: type(of: self))), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerCellID)
+        clvMain.register(UINib(nibName: cellID, bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
+        clvMain.register(UINib(nibName: headerCellID, bundle: Bundle(for: type(of: self))), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerCellID)
         clvMain.dataSource = self
         clvMain.delegate = self
         

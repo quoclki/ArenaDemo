@@ -65,7 +65,7 @@ class CategoryDetailVCtrl: BaseVCtrl {
 
 extension CategoryDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
     private var cellID: String {
-        return "clvCategoryDetailCellID"
+        return String(describing: ClvProductCell.self)
     }
     
     private var backgroundColor: UIColor {
@@ -74,7 +74,7 @@ extension CategoryDetailVCtrl: UICollectionViewDataSource, UICollectionViewDeleg
     
     func configCollectionView() {
         clvCategoryDetail.backgroundColor = backgroundColor
-        clvCategoryDetail.register(UINib(nibName: String(describing: ClvProductCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
+        clvCategoryDetail.register(UINib(nibName: cellID, bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
         clvCategoryDetail.dataSource = self
         clvCategoryDetail.delegate = self
         

@@ -13,6 +13,7 @@ class MyOrderVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
     @IBOutlet weak var vSafe: UIView!
+    @IBOutlet weak var tbvMyOrder: UITableView!
     
     // MARK: - Private properties
     private var lstOrder: [OrderDTO] = []

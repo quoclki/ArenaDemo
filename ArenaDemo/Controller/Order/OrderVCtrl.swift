@@ -85,11 +85,11 @@ class OrderVCtrl: BaseVCtrl {
 
 extension OrderVCtrl: UITableViewDataSource, UITableViewDelegate {
     private var cellID: String {
-        return "clvOrderCellID"
+        return String(describing: TbvOrderCell.self)
     }
     
     private var paymentCellID: String {
-        return "clvOrderPaymentCellID"
+        return String(describing: TbvOrderPaymentCell.self)
     }
     
     private var padding: CGFloat {
@@ -98,8 +98,8 @@ extension OrderVCtrl: UITableViewDataSource, UITableViewDelegate {
     
     func configTableView() {
         tbvOrder.backgroundColor = .white
-        tbvOrder.register(UINib(nibName: String(describing: TbvOrderCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: cellID)
-        tbvOrder.register(UINib(nibName: String(describing: TbvOrderPaymentCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: paymentCellID)
+        tbvOrder.register(UINib(nibName: cellID, bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: cellID)
+        tbvOrder.register(UINib(nibName: paymentCellID, bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: paymentCellID)
         tbvOrder.dataSource = self
         tbvOrder.delegate = self
         tbvOrder.separatorStyle = .none

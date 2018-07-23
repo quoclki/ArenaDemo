@@ -159,11 +159,11 @@ class AccountVCtrl: BaseVCtrl {
 extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
     
     private var cellID: String {
-        return "tbvAccountCellID"
+        return String(describing: TbvAccountCell.self)
     }
     
     func configTableView() {
-        tbvAccount.register(UINib(nibName: String(describing: TbvAccountCell.self), bundle: Bundle(for: Base.self)), forCellReuseIdentifier: cellID)
+        tbvAccount.register(UINib(nibName: cellID, bundle: Bundle(for: Base.self)), forCellReuseIdentifier: cellID)
         tbvAccount.dataSource = self
         tbvAccount.delegate = self
         tbvAccount.isScrollEnabled = false

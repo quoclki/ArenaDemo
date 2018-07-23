@@ -207,11 +207,11 @@ class ProductDetailVCtrl: BaseVCtrl {
 extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     private var cellID: String {
-        return "clvProductDetailCellID"
+        return String(describing: ClvProductCell.self)
     }
     
     private var headerCellID: String {
-        return "clvProductHeaderCellID"
+        return String(describing: ClvProductHeaderCell.self)
     }
     
     private var backgroundColor: UIColor {
@@ -220,8 +220,8 @@ extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelega
     
     func configCollectionView() {
         clvProductDetail.backgroundColor = backgroundColor
-        clvProductDetail.register(UINib(nibName: String(describing: ClvProductCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
-        clvProductDetail.register(UINib(nibName: String(describing: ClvProductHeaderCell.self), bundle: Bundle(for: type(of: self))), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerCellID)
+        clvProductDetail.register(UINib(nibName: cellID, bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
+        clvProductDetail.register(UINib(nibName: headerCellID, bundle: Bundle(for: type(of: self))), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerCellID)
         clvProductDetail.dataSource = self
         clvProductDetail.delegate = self
         

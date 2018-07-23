@@ -92,12 +92,12 @@ class CategoryVCtrl: BaseVCtrl {
 
 extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
     private var cellID: String {
-        return "clvCategoryCellID"
+        return String(describing: ClvCategoryCell.self)
     }
         
     func configCollectionView() {
         clvCategory.backgroundColor = .white
-        clvCategory.register(UINib(nibName: String(describing: ClvCategoryCell.self), bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
+        clvCategory.register(UINib(nibName: cellID, bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
         clvCategory.dataSource = self
         clvCategory.delegate = self
         

@@ -125,19 +125,19 @@ class PaymentVCtrl: BaseVCtrl {
 
 extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
     private var paymentInfoCellID: String {
-        return "clvPaymentInfoCellID"
+        return String(describing: TbvPaymentInfoCell.self)
     }
     
     private var cellID: String {
-        return "clvPaymentOrderCellID"
+        return String(describing: TbvOrderCell.self)
     }
     
     private var paymentCellID: String {
-        return "clvPaymentPaymentCellID"
+        return String(describing: TbvOrderPaymentCell.self)
     }
     
     private var paymentMethodCellID: String {
-        return "clvPaymentHeaderCellID"
+        return String(describing: TbvPaymentMethodCell.self)
     }
     
     private var padding: CGFloat {
@@ -150,10 +150,10 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
     
     func configTableView() {
         lstItem = [.paymentInfo, .myOrder, .paymentMethod]
-        tbvOrder.register(UINib(nibName: String(describing: TbvOrderCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: cellID)
-        tbvOrder.register(UINib(nibName: String(describing: TbvOrderPaymentCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: paymentCellID)
-        tbvOrder.register(UINib(nibName: String(describing: TbvPaymentInfoCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: paymentInfoCellID)
-        tbvOrder.register(UINib(nibName: String(describing: TbvPaymentMethodCell.self), bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: paymentMethodCellID)
+        tbvOrder.register(UINib(nibName: cellID, bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: cellID)
+        tbvOrder.register(UINib(nibName: paymentCellID, bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: paymentCellID)
+        tbvOrder.register(UINib(nibName: paymentInfoCellID, bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: paymentInfoCellID)
+        tbvOrder.register(UINib(nibName: paymentMethodCellID, bundle: Bundle(for: type(of: self))), forCellReuseIdentifier: paymentMethodCellID)
         tbvOrder.dataSource = self
         tbvOrder.delegate = self
         tbvOrder.separatorStyle = .none
