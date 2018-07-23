@@ -21,9 +21,9 @@ class MultiLanguage {
 //        return lstLanguage.firstOrDefault({$0.id == self.languageID})
 //    }
     
-//    var currentLocale: String {
-//        return currentLanguage?.locale ?? "en"
-//    }
+    var currentLocale: String {
+        return "vi_VN"
+    }
     
     func setUpLanguageDictionary() {
 //        dicLanguage.updateValue("Trang chủ", forKey: "home")
