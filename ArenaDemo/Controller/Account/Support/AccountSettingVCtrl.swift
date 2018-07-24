@@ -87,6 +87,7 @@ class AccountSettingVCtrl: BaseVCtrl {
     
     // MARK: - Event Handler
     func btnSave_Touched(sender: UIButton) {
+        view.endEditing(true)
         guard let name = txtName.text, !name.isEmpty else {
             _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập họ tên", buttonTitle: "OK", action: {
                 self.txtName.text = ""

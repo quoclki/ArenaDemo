@@ -134,6 +134,7 @@ class PaymentVCtrl: BaseVCtrl {
     }
     
     func btnSignUpConfirm_Touched(sender: UIButton) {
+        view.endEditing(true)
         guard let name = txtSignUpName.text?.trim(), !name.isEmpty else {
             _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập email", buttonTitle: "OK") {
                 self.txtSignUpName.becomeFirstResponder()
@@ -184,7 +185,6 @@ class PaymentVCtrl: BaseVCtrl {
             return
         }
         tbvOrder.reloadSections(IndexSet(integer: index), with: .none)
-        
         
     }
 

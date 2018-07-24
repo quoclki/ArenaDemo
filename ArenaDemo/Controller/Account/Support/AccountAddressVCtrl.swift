@@ -97,6 +97,8 @@ class AccountAddressVCtrl: BaseVCtrl {
     
     // MARK: - Event Handler
     func btnSave_Touched(sender: UIButton) {
+        view.endEditing(true)
+
         guard let request = CustomerDTO.fromJson(cusDTO.toJson()) else {
             return
         }
