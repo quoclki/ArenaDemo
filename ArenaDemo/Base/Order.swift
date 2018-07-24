@@ -27,13 +27,6 @@ class Order {
         
     }
     
-    func setUpCustomer() {
-        orderDTO.customer_id = cusDTO.id
-        orderDTO.shipping = cusDTO.shipping
-        orderDTO.billing = cusDTO.billing
-
-    }
-    
     func updateCusDTO(_ cusDTO: CustomerDTO, isSaveUserDefault: Bool = false) {
         self.cusDTO = cusDTO
 
@@ -60,6 +53,12 @@ extension OrderDTO {
         return line_items.reduce(0, { (value, dto) -> Int in
             return value + (dto.quantity )
         })
+    }
+    
+    func setupCustomer(_ cusDTO: CustomerDTO) {
+        customer_id = cusDTO.id
+        shipping = cusDTO.shipping
+        billing = cusDTO.billing
     }
 
 }

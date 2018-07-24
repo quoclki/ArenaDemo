@@ -18,8 +18,16 @@ class PaymentVCtrl: BaseVCtrl {
     @IBOutlet weak var btnOrder: UIButton!
     
     @IBOutlet var vSignUp: UIView!
+    @IBOutlet weak var vSignUpHeader: UIView!
     @IBOutlet weak var btnSignUp: UIButton!
-    
+    @IBOutlet weak var vSignUpDetail: UIView!
+    @IBOutlet weak var txtSignUpName: CustomUITextField!
+    @IBOutlet weak var txtSignUpPassword: CustomUITextField!
+    @IBOutlet weak var btnCheck: UIButton!
+    @IBOutlet weak var btnCheckRemember: UIButton!
+    @IBOutlet weak var btnForgetPassword: UIButton!
+    @IBOutlet weak var btnSignUpConfirm: UIButton!
+
     @IBOutlet var vPaymentFooter: UIView!
     @IBOutlet weak var lblTotal: UILabel!
     @IBOutlet weak var vMethod: UIView!
@@ -69,12 +77,14 @@ class PaymentVCtrl: BaseVCtrl {
         lstPayemnt.first?.isCheck = true
         order.lstPayment = lstPayemnt
         
+        vSignUp.clipsToBounds = true
         if Order.shared.cusDTO.id == nil {
+            vSignUp.height = vSignUpHeader.height
             tbvOrder.tableHeaderView = vSignUp
             return
         }
         
-        Order.shared.setUpCustomer()
+        order.setupCustomer(Order.shared.cusDTO)
         
     }
     
@@ -83,6 +93,11 @@ class PaymentVCtrl: BaseVCtrl {
         super.eventListener()
         btnOrder.touchUpInside(block: btnOrder_Touched)
         btnSignUp.touchUpInside(block: btnSignUp_Touched)
+        
+        btnCheck.touchUpInside(block: btnCheck_Touched)
+        btnCheckRemember.touchUpInside(block: btnCheck_Touched)
+        btnSignUpConfirm.touchUpInside(block: btnSignUpConfirm_Touched)
+
     }
     
     // MARK: - Event Handler
@@ -113,14 +128,66 @@ class PaymentVCtrl: BaseVCtrl {
     }
     
     func btnSignUp_Touched(sender: UIButton) {
-        
+        vSignUp.height = vSignUpDetail.frame.maxY
+        tbvOrder.tableHeaderView = vSignUp
+
     }
     
+    func btnSignUpConfirm_Touched(sender: UIButton) {
+        guard let name = txtSignUpName.text?.trim(), !name.isEmpty else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập email", buttonTitle: "OK") {
+                self.txtSignUpName.becomeFirstResponder()
+            }
+            return
+        }
+        
+        guard let password = txtSignUpPassword.text, !password.isEmpty else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập mật khẩu", buttonTitle: "OK") {
+                self.txtSignUpPassword.becomeFirstResponder()
+            }
+            return
+        }
+        
+        if name.isEmail {
+            self.getCustomerDTO(name) { (dto) in
+                self.getAuthDTO(dto.username, password: password, completed: { (authDTO) in
+                    self.loginSuccess(dto)
+                })
+            }
+            return
+        }
+        
+        self.getAuthDTO(name, password: password) { (authDTO) in
+            self.getCustomerDTO(authDTO.user?.email, completed: { (dto) in
+                self.loginSuccess(dto)
+            })
+        }
+    }
+
+    func btnCheck_Touched(sender: UIButton) {
+        btnCheck.isSelected = !btnCheck.isSelected
+    }
+
     // MARK: - Func
     override func loadData() {
         super.loadData()
         
     }
+    
+    func loginSuccess(_ cusDTO: CustomerDTO) {
+        cusDTO.password = self.txtSignUpPassword.text
+        Order.shared.updateCusDTO(cusDTO, isSaveUserDefault: self.btnCheck.isSelected)
+        order.setupCustomer(Order.shared.cusDTO)
+     
+        self.tbvOrder.tableHeaderView = nil
+        guard let index = lstItem.index(where: { $0 == .paymentInfo }) else {
+            return
+        }
+        tbvOrder.reloadSections(IndexSet(integer: index), with: .none)
+        
+        
+    }
+
 }
 
 extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {

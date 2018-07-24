@@ -230,7 +230,56 @@ class BaseVCtrl: UIViewController {
         return all
     }
 
+    /// Auth Account
+    func getAuthDTO(_ username: String?, password: String?, completed: @escaping ((AuthDTO) -> Void)) {
+        let request = GetAuthRequest()
+        request.username = username
+        request.password = password
+        
+        task = SEAuth.authentication(request, animation: {
+            self.showLoadingView($0, frameLoading: self.vSetSafeArea.frame)
+            self.vBar.isUserInteractionEnabled = !$0
+            
+        }, completed: { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            
+            guard let dto = response.authDTO else {
+                _ = self.showWarningAlert(title: "Cảnh báo", message: "Không thể xác thực!")
+                return
+            }
+            
+            completed(dto)
+        })
+        
+    }
     
+    func getCustomerDTO(_ email: String?, completed: @escaping ((CustomerDTO) -> Void)) {
+        let request = GetCustomerRequest(page: 1)
+        request.email = email
+        request.role = ECustomerRole.all.rawValue
+        
+        task = SECustomer.getList(request, animation: {
+            self.showLoadingView($0, frameLoading: self.vSetSafeArea.frame)
+            self.vBar.isUserInteractionEnabled = !$0
+
+        }, completed: { (response) in
+            if !self.checkResponse(response) {
+                return
+            }
+            
+            guard let dto = response.lstCustomer.first else {
+                _ = self.showWarningAlert(title: "Cảnh báo", message: "Không tốn tại thông tin user!")
+                return
+            }
+            
+            completed(dto)
+            
+        })
+        
+    }
+
     
 }
 
