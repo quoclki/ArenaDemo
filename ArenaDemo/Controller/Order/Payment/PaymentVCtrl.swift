@@ -94,6 +94,8 @@ class PaymentVCtrl: BaseVCtrl {
         btnOrder.touchUpInside(block: btnOrder_Touched)
         btnSignUp.touchUpInside(block: btnSignUp_Touched)
         
+        txtSignUpName.delegate = self
+        txtSignUpPassword.delegate = self
         btnCheck.touchUpInside(block: btnCheck_Touched)
         btnCheckRemember.touchUpInside(block: btnCheck_Touched)
         btnSignUpConfirm.touchUpInside(block: btnSignUpConfirm_Touched)
@@ -327,7 +329,12 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
         
 }
 
-extension PaymentVCtrl: HandleKeyboardProtocol {
+extension PaymentVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.endEditing(true)
+        return true
+    }
+    
     func handleKeyboard(willShow notify: NSNotification) {
         self.handleKeyboard(willShow: notify, scv: tbvOrder)
     }

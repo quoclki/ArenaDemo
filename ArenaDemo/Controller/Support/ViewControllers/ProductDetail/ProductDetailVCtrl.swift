@@ -82,8 +82,6 @@ class ProductDetailVCtrl: BaseVCtrl {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         updateLayoutUI()
-        updateCart()
-        
     }
     
     func updateLayoutUI() {
@@ -97,17 +95,11 @@ class ProductDetailVCtrl: BaseVCtrl {
         
         // Header for Collection View
         let heightForViewHeader = vDescribe.frame.maxY + padding
-        vHeader.frame = CGRect(0, -heightForViewHeader, Ratio.width, heightForViewHeader)
+        vHeader.frame = CGRect(0, -heightForViewHeader, vSafe.width, heightForViewHeader)
         clvProductDetail.addSubview(vHeader)
         clvProductDetail.contentInset.top = heightForViewHeader
         clvProductDetail.contentOffset.y = -heightForViewHeader
-    }
-    
-    func updateCart() {
-        let totalItem = Order.shared.orderDTO.totalItem
-        lblTotalOrder.text = totalItem.toString()
-        lblTotalOrder.isHidden = totalItem == 0
-        lblTotalOrder.cornerRadius = lblTotalOrder.height / 2
+        
     }
     
     // MARK: - Layout UI
@@ -137,9 +129,16 @@ class ProductDetailVCtrl: BaseVCtrl {
     override func configUIViewWillAppear() {
         super.configUIViewWillAppear()
         initPageViewController()
-
+        updateCart()
     }
     
+    func updateCart() {
+        let totalItem = Order.shared.orderDTO.totalItem
+        lblTotalOrder.text = totalItem.toString()
+        lblTotalOrder.isHidden = totalItem == 0
+        lblTotalOrder.cornerRadius = lblTotalOrder.height / 2
+    }
+
     // MARK: - Event Listerner
     override func eventListener() {
         super.eventListener()
@@ -290,7 +289,8 @@ extension ProductDetailVCtrl: UIPageViewControllerDataSource, UIPageViewControll
             pageVCtrl.setViewControllers([imageSlide], direction: .forward, animated: false, completion: nil)
             pageVCtrl.dataSource = self
             pageVCtrl.delegate = self
-            pageVCtrl.view.frame = vSlide.bounds
+            pageVCtrl.view.frame = CGRect(0, 0, Ratio.width, Ratio.width)
+            pageVCtrl.view.autoresizingMask = []
             addChildViewController(pageVCtrl)
             vSlide.cleanSubViews()
             vSlide.clipsToBounds = true
@@ -302,13 +302,12 @@ extension ProductDetailVCtrl: UIPageViewControllerDataSource, UIPageViewControll
     
     func initPagePoint() {
         let totalWidthPoint: CGFloat = vPagePoint.height * CGFloat(lstImages.count) * 0.7
-        var startXPoint: CGFloat = vPagePoint.center.x - totalWidthPoint / 2
+        var startXPoint: CGFloat = Ratio.width / 2 - totalWidthPoint / 2
         vPagePoint.cleanSubViews()
         for value in lstImages.enumerated() {
             let btn = UIButton(type: .system)
             btn.frame = CGRect(startXPoint, 0, vPagePoint.height * 0.7, vPagePoint.height)
             btn.accessibilityValue = value.element.id?.toString()
-            btn.autoresizingMask = [.flexibleTopMargin, .flexibleLeftMargin, .flexibleRightMargin, .flexibleBottomMargin, .flexibleWidth, .flexibleHeight]
             btn.touchUpInside(block: btnPoint_Touched)
             
             let v = UIView()
@@ -318,6 +317,8 @@ extension ProductDetailVCtrl: UIPageViewControllerDataSource, UIPageViewControll
             v.setCircle = true
             v.borderColor = unSelectPagePointColor
             v.borderWidth = 0.5
+            v.isUserInteractionEnabled = false
+            btn.autoresizingMask = []
             btn.addSubview(v)
             vPagePoint.addSubview(btn)
             startXPoint += btn.width
@@ -371,17 +372,23 @@ extension ProductDetailVCtrl: UIPageViewControllerDataSource, UIPageViewControll
     }
     
     func preSlide() {
-        guard let index = lstImages.index(where: { $0.id == self.selectedImage?.id }), index > 0 else { return }
+        guard let index = lstImages.index(where: { $0.id == self.selectedImage?.id }), index > 0 else {
+            return
+        }
         setAnimationPageViewController(index: index - 1, direction: .reverse)
     }
     
     func nextSlide() {
-        guard let index = lstImages.index(where: { $0.id == self.selectedImage?.id }), index < lstImages.count - 1 else { return }
+        guard let index = lstImages.index(where: { $0.id == self.selectedImage?.id }), index < lstImages.count - 1 else {
+            return
+        }
         setAnimationPageViewController(index: index + 1, direction: .forward)
     }
     
     func btnPoint_Touched(sender: UIButton) {
-        guard let index = vPagePoint.subviews.index(where: { $0.accessibilityValue == sender.accessibilityValue }) else { return }
+        guard let index = vPagePoint.subviews.index(where: { $0.accessibilityValue == sender.accessibilityValue }), sender.accessibilityValue != self.selectedImage?.id?.toString() else {
+            return
+        }
         let indexPrevious = vPagePoint.subviews.index(where: { $0.subviews.first?.backgroundColor == self.selectPagePointColor }) ?? -1
         setAnimationPageViewController(index: index, direction: index > indexPrevious ? .forward : .reverse)
     }
@@ -402,10 +409,14 @@ extension ProductDetailVCtrl: UIPageViewControllerDataSource, UIPageViewControll
     
     /// Format Label Page No
     func formatViewSlide() {
-        guard let image = self.selectedImage else { return }
+        guard let image = self.selectedImage else {
+            return
+        }
         vPagePoint.isUserInteractionEnabled = true
         vPagePoint.subviews.forEach { (v) in
-            guard let btn = v.subviews.first else { return }
+            guard let btn = v.subviews.first else {
+                return
+            }
             btn.backgroundColor = Int(v.accessibilityValue ?? "") == image.id ? selectPagePointColor : unSelectPagePointColor
         }
         
@@ -422,14 +433,18 @@ extension ProductDetailVCtrl: UIPageViewControllerDataSource, UIPageViewControll
             return
         }
         
-        if lstImages.count == 1 { return }
+        if lstImages.count == 1 {
+            return
+        }
         timerSlide.invalidate()
         timerSlide = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(handleTimer(_:)), userInfo: nil, repeats: false)
         
     }
     
     @objc func handleTimer(_ timer: Timer) {
-        guard let index = lstImages.index(where: { $0.id == self.selectedImage?.id }), vPagePoint.isUserInteractionEnabled else { return }
+        guard let index = lstImages.index(where: { $0.id == self.selectedImage?.id }), vPagePoint.isUserInteractionEnabled else {
+            return
+        }
         
         if index == 0 {
             self.isNext = true

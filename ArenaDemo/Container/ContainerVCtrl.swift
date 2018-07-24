@@ -44,7 +44,9 @@ class ContainerVCtrl: BaseVCtrl {
     }
     
     func configNavigation() {
-        guard let navBar = navigationController?.navigationBar else { return }
+        guard let navBar = navigationController?.navigationBar else {
+            return
+        }
         navBar.isHidden = true
         navBar.isExclusiveTouch = false
 
@@ -64,7 +66,9 @@ class ContainerVCtrl: BaseVCtrl {
     
     // MARK: - Event Handler
     func btnMenu_Touched(sender: UIButton) {
-        guard let tab = EMenu(rawValue: sender.tag) else { return }
+        guard let tab = EMenu(rawValue: sender.tag) else {
+            return
+        }
         if self.tab == tab {
             return
         }
