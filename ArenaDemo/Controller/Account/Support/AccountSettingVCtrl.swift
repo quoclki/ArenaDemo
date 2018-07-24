@@ -166,22 +166,9 @@ class AccountSettingVCtrl: BaseVCtrl {
             
         }
         
-        let request = GetAuthRequest()
-        request.username = cusDTO.username
-        request.password = pass
-        
-        _ = SEAuth.authentication(request, animation: {
-            self.showLoadingView($0, frameLoading: self.vSafe.frame)
-            self.vBar.isUserInteractionEnabled = !$0
-            
-        }, completed: { (response) in
-            if !self.checkResponse(response) {
-                return
-            }
-            
+        getAuthDTO(cusDTO.username, password: pass) {_ in
             updateAccount()
-            
-        })
+        }
         
     }
     
