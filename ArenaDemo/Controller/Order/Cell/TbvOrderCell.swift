@@ -32,7 +32,6 @@ class TbvOrderCell: UITableViewCell {
     private var quantity: Int = 0 {
         didSet {
             itemLine.quantity = quantity
-            itemLine.calculateSubTotal()
             lblQuantity.text = quantity.toString()
             lblPaymentQuantity.text = "Số lượng: \( quantity.toString() )"
             btnMinus.isEnabled = quantity > 1
@@ -107,11 +106,13 @@ class TbvOrderCell: UITableViewCell {
     
     func btnMinus_Touched(sender: UIButton) {
         quantity -= 1
+        Order.shared.orderDTO.updateOrderLineItem(itemLine)
         updatePaymentCell()
     }
     
     func btnPlus_Touched(sender: UIButton) {
         quantity += 1
+        Order.shared.orderDTO.updateOrderLineItem(itemLine)
         updatePaymentCell()
     }
     

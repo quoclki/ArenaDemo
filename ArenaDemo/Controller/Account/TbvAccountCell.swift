@@ -14,9 +14,9 @@ class TbvAccountCell: UITableViewCell {
     @IBOutlet weak var vCell: UIView!
     @IBOutlet weak var imvIcon: UIImageView!
     @IBOutlet weak var lblName: UILabel!
-    @IBOutlet weak var btnSignUp: UIButton!
     @IBOutlet weak var btnSignIn: UIButton!
-    
+    @IBOutlet weak var btnSignUp: UIButton!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -49,7 +49,5 @@ class TbvAccountCell: UITableViewCell {
         imvIcon.image = item.icon
 
     }
-    
-    
     
 }

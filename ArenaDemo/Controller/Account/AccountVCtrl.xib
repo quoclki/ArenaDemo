@@ -15,9 +15,9 @@
                 <outlet property="btnCheckRemember" destination="iPH-HR-qST" id="hqY-YQ-dOz"/>
                 <outlet property="btnForgetPassword" destination="qQx-tv-t0A" id="ONx-4g-ZfM"/>
                 <outlet property="btnSignInConfirm" destination="ROg-Pn-otQ" id="F4n-VN-eWO"/>
-                <outlet property="btnSignInDetail" destination="sir-kZ-fbk" id="0v9-sq-4I0"/>
+                <outlet property="btnSignInDetail" destination="zlh-D0-hOW" id="teE-e7-qNb"/>
                 <outlet property="btnSignUpConfirm" destination="JBg-4X-o3Y" id="B7q-ij-ose"/>
-                <outlet property="btnSignUpDetail" destination="zlh-D0-hOW" id="Wij-MY-ZF9"/>
+                <outlet property="btnSignUpDetail" destination="sir-kZ-fbk" id="gHV-zW-DWk"/>
                 <outlet property="imvLogo" destination="Eib-jP-Hke" id="0t3-VN-9tn"/>
                 <outlet property="lblName" destination="flF-7V-ZCh" id="p6r-9t-4IG"/>
                 <outlet property="scrollView" destination="YWS-uj-DFM" id="JG5-si-qCU"/>

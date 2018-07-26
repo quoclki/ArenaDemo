@@ -53,17 +53,17 @@ class AccountVCtrl: BaseVCtrl {
         }
     }
     
-    private var isSignUp: Bool = false {
+    private var isSignIn: Bool = false {
         didSet {
             self.view.endEditing(true)
-            vMark.originX = isSignUp ? btnSignUpDetail.originX : btnSignInDetail.originX
+            vMark.originX = isSignIn ? btnSignInDetail.originX : btnSignUpDetail.originX
             vMark.originY = btnSignUpDetail.height
             UIView.animate(withDuration: 0.3) {
                 self.vMark.originY = self.btnSignUpDetail.height - self.vMark.height
             }
 
-            vSignUpDetail.isHidden = !isSignUp
-            vSignInDetail.isHidden = !vSignUpDetail.isHidden
+            vSignInDetail.isHidden = !isSignIn
+            vSignUpDetail.isHidden = !vSignInDetail.isHidden
         }
     }
     
@@ -133,12 +133,12 @@ class AccountVCtrl: BaseVCtrl {
         super.eventListener()
         btnSignInDetail.touchUpInside(block: btnSignInDetail_Touched)
         btnSignInConfirm.touchUpInside(block: btnSignInConfirm_Touched)
-//        btnSignUpDetail.touchUpInside(block: btnSignUpDetail_Touched)
-//        btnSignUpConfirm.touchUpInside(block: btnSignUpConfirm_Touched)
+        btnSignUpDetail.touchUpInside(block: btnSignUpDetail_Touched)
+        btnSignUpConfirm.touchUpInside(block: btnSignUpConfirm_Touched)
 
-//        [txtSignUpName, txtSignUpPassword, txtSignInEmail, txtSignInPassword, txtSignInConfirmPassword].forEach({
-//            $0?.delegate = self
-//        })
+        [txtSignInName, txtSignInPassword, txtSignUpEmail, txtSignUpPassword, txtSignUpConfirmPassword].forEach({
+            $0?.delegate = self
+        })
 
         btnCheck.touchUpInside(block: btnCheck_Touched)
         btnCheckRemember.touchUpInside(block: btnCheck_Touched)
@@ -262,11 +262,11 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
 extension AccountVCtrl {
     func btnSignUp_Touched(sender: UIButton) {
         isBack = true
-        isSignUp = false
+        isSignIn = false
     }
     
     func btnSignUpDetail_Touched(sender: UIButton) {
-        isSignUp = false
+        isSignIn = false
     }
     
     func btnSignUpConfirm_Touched(sender: UIButton) {
@@ -327,12 +327,12 @@ extension AccountVCtrl {
     
     func btnSignIn_Touched(sender: UIButton) {
         isBack = true
-        isSignUp = true
+        isSignIn = true
         
     }
     
     func btnSignInDetail_Touched(sender: UIButton) {
-        isSignUp = true
+        isSignIn = true
     }
     
     func btnSignInConfirm_Touched(sender: UIButton) {

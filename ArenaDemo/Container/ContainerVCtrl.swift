@@ -157,10 +157,43 @@ class ContainerVCtrl: BaseVCtrl {
             label.center.x = btn.center.x
             v.addSubview(label)
             
+            if element == .order {
+                let no = UILabel()
+                no.text = Order.shared.orderDTO.totalItem.toString()
+                no.accessibilityValue = "totalItem"
+                no.size = CGSize(16, 16)
+                no.font = UIFont.systemFont(ofSize: 7, weight: .light)
+                no.origin = CGPoint(imv.originX + 11, 3)
+                no.backgroundColor = Base.baseColor
+                no.textColor = .white
+                no.clipsToBounds = true
+                no.textAlignment = .center
+                no.cornerRadius = no.height / 2
+                no.isHidden = Order.shared.orderDTO.totalItem == 0
+                v.addSubview(no)
+            }
+            
+            v.accessibilityValue = element.rawValue.toString()
             vMenu.addSubview(v)
         }
         
         self.tab = .home
+        
+    }
+    
+    func updateTotalItem() {
+        let totalItem = Order.shared.orderDTO.totalItem
+        
+        guard let vOrder = vMenu.subviews.first(where: { $0.accessibilityValue == EMenu.order.rawValue.toString() }) else {
+            return
+        }
+        
+        guard let no = vOrder.subviews.first(where: { $0.accessibilityValue == "totalItem" }) as? UILabel else {
+            return
+        }
+        
+        no.text = totalItem.toString()
+        no.isHidden = totalItem == 0
         
     }
     

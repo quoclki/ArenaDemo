@@ -15,18 +15,6 @@ class Order {
     var orderDTO: OrderDTO = OrderDTO()
     var cusDTO: CustomerDTO = CustomerDTO()
     
-    func updateOrderLineItem(_ item: OrderLineItemDTO) {
-        item.calculateSubTotal()
-
-        if let index = orderDTO.line_items.index(where: { $0.product_id == item.product_id }) {
-            orderDTO.line_items[index] = item
-            return
-        }
-
-        orderDTO.line_items.append(item)
-        
-    }
-    
     func updateCusDTO(_ cusDTO: CustomerDTO, isSaveUserDefault: Bool = false) {
         self.cusDTO = cusDTO
 
@@ -61,6 +49,25 @@ extension OrderDTO {
         billing = cusDTO.billing
     }
 
+    func updateOrderLineItem(_ item: OrderLineItemDTO) {
+        item.calculateSubTotal()
+        
+        if let index = line_items.index(where: { $0.product_id == item.product_id }) {
+            line_items[index] = item
+        } else {
+            line_items.append(item)
+        }
+        
+        Base.container.updateTotalItem()
+        
+    }
+    
+    func deleteOrderLintItem(_ item: OrderLineItemDTO) {
+        line_items.remove(item)
+        Base.container.updateTotalItem()
+        
+    }
+    
 }
 
 extension OrderLineItemDTO {

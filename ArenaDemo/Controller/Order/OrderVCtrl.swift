@@ -136,7 +136,8 @@ extension OrderVCtrl: UITableViewDataSource, UITableViewDelegate {
 
     func handleDelete(_ tableView: UITableView, indexPath: IndexPath) {
         _ = showAlert(title: "Cảnh báo", message: "Bạn có chắc chắn muốn xoá món hàng này?", leftBtnTitle: "Không", rightBtnTitle: "Có", rightBtnStyle: .destructive, rightAction: {
-            self.order.line_items.remove(at: indexPath.row)
+            let item = self.order.line_items[indexPath.row]
+            self.order.deleteOrderLintItem(item)
             tableView.reloadData()
             self.addContinueVCtrl()
         })

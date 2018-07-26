@@ -177,7 +177,7 @@ class ProductDetailVCtrl: BaseVCtrl {
 
     func btnOrder_Touched(sender: UIButton) {
         lineItem.quantity = quantity
-        Order.shared.updateOrderLineItem(lineItem)
+        Order.shared.orderDTO.updateOrderLineItem(lineItem)
         navigationController?.popToRootViewController(animated: true)
     }
     
