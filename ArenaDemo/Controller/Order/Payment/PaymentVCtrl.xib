@@ -16,18 +16,18 @@
                 <outlet property="btnCheckRemember" destination="45D-JM-0Zk" id="4MF-jU-ZRe"/>
                 <outlet property="btnForgetPassword" destination="zXp-TK-emj" id="tjV-S4-VLP"/>
                 <outlet property="btnOrder" destination="hLT-Pu-qX8" id="c2r-Lf-D6y"/>
-                <outlet property="btnSignUp" destination="Yux-7y-xDi" id="mYw-by-asd"/>
-                <outlet property="btnSignUpConfirm" destination="LQ2-po-qCo" id="CWq-2g-WQY"/>
+                <outlet property="btnSignIn" destination="Yux-7y-xDi" id="5gx-0r-ERX"/>
+                <outlet property="btnSignUpConfirm" destination="LQ2-po-qCo" id="KtO-wm-ATH"/>
                 <outlet property="lblTotal" destination="Fa9-4i-oJQ" id="m3J-jP-1lF"/>
                 <outlet property="tbvOrder" destination="X7k-aF-fXC" id="r8N-X9-J5r"/>
-                <outlet property="txtSignUpName" destination="UNF-nE-y07" id="adF-1K-dIw"/>
-                <outlet property="txtSignUpPassword" destination="WcZ-uy-UAO" id="dAP-f4-4Az"/>
+                <outlet property="txtSignInName" destination="UNF-nE-y07" id="1TA-tw-XXL"/>
+                <outlet property="txtSignInPassword" destination="WcZ-uy-UAO" id="l0l-Qp-0cl"/>
                 <outlet property="vMethod" destination="3tw-gY-0qZ" id="TeR-Xz-Elm"/>
                 <outlet property="vPaymentFooter" destination="v34-QY-Y3t" id="Mfc-g0-Z9z"/>
                 <outlet property="vSafe" destination="xkw-gR-qst" id="vqd-ch-khb"/>
-                <outlet property="vSignUp" destination="XgF-no-L2k" id="ERw-cJ-Bpk"/>
-                <outlet property="vSignUpDetail" destination="EDf-Aj-66f" id="FZj-P4-3QC"/>
-                <outlet property="vSignUpHeader" destination="ZcM-9p-3Gg" id="s9d-sK-iDR"/>
+                <outlet property="vSignIn" destination="XgF-no-L2k" id="K4m-6o-ouj"/>
+                <outlet property="vSignInDetail" destination="EDf-Aj-66f" id="X3e-pX-lqP"/>
+                <outlet property="vSignInHeader" destination="ZcM-9p-3Gg" id="6Av-LY-P7s"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -43,7 +43,7 @@
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hLT-Pu-qX8">
                             <rect key="frame" x="0.0" y="547" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
-                            <color key="backgroundColor" red="0.90588235289999997" green="0.29803921570000003" blue="0.23529411759999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" red="0.81568627450980391" green="0.0039215686274509803" blue="0.10588235294117647" alpha="1" colorSpace="calibratedRGB"/>
                             <state key="normal" title="ĐẶT HÀNG">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </state>
@@ -118,7 +118,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="tài khoản / email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UNF-nE-y07" customClass="CustomUITextField" customModule="CustomControl">
+                                        <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Tài khoản / Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UNF-nE-y07" customClass="CustomUITextField" customModule="CustomControl">
                                             <rect key="frame" x="15" y="45" width="318" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <nil key="textColor"/>
@@ -146,7 +146,7 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="mật khẩu" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WcZ-uy-UAO" customClass="CustomUITextField" customModule="CustomControl">
+                                        <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Mật khẩu" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WcZ-uy-UAO" customClass="CustomUITextField" customModule="CustomControl">
                                             <rect key="frame" x="15" y="140" width="318" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <nil key="textColor"/>
@@ -167,7 +167,7 @@
                                                 </userDefinedRuntimeAttribute>
                                             </userDefinedRuntimeAttributes>
                                         </textField>
-                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4vw-RV-GQm">
+                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4vw-RV-GQm">
                                             <rect key="frame" x="17" y="191" width="30" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <state key="normal" image="icon-remember-notCheck"/>

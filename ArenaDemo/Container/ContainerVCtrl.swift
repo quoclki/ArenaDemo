@@ -218,16 +218,16 @@ enum EMenu: Int {
     var name: String {
         switch self {
         case .home:
-            return "Trang chủ"
+            return "Trang Chủ"
             
         case .category:
-            return "Danh mục"
+            return "Danh Mục"
             
         case .order:
-            return "Giỏ hàng"
+            return "Giỏ Hàng"
             
         case .account:
-            return "Tài khoản"
+            return "Tài Khoản"
         }
     }
     

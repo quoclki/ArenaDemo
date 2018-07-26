@@ -68,8 +68,8 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="btnSignIn" destination="C5B-Nk-kr2" id="9mz-Cm-PnL"/>
-                <outlet property="btnSignUp" destination="CKR-Ws-293" id="qid-TH-SYw"/>
+                <outlet property="btnSignIn" destination="CKR-Ws-293" id="tdg-E8-K9V"/>
+                <outlet property="btnSignUp" destination="C5B-Nk-kr2" id="EWv-sc-Lc9"/>
                 <outlet property="imvIcon" destination="Fka-jC-Txk" id="swx-Ku-NMm"/>
                 <outlet property="lblName" destination="eGA-l7-KtU" id="FzX-0M-p32"/>
                 <outlet property="vCell" destination="XMI-6i-P6F" id="w1g-B5-pNX"/>

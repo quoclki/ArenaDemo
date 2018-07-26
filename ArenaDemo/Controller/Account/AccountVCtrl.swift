@@ -23,23 +23,23 @@ class AccountVCtrl: BaseVCtrl {
     @IBOutlet var vSignUpSignIn: UIView!
     
     // View Sign In - Sign Up
-    @IBOutlet weak var btnSignUpDetail: UIButton!
     @IBOutlet weak var btnSignInDetail: UIButton!
+    @IBOutlet weak var btnSignUpDetail: UIButton!
     @IBOutlet weak var vMark: UIView!
-    
-    @IBOutlet weak var vSignUpDetail: UIView!
-    @IBOutlet weak var txtSignUpName: CustomUITextField!
-    @IBOutlet weak var txtSignUpPassword: CustomUITextField!
+
+    @IBOutlet weak var vSignInDetail: UIView!
+    @IBOutlet weak var txtSignInName: CustomUITextField!
+    @IBOutlet weak var txtSignInPassword: CustomUITextField!
     @IBOutlet weak var btnCheck: UIButton!
     @IBOutlet weak var btnCheckRemember: UIButton!
     @IBOutlet weak var btnForgetPassword: UIButton!
-    @IBOutlet weak var btnSignUpConfirm: UIButton!
-    
-    @IBOutlet weak var vSignInDetail: UIView!
-    @IBOutlet weak var txtSignInEmail: CustomUITextField!
-    @IBOutlet weak var txtSignInPassword: CustomUITextField!
-    @IBOutlet weak var txtSignInConfirmPassword: CustomUITextField!
     @IBOutlet weak var btnSignInConfirm: UIButton!
+
+    @IBOutlet weak var vSignUpDetail: UIView!
+    @IBOutlet weak var txtSignUpEmail: CustomUITextField!
+    @IBOutlet weak var txtSignUpPassword: CustomUITextField!
+    @IBOutlet weak var txtSignUpConfirmPassword: CustomUITextField!
+    @IBOutlet weak var btnSignUpConfirm: UIButton!
     
     // MARK: - Private properties
     private var lstItem: [EAccountMenu] = []
@@ -61,7 +61,7 @@ class AccountVCtrl: BaseVCtrl {
             UIView.animate(withDuration: 0.3) {
                 self.vMark.originY = self.btnSignUpDetail.height - self.vMark.height
             }
-            
+
             vSignUpDetail.isHidden = !isSignUp
             vSignInDetail.isHidden = !vSignUpDetail.isHidden
         }
@@ -98,7 +98,7 @@ class AccountVCtrl: BaseVCtrl {
         }
         vBar.addSubview(btnBack)
         imvLogo.contentMode = .scaleAspectFill
-        
+
         vSignUpSignIn.size = vBorder.size
         vMark.backgroundColor = Base.baseColor
         vBorder.addSubview(vSignUpSignIn)
@@ -116,7 +116,7 @@ class AccountVCtrl: BaseVCtrl {
             lstItem = [.myOrder, .favourite, .orderCondition, .storeSystem, .contactInfo, .signInSignUp]
             lblName.text = "APP BÁN HÀNG"
         }
-        [txtSignUpName, txtSignUpPassword, txtSignInEmail, txtSignInPassword, txtSignInConfirmPassword].forEach({
+        [txtSignInName, txtSignInPassword, txtSignUpEmail, txtSignUpPassword, txtSignUpConfirmPassword].forEach({
             $0?.text = ""
         })
         btnCheck.isSelected = false
@@ -133,13 +133,13 @@ class AccountVCtrl: BaseVCtrl {
         super.eventListener()
         btnSignInDetail.touchUpInside(block: btnSignInDetail_Touched)
         btnSignInConfirm.touchUpInside(block: btnSignInConfirm_Touched)
-        btnSignUpDetail.touchUpInside(block: btnSignUpDetail_Touched)
-        btnSignUpConfirm.touchUpInside(block: btnSignUpConfirm_Touched)
-        
-        [txtSignUpName, txtSignUpPassword, txtSignInEmail, txtSignInPassword, txtSignInConfirmPassword].forEach({
-            $0?.delegate = self
-        })
-        
+//        btnSignUpDetail.touchUpInside(block: btnSignUpDetail_Touched)
+//        btnSignUpConfirm.touchUpInside(block: btnSignUpConfirm_Touched)
+
+//        [txtSignUpName, txtSignUpPassword, txtSignInEmail, txtSignInPassword, txtSignInConfirmPassword].forEach({
+//            $0?.delegate = self
+//        })
+
         btnCheck.touchUpInside(block: btnCheck_Touched)
         btnCheckRemember.touchUpInside(block: btnCheck_Touched)
     }
@@ -260,37 +260,37 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
 
 // Handle Sign in - Sign Up
 extension AccountVCtrl {
-    func btnSignIn_Touched(sender: UIButton) {
+    func btnSignUp_Touched(sender: UIButton) {
         isBack = true
         isSignUp = false
     }
     
-    func btnSignInDetail_Touched(sender: UIButton) {
+    func btnSignUpDetail_Touched(sender: UIButton) {
         isSignUp = false
     }
     
-    func btnSignInConfirm_Touched(sender: UIButton) {
-        guard let email = txtSignInEmail.text?.trim(), !email.isEmpty else {
+    func btnSignUpConfirm_Touched(sender: UIButton) {
+        guard let email = txtSignUpEmail.text?.trim(), !email.isEmpty else {
             _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập email", buttonTitle: "OK") {
-                self.txtSignInEmail.becomeFirstResponder()
+                self.txtSignUpEmail.becomeFirstResponder()
             }
             return
         }
-        
-        guard let password = txtSignInPassword.text, !password.isEmpty else {
+
+        guard let password = txtSignUpPassword.text, !password.isEmpty else {
             _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập mật khẩu", buttonTitle: "OK") {
-                self.txtSignInPassword.becomeFirstResponder()
+                self.txtSignUpPassword.becomeFirstResponder()
             }
             return
         }
-        
-        guard let confirmPassword = txtSignInConfirmPassword.text, !confirmPassword.isEmpty else {
+
+        guard let confirmPassword = txtSignUpConfirmPassword.text, !confirmPassword.isEmpty else {
             _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập xác nhận mật khẩu", buttonTitle: "OK") {
-                self.txtSignInConfirmPassword.becomeFirstResponder()
+                self.txtSignUpConfirmPassword.becomeFirstResponder()
             }
             return
         }
-        
+
         if password != confirmPassword {
             _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập xác nhận mật khẩu giống mật khẩu", buttonTitle: "OK")
             return
@@ -301,15 +301,15 @@ extension AccountVCtrl {
         request.email = email
         request.password = password
         request.role = ECustomerRole.customer.rawValue
-        
+
         task = SECustomer.createOrUpdate(request, animation: {
             self.showLoadingView($0)
-            
+
         }) { (response) in
             if !self.checkResponse(response) {
                 return
             }
-            
+
             guard let cusDTO = response.lstCustomer.first else {
                 _ = self.showWarningAlert(title: "Cảnh báo", message: "Không thể đăng kí thông tin!")
                 return
@@ -318,35 +318,34 @@ extension AccountVCtrl {
             _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG KÍ THÀNH CÔNG", buttonTitle: "OK") {
                 self.configDefaultAccount()
                 self.tbvAccount.reloadData()
-                
+
             }
 
         }
-
         
     }
     
-    func btnSignUp_Touched(sender: UIButton) {
+    func btnSignIn_Touched(sender: UIButton) {
         isBack = true
         isSignUp = true
         
     }
     
-    func btnSignUpDetail_Touched(sender: UIButton) {
+    func btnSignInDetail_Touched(sender: UIButton) {
         isSignUp = true
     }
     
-    func btnSignUpConfirm_Touched(sender: UIButton) {
-        guard let name = txtSignUpName.text?.trim(), !name.isEmpty else {
+    func btnSignInConfirm_Touched(sender: UIButton) {
+        guard let name = txtSignInName.text?.trim(), !name.isEmpty else {
             _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập email", buttonTitle: "OK") {
-                self.txtSignUpName.becomeFirstResponder()
+                self.txtSignInName.becomeFirstResponder()
             }
             return
         }
-        
-        guard let password = txtSignUpPassword.text, !password.isEmpty else {
+
+        guard let password = txtSignInPassword.text, !password.isEmpty else {
             _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập mật khẩu", buttonTitle: "OK") {
-                self.txtSignUpPassword.becomeFirstResponder()
+                self.txtSignInPassword.becomeFirstResponder()
             }
             return
         }
@@ -368,13 +367,13 @@ extension AccountVCtrl {
     }
  
     func loginSuccess(_ cusDTO: CustomerDTO) {
-        cusDTO.password = self.txtSignUpPassword.text
+        cusDTO.password = self.txtSignInPassword.text
         Order.shared.updateCusDTO(cusDTO, isSaveUserDefault: self.btnCheck.isSelected)
-        
+
         _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG NHẬP THÀNH CÔNG", buttonTitle: "OK") {
             self.configDefaultAccount()
             self.tbvAccount.reloadData()
-            
+
         }
 
     }

@@ -14,25 +14,25 @@
                 <outlet property="btnCheck" destination="rZH-yg-Kio" id="PTy-1d-PBC"/>
                 <outlet property="btnCheckRemember" destination="iPH-HR-qST" id="hqY-YQ-dOz"/>
                 <outlet property="btnForgetPassword" destination="qQx-tv-t0A" id="ONx-4g-ZfM"/>
-                <outlet property="btnSignInConfirm" destination="JBg-4X-o3Y" id="ttC-NW-U0n"/>
+                <outlet property="btnSignInConfirm" destination="ROg-Pn-otQ" id="F4n-VN-eWO"/>
                 <outlet property="btnSignInDetail" destination="sir-kZ-fbk" id="0v9-sq-4I0"/>
-                <outlet property="btnSignUpConfirm" destination="ROg-Pn-otQ" id="Rid-Lx-UVJ"/>
+                <outlet property="btnSignUpConfirm" destination="JBg-4X-o3Y" id="B7q-ij-ose"/>
                 <outlet property="btnSignUpDetail" destination="zlh-D0-hOW" id="Wij-MY-ZF9"/>
                 <outlet property="imvLogo" destination="Eib-jP-Hke" id="0t3-VN-9tn"/>
                 <outlet property="lblName" destination="flF-7V-ZCh" id="p6r-9t-4IG"/>
                 <outlet property="scrollView" destination="YWS-uj-DFM" id="JG5-si-qCU"/>
                 <outlet property="tbvAccount" destination="PWI-pe-hog" id="cgn-am-1av"/>
-                <outlet property="txtSignInConfirmPassword" destination="3Jr-uc-FSX" id="yqw-uS-HYx"/>
-                <outlet property="txtSignInEmail" destination="e7Q-9U-vs4" id="woe-xf-6JZ"/>
-                <outlet property="txtSignInPassword" destination="mdx-bq-a1U" id="Gz6-8d-RwT"/>
-                <outlet property="txtSignUpName" destination="mMY-Nk-XFW" id="Ikg-57-GsL"/>
-                <outlet property="txtSignUpPassword" destination="GH3-8Q-WTr" id="q3T-CL-tUT"/>
+                <outlet property="txtSignInName" destination="mMY-Nk-XFW" id="Xa5-XR-MsU"/>
+                <outlet property="txtSignInPassword" destination="GH3-8Q-WTr" id="k7G-gF-pSF"/>
+                <outlet property="txtSignUpConfirmPassword" destination="3Jr-uc-FSX" id="6Th-Ti-6iQ"/>
+                <outlet property="txtSignUpEmail" destination="e7Q-9U-vs4" id="eeA-rg-c6n"/>
+                <outlet property="txtSignUpPassword" destination="mdx-bq-a1U" id="IAl-vA-G8i"/>
                 <outlet property="vBorder" destination="uQL-wA-Ucf" id="hzz-qD-iMb"/>
                 <outlet property="vLogo" destination="S4f-xX-9bt" id="vig-08-gvL"/>
                 <outlet property="vMark" destination="TFo-Dt-wOr" id="Brz-cJ-vLM"/>
                 <outlet property="vSafe" destination="0rR-Li-aWA" id="R89-ef-yta"/>
-                <outlet property="vSignInDetail" destination="Xrc-Pl-O2y" id="Hra-59-03j"/>
-                <outlet property="vSignUpDetail" destination="WJF-EU-PW6" id="gBD-g0-4Qe"/>
+                <outlet property="vSignInDetail" destination="WJF-EU-PW6" id="Zcp-5F-Mrd"/>
+                <outlet property="vSignUpDetail" destination="Xrc-Pl-O2y" id="QkE-y5-vEf"/>
                 <outlet property="vSignUpSignIn" destination="Vno-wQ-pYn" id="9NM-iT-hKy"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -153,7 +153,7 @@
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="tài khoản / email" textAlignment="natural" minimumFontSize="17" id="mMY-Nk-XFW" customClass="CustomUITextField" customModule="CustomControl">
+                                <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Tài khoản / Email" textAlignment="natural" minimumFontSize="17" id="mMY-Nk-XFW" customClass="CustomUITextField" customModule="CustomControl">
                                     <rect key="frame" x="15" y="56" width="315" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     <nil key="textColor"/>
@@ -181,7 +181,7 @@
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="mật khẩu" textAlignment="natural" minimumFontSize="17" id="GH3-8Q-WTr" customClass="CustomUITextField" customModule="CustomControl">
+                                <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Mật khẩu" textAlignment="natural" minimumFontSize="17" id="GH3-8Q-WTr" customClass="CustomUITextField" customModule="CustomControl">
                                     <rect key="frame" x="15" y="151" width="315" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     <nil key="textColor"/>
@@ -202,7 +202,7 @@
                                         </userDefinedRuntimeAttribute>
                                     </userDefinedRuntimeAttributes>
                                 </textField>
-                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="rZH-yg-Kio">
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="rZH-yg-Kio">
                                     <rect key="frame" x="18" y="202" width="30" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     <state key="normal" image="icon-remember-notCheck"/>
@@ -285,7 +285,7 @@
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="mật khẩu" textAlignment="natural" minimumFontSize="17" id="mdx-bq-a1U" customClass="CustomUITextField" customModule="CustomControl">
+                                <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Mật khẩu" textAlignment="natural" minimumFontSize="17" id="mdx-bq-a1U" customClass="CustomUITextField" customModule="CustomControl">
                                     <rect key="frame" x="15" y="125" width="315" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     <nil key="textColor"/>
@@ -313,7 +313,7 @@
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="xác nhận mật khẩu" textAlignment="natural" minimumFontSize="17" id="3Jr-uc-FSX" customClass="CustomUITextField" customModule="CustomControl">
+                                <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Xác nhận mật khẩu" textAlignment="natural" minimumFontSize="17" id="3Jr-uc-FSX" customClass="CustomUITextField" customModule="CustomControl">
                                     <rect key="frame" x="15" y="209" width="315" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                     <nil key="textColor"/>

@@ -44,7 +44,7 @@ extension BaseVCtrl {
 
 extension CALayer {
     func applySketchShadow (
-        color: UIColor = UIColor(hexString: "DAD8DA"),
+        color: UIColor = UIColor(hexString: "CDCCCD"),
         alpha: Float = 0.5,
         x: CGFloat = 0,
         y: CGFloat = 2,
