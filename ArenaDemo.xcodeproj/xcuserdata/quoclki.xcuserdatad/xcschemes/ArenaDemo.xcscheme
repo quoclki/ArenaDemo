@@ -57,8 +57,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0D2C57D820CA232B00F78A5B"
-               BuildableName = "ArenaDemo.app"
-               BlueprintName = "ArenaDemo"
+               BuildableName = "App Ban Hang.app"
+               BlueprintName = "App Ban Hang"
                ReferencedContainer = "container:ArenaDemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -75,8 +75,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0D2C57D820CA232B00F78A5B"
-            BuildableName = "ArenaDemo.app"
-            BlueprintName = "ArenaDemo"
+            BuildableName = "App Ban Hang.app"
+            BlueprintName = "App Ban Hang"
             ReferencedContainer = "container:ArenaDemo.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -98,8 +98,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0D2C57D820CA232B00F78A5B"
-            BuildableName = "ArenaDemo.app"
-            BlueprintName = "ArenaDemo"
+            BuildableName = "App Ban Hang.app"
+            BlueprintName = "App Ban Hang"
             ReferencedContainer = "container:ArenaDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -117,8 +117,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0D2C57D820CA232B00F78A5B"
-            BuildableName = "ArenaDemo.app"
-            BlueprintName = "ArenaDemo"
+            BuildableName = "App Ban Hang.app"
+            BlueprintName = "App Ban Hang"
             ReferencedContainer = "container:ArenaDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

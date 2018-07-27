@@ -23,6 +23,9 @@ class ContainerVCtrl: BaseVCtrl {
         }
     }
     
+    let selectedColor = UIColor(hexString: "ED1C24")
+    let unSelectedColor = UIColor(hexString: "A5A5A5")
+
     // MARK: - Properties
     
     // MARK: - Init
@@ -164,7 +167,7 @@ class ContainerVCtrl: BaseVCtrl {
                 no.size = CGSize(16, 16)
                 no.font = UIFont.systemFont(ofSize: 7, weight: .light)
                 no.origin = CGPoint(imv.originX + 11, 3)
-                no.backgroundColor = Base.baseColor
+                no.backgroundColor = selectedColor
                 no.textColor = .white
                 no.clipsToBounds = true
                 no.textAlignment = .center
@@ -204,8 +207,6 @@ class ContainerVCtrl: BaseVCtrl {
         addChildViewController(vctrl)
         vBody.addSubview(vctrl.view)
         
-        let selectedColor = UIColor(hexString: "ED1C24")
-        let unSelectedColor = UIColor(hexString: "A5A5A5")
         for v in vMenu.subviews {
             guard let imv = v.subviews.first(where: { $0 is UIImageView }) as? UIImageView else {
                 continue

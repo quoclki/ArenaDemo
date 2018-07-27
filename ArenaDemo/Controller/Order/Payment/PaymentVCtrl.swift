@@ -144,7 +144,8 @@ class PaymentVCtrl: BaseVCtrl {
             if !self.checkResponse(response) {
                 return
             }
-          
+            
+            Order.shared.clearOrder()
             let complete = ContinueOrderVCtrl(false)
             self.navigationController?.pushViewController(complete, animated: true)
         })

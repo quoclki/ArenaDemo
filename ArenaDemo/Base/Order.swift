@@ -26,6 +26,8 @@ class Order {
     
     func clearOrder() {
         orderDTO = OrderDTO()
+        Base.container.updateTotalItem()
+
     }
     
 }

@@ -225,7 +225,7 @@
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ldZ-Qp-9Cu">
                             <rect key="frame" x="15" y="40" width="345" height="40"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                            <fontDescription key="fontDescription" type="system" weight="light" pointSize="16"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -259,6 +259,20 @@
             <viewLayoutGuide key="safeArea" id="IGm-Dd-dt3"/>
             <point key="canvasLocation" x="-692" y="-257"/>
         </view>
+        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" id="Fek-d7-YqL">
+            <rect key="frame" x="0.0" y="0.0" width="46" height="30"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <state key="normal">
+                <attributedString key="attributedTitle">
+                    <fragment content="Button">
+                        <attributes>
+                            <font key="NSFont" size="15" name="SFMono-Regular"/>
+                        </attributes>
+                    </fragment>
+                </attributedString>
+            </state>
+            <point key="canvasLocation" x="378" y="267"/>
+        </button>
     </objects>
     <resources>
         <image name="icon-cart" width="20" height="20"/>

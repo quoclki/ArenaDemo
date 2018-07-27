@@ -88,7 +88,13 @@ class ProductDetailVCtrl: BaseVCtrl {
         vSlideBorder.frame.size = CGSize(Ratio.width, Ratio.width)
         vProductInfo.originY = vSlideBorder.frame.maxY
         
-        lblDescription.attributedText = product.description?.htmlAttribute
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = .justified
+        
+        let attributed = product.description?.htmlAttribute
+        attributed?.addAttributes([NSAttributedStringKey.font: UIFont(name: "SF Mono", size: 16) ?? lblDescription.font ?? UIFont(), NSAttributedStringKey.paragraphStyle: paragraph], range: NSMakeRange(0, attributed?.length ?? 0))
+        lblDescription.attributedText = attributed
+
         lblDescription.sizeToFit()
         vDescribe.height = lblDescription.frame.maxY
         vDescribe.originY = vProductInfo.frame.maxY + padding
@@ -190,6 +196,7 @@ class ProductDetailVCtrl: BaseVCtrl {
     func getRalatedProduct() {
         let request = GetProductRequest(page: 1)
         request.include = self.product.related_ids
+        request.per_page = 4
         
         task = SEProduct.getListProduct(request, completed: { (response) in
             if !self.checkResponse(response) {
