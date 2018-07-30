@@ -167,9 +167,8 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
         tbvAccount.dataSource = self
         tbvAccount.delegate = self
         tbvAccount.isScrollEnabled = false
-        tbvAccount.separatorInset.left = 15
-        tbvAccount.separatorInset.right = 15
         tbvAccount.backgroundColor = .clear
+        tbvAccount.separatorStyle = .none
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

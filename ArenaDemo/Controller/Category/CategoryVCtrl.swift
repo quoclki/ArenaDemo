@@ -13,27 +13,26 @@ import CustomControl
 class CategoryVCtrl: BaseVCtrl {
 
     // MARK: - Outlet
-    @IBOutlet var searchBar: UISearchBar!
     @IBOutlet weak var vSafe: UIView!
     @IBOutlet weak var clvCategory: UICollectionView!
     
     // MARK: - Private properties
     private var lstCategory: [CategoryDTO] = []
-    private var lstCategory_Display: [CategoryDTO] = []
+//    private var lstCategory_Display: [CategoryDTO] = []
 
-    private var searchText: String = "" {
-        didSet {
-            if searchText.trim().isEmpty {
-                lstCategory_Display = lstCategory
-                clvCategory.reloadData()
-                return
-            }
-            
-            lstCategory_Display = lstCategory.filter({ $0.name?.contains(s: searchText) ?? false })
-            clvCategory.reloadData()
-            
-        }
-    }
+//    private var searchText: String = "" {
+//        didSet {
+//            if searchText.trim().isEmpty {
+//                lstCategory_Display = lstCategory
+//                clvCategory.reloadData()
+//                return
+//            }
+//
+//            lstCategory_Display = lstCategory.filter({ $0.name?.contains(s: searchText) ?? false })
+//            clvCategory.reloadData()
+//
+//        }
+//    }
 
     // MARK: - Properties
     
@@ -44,9 +43,8 @@ class CategoryVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(vSafe, searchBar: searchBar)
+        createNavigationBar(vSafe, title: "DANH MỤC")
         configCollectionView()
-        searchBar.delegate = self
     }
     
     override func configUIViewWillAppear() {
@@ -82,8 +80,7 @@ class CategoryVCtrl: BaseVCtrl {
             }
 
             self.lstCategory = response.lstCategory
-            self.searchText = ""
-            
+            self.clvCategory.reloadData()
         })
         
     }
@@ -114,18 +111,18 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return lstCategory_Display.count
+        return lstCategory.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let item = lstCategory_Display[indexPath.row]
+        let item = lstCategory[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ClvCategoryCell
         cell.updateCell(item)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let item = lstCategory_Display[indexPath.row]
+        let item = lstCategory[indexPath.row]
         
         let request = GetProductRequest(page: 1)
         request.category = item.id
@@ -154,23 +151,23 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
 }
 
 
-extension CategoryVCtrl: UISearchBarDelegate {
-    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        searchBar.setShowsCancelButton(true, animated: true)
-        return true
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        self.searchText = searchText
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-        searchBar.setShowsCancelButton(false, animated: true)
-        searchBar.text = ""
-        self.searchText = ""
-    }
-    
-    
-}
+//extension CategoryVCtrl: UISearchBarDelegate {
+//    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+//        searchBar.setShowsCancelButton(true, animated: true)
+//        return true
+//    }
+//
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        self.searchText = searchText
+//    }
+//
+//    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+//        searchBar.resignFirstResponder()
+//        searchBar.setShowsCancelButton(false, animated: true)
+//        searchBar.text = ""
+//        self.searchText = ""
+//    }
+//
+//
+//}
 

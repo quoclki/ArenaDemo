@@ -155,7 +155,6 @@ class ProductDetailVCtrl: BaseVCtrl {
         btnOrder.touchUpInside(block: btnOrder_Touched)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        tap.numberOfTapsRequired = 2
         vSlide.addGestureRecognizer(tap)
 
     }
