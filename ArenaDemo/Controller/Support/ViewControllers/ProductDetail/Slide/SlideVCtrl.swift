@@ -37,6 +37,7 @@ class SlideVCtrl: BaseVCtrl {
         super.configUI()
         ImageStore.shared.setImg(toImageView: imvPhoto, imgURL: image.src)
         imvPhoto.contentMode = .scaleAspectFit
+        
     }
     
     override func configUIViewWillAppear() {
@@ -47,7 +48,6 @@ class SlideVCtrl: BaseVCtrl {
     // MARK: - Event Listerner
     override func eventListener() {
         super.eventListener()
-        
     }
     
     // MARK: - Event Handler
@@ -57,5 +57,5 @@ class SlideVCtrl: BaseVCtrl {
         super.loadData()
         
     }
-    
+        
 }

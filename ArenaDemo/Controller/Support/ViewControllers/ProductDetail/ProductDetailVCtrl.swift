@@ -153,6 +153,11 @@ class ProductDetailVCtrl: BaseVCtrl {
         btnMinus.touchUpInside(block: btnMinus_Touched)
         btnPlus.touchUpInside(block: btnPlus_Touched)
         btnOrder.touchUpInside(block: btnOrder_Touched)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        tap.numberOfTapsRequired = 2
+        vSlide.addGestureRecognizer(tap)
+
     }
     
     // MARK: - Event Handler
@@ -207,7 +212,14 @@ class ProductDetailVCtrl: BaseVCtrl {
             self.clvProductDetail.reloadData()
         })
     }
-    
+  
+    @objc func handleTap(_ tapGesture: UITapGestureRecognizer) {
+        let photo = ProductPhotoVCtrl(lstImages, selectedImage: self.selectedImage)
+        photo.view.frame = self.view.frame
+        addChildViewController(photo)
+        view.addSubview(photo.view)
+    }
+
 }
 
 extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
