@@ -156,7 +156,7 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
 
 extension CategoryVCtrl: UISearchBarDelegate {
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        searchBar.showsCancelButton = true
+        searchBar.setShowsCancelButton(true, animated: true)
         return true
     }
     
@@ -166,7 +166,7 @@ extension CategoryVCtrl: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        searchBar.showsCancelButton = false
+        searchBar.setShowsCancelButton(false, animated: true)
         searchBar.text = ""
         self.searchText = ""
     }

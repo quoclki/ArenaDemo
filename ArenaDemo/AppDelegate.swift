@@ -16,13 +16,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+    
         Thread.sleep(forTimeInterval: 4)
+        application.isStatusBarHidden = false
         application.statusBarStyle = .lightContent
+        
         window = UIWindow(frame: UIScreen.main.bounds)
         Base.container = ContainerVCtrl()
         window?.rootViewController = UINavigationController(rootViewController: Base.container)
         window?.makeKeyAndVisible()
+    
+        print(#function)
         
         return true
     }

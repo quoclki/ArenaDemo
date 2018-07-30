@@ -103,27 +103,22 @@ class BaseVCtrl: UIViewController {
         }
         
         if let searchBar = searchBar {
-            configSearchBar(searchBar)
+            searchBar.backgroundImage = UIImage()
+            searchBar.enablesReturnKeyAutomatically = true
             searchBar.width = v.width * 0.95
             searchBar.center = CGPoint(v.center.x, statusBarHeight + 25)
             searchBar.tintColor = .white
+            if let textField = searchBar.value(forKey: "searchField") as? UITextField, let backgroundView = textField.subviews.first {
+                backgroundView.layer.cornerRadius = 19
+                backgroundView.clipsToBounds = true
+                backgroundView.height = 20
+                textField.tintColor = .black
+            }
             v.addSubview(searchBar)
         }
         
         vBar = v
         self.view.addSubview(vBar)
-        
-    }
-    
-    // Config seach bar for Top Bar
-    func configSearchBar(_ searchBar: UISearchBar) {
-        searchBar.backgroundImage = UIImage()
-        
-        if let textField = searchBar.value(forKey: "searchField") as? UITextField, let backgroundView = textField.subviews.first {
-            backgroundView.layer.cornerRadius = 19
-            backgroundView.clipsToBounds = true
-            backgroundView.height = 20
-        }
         
     }
     
