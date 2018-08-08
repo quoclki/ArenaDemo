@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
     
-        Thread.sleep(forTimeInterval: 4)
+        Thread.sleep(forTimeInterval: 3)
         application.isStatusBarHidden = false
         application.statusBarStyle = .lightContent
         

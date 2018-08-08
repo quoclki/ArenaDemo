@@ -202,6 +202,10 @@ class ContainerVCtrl: BaseVCtrl {
     
     func selectedTab() {
         vBody.cleanSubViews()
+        for child in childViewControllers {
+            child.removeFromParentViewController()
+        }
+        
         let vctrl = tab.controller
         vctrl.view.size = vBody.size
         addChildViewController(vctrl)

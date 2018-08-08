@@ -85,6 +85,7 @@ class ProductDetailVCtrl: BaseVCtrl {
     }
     
     func updateLayoutUI() {
+        lblTotalOrder.cornerRadius = lblTotalOrder.height / 2
         vSlideBorder.frame.size = CGSize(Ratio.width, Ratio.width)
         vProductInfo.originY = vSlideBorder.frame.maxY
         
@@ -142,7 +143,6 @@ class ProductDetailVCtrl: BaseVCtrl {
         let totalItem = Order.shared.orderDTO.totalItem
         lblTotalOrder.text = totalItem.toString()
         lblTotalOrder.isHidden = totalItem == 0
-        lblTotalOrder.cornerRadius = lblTotalOrder.height / 2
     }
 
     // MARK: - Event Listerner
