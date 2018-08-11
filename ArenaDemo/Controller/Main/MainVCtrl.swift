@@ -207,8 +207,7 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICol
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = lstItem[indexPath.section].category.lstProduct[indexPath.row]
-        let detail = ProductDetailVCtrl(item)
-        navigationController?.pushViewController(detail, animated: true)
+        pushProductVCtrl(item)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {

@@ -152,8 +152,7 @@ extension ProductSearchVCtrl: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = lstItem[indexPath.row]
-        let detail = ProductDetailVCtrl(item)
-        navigationController?.pushViewController(detail, animated: true)
+        pushProductVCtrl(item)
     }
     
 }

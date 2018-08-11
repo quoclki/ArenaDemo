@@ -67,6 +67,9 @@ class AccountVCtrl: BaseVCtrl {
         }
     }
     
+    private var storeDataDTO: PageDTO?
+    private var policyDataDTO: PageDTO?
+    
     // MARK: - Properties
     
     // MARK: - Init
@@ -204,10 +207,74 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
             return
             
         case .orderCondition:
-            return
+            let title = RenderDTO()
+            title.rendered = "Chính sách mua hàng"
+
+            let dto = PageDTO()
+            dto.title = title
+            dto.slug = "chinh-sach"
+            pushAccountShowInfo(dto)
+            
+//            if let dto = policyDataDTO {
+//                pushAccountShowInfo(dto)
+//                return
+//            }
+//
+//            let request = GetPageRequest(page: 1)
+//            request.per_page = 1
+//            request.slug = "chinh-sach"
+//
+//            _ = SEPage.getList(request, animation: {
+//                self.showLoadingView($0)
+//
+//            }, completed: { (response) in
+//                if !self.checkResponse(response) {
+//                    return
+//                }
+//
+//                guard let dto = response.lstPage.first else {
+//                    _ = self.showWarningAlert(message: "Unable to find page")
+//                    return
+//                }
+//                self.policyDataDTO = dto
+//                self.pushAccountShowInfo(dto)
+//
+//            })
             
         case .storeSystem:
-            return
+            let title = RenderDTO()
+            title.rendered = "Danh sách cửa hàng"
+            
+            let dto = PageDTO()
+            dto.title = title
+            dto.slug = "cua-hang"
+            pushAccountShowInfo(dto)
+
+//            if let dto = storeDataDTO {
+//                pushAccountShowInfo(dto)
+//                return
+//            }
+//
+//            let request = GetPageRequest(page: 1)
+//            request.per_page = 1
+//            request.slug = "cua-hang"
+//
+//            _ = SEPage.getList(request, animation: {
+//                self.showLoadingView($0)
+//
+//            }, completed: { (response) in
+//                if !self.checkResponse(response) {
+//                    return
+//                }
+//
+//                guard let dto = response.lstPage.first else {
+//                    _ = self.showWarningAlert(message: "Unable to find page")
+//                    return
+//                }
+//                self.storeDataDTO = dto
+//                self.pushAccountShowInfo(dto)
+//
+//            })
             
         case .contactInfo:
             return
@@ -225,6 +292,11 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
             break
             
         }
+    }
+    
+    func pushAccountShowInfo(_ dto: PageDTO) {
+        let store = AccountShowInfo(dto)
+        navigationController?.pushViewController(store, animated: true)
     }
     
     func pushMyOrder() {

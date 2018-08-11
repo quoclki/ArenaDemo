@@ -81,22 +81,16 @@ class ProductDetailVCtrl: BaseVCtrl {
     // MARK: - UIViewController func
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        updateLayoutUI()
     }
     
     func updateLayoutUI() {
         lblTotalOrder.cornerRadius = lblTotalOrder.height / 2
         vSlideBorder.frame.size = CGSize(Ratio.width, Ratio.width)
         vProductInfo.originY = vSlideBorder.frame.maxY
-        
-        let paragraph = NSMutableParagraphStyle()
-        paragraph.alignment = .justified
-        
-        let attributed = product.description?.htmlAttribute
-        attributed?.addAttributes([NSAttributedStringKey.font: UIFont(name: "SF Mono", size: 16) ?? lblDescription.font ?? UIFont(), NSAttributedStringKey.paragraphStyle: paragraph], range: NSMakeRange(0, attributed?.length ?? 0))
-        lblDescription.attributedText = attributed
 
+        lblDescription.attributedText = product.descriptionAttributed
         lblDescription.sizeToFit()
+
         vDescribe.height = lblDescription.frame.maxY
         vDescribe.originY = vProductInfo.frame.maxY + padding
         
@@ -117,6 +111,8 @@ class ProductDetailVCtrl: BaseVCtrl {
         addViewToRightBarItem(vRight)
         addViewToLeftBarItem(createBackButton())
         mappingUI()
+        self.updateLayoutUI()
+
     }
     
     func mappingUI() {
@@ -277,8 +273,7 @@ extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = lstItem[indexPath.row]
-        let detail = ProductDetailVCtrl(item)
-        navigationController?.pushViewController(detail, animated: true)
+        pushProductVCtrl(item)
 
     }
     

@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import ArenaDemoAPI
+import CustomControl
 import OAuthSwift
 
 class BaseVCtrl: UIViewController {
@@ -275,7 +276,35 @@ class BaseVCtrl: UIViewController {
         
     }
 
-    
+    /// Did select product page
+    func pushProductVCtrl(_ dto: ProductDTO) {
+        func push() {
+            let detail = ProductDetailVCtrl(dto)
+            self.navigationController?.pushViewController(detail, animated: true)
+        }
+        
+        if dto.descriptionAttributed != nil {
+            push()
+        }
+        
+        self.showLoadingView(frameLoading: self.vSetSafeArea.frame)
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = .justified
+        
+        // 345 is lblDescrition width of iPhone8 size
+        // 45 is ratio of lblDescrition of iPhone8 size
+        let ratio = (Ratio.width - 30) * 45 / 345
+        
+        Helper.backgroundWorker({
+            let attributed = dto.description?.htmlImageCorrector(ratio).htmlAttribute
+            attributed?.addAttributes([NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15), NSAttributedStringKey.paragraphStyle: paragraph], range: NSMakeRange(0, attributed?.length ?? 0))
+            dto.descriptionAttributed = attributed
+
+        }) {
+            self.showLoadingView(false)
+            push()
+        }
+    }
 }
 
 /// For Keyboard Only
