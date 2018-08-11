@@ -26,8 +26,8 @@ class MultiLanguage {
     }
     
     func setUpLanguageDictionary() {
-//        dicLanguage.updateValue("Trang chủ", forKey: "home")
-//        dicLanguage.updateValue("Danh mục", forKey: "category")
+        dicLanguage.updateValue("Hết thời gian truy vấn", forKey: "the request timed out")
+        dicLanguage.updateValue("Tài khoản hoặc mật khẩu không đúng", forKey: "invalid username and/or password")
 //        dicLanguage.updateValue("Giỏ", forKey: "cart")
 //        dicLanguage.updateValue("Tài khoản", forKey: "account")
 //        dicLanguage.updateValue("Tìm kiếm", forKey: "search")

@@ -34,7 +34,7 @@ public extension BaseRequest {
 extension BaseVCtrl {
     func checkResponse<T: BaseResponse>(_ response: T) -> Bool {
         if !response.success && !response.isCancel {
-            _ = showWarningAlert(title: "Thông báo", message: response.message ?? "", buttonTitle: "OK")
+            _ = showWarningAlert(title: "Thông báo", message: response.message?.translate ?? "", buttonTitle: "OK")
         }
         
         return response.success

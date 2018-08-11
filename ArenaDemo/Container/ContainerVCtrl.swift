@@ -42,6 +42,7 @@ class ContainerVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
+        MultiLanguage.shared.setUpLanguageDictionary()
         configNavigation()
         
     }
@@ -55,7 +56,6 @@ class ContainerVCtrl: BaseVCtrl {
 
     }
     
-
     override func configUIViewWillAppear() {
         super.configUIViewWillAppear()
         
