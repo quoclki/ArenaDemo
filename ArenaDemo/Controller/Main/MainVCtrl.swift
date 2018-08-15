@@ -8,6 +8,7 @@
 
 import UIKit
 import ArenaDemoAPI
+import WebKit
 
 class MainVCtrl: BaseVCtrl {
 
@@ -15,6 +16,8 @@ class MainVCtrl: BaseVCtrl {
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet weak var vSafe: UIView!
     @IBOutlet weak var clvMain: UICollectionView!
+    
+    @IBOutlet var vHeader: UIView!
     
     // MARK: - Private properties
     private var lstItem: [MainDataGroup] = []
@@ -24,6 +27,10 @@ class MainVCtrl: BaseVCtrl {
     // MARK: - Init
     
     // MARK: - UIViewController func
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        updateLayoutCollectionView()
+    }
     
     // MARK: - Layout UI
     override func configUI() {
@@ -31,6 +38,7 @@ class MainVCtrl: BaseVCtrl {
         createNavigationBar(vSafe, searchBar: searchBar)
         searchBar.delegate = self
         configCollectionView()
+        configWebView()
     }
     
     override func configUIViewWillAppear() {
@@ -47,6 +55,36 @@ class MainVCtrl: BaseVCtrl {
     // MARK: - Event Handler
     
     // MARK: - Func
+    func configWebView() {
+        vSafe.clipsToBounds = true
+        vHeader.cleanSubViews()
+        
+        let web = WKWebView()
+        web.frame = vHeader.bounds
+        web.autoresizingMask = vSafe.autoresizingMask
+        web.isUserInteractionEnabled = false
+        if let url = URL(string: SEBase.apiURL) {
+            let request = URLRequest(url: url)
+            web.load(request)
+        }
+        
+        web.backgroundColor = .white
+        web.navigationDelegate = self
+        vHeader.addSubview(web)
+        
+    }
+    
+    func updateLayoutCollectionView() {
+        // Header for Collection View
+        vHeader.originY = -vHeader.height
+        vHeader.width = self.view.width
+        vHeader.clipsToBounds = true
+        clvMain.addSubview(vHeader)
+        clvMain.contentInset.top = vHeader.height
+        clvMain.contentOffset.y = -vHeader.height
+        
+    }
+    
     override func loadData() {
         super.loadData()
         getListTopSales()
@@ -162,6 +200,7 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICol
     }
         
     func configCollectionView() {
+        vHeader.backgroundColor = backgroundColor
         clvMain.backgroundColor = backgroundColor
         clvMain.register(UINib(nibName: cellID, bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
         clvMain.register(UINib(nibName: headerCellID, bundle: Bundle(for: type(of: self))), forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerCellID)
@@ -235,6 +274,23 @@ extension MainVCtrl: UISearchBarDelegate {
     }
     
 }
+
+extension MainVCtrl: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        vHeader.showLoadingView(loadingBgColor: vHeader.backgroundColor ?? .white)
+    }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        vHeader.showLoadingView(false)
+        webView.scrollView.contentInset.top = -100 * Ratio.ratioWidth
+    }
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return nil
+    }
+    
+}
+
 
 enum EMain: Int {
     case topSaller

@@ -10,10 +10,11 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainVCtrl" customModule="ArenaDemo" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainVCtrl" customModule="App_Ban_Hang" customModuleProvider="target">
             <connections>
                 <outlet property="clvMain" destination="ykQ-uk-5WE" id="2Mv-0D-gPh"/>
                 <outlet property="searchBar" destination="XZb-xH-ZKO" id="qFt-k8-8GW"/>
+                <outlet property="vHeader" destination="A82-y6-yUy" id="XC0-j1-ZWK"/>
                 <outlet property="vSafe" destination="8oT-rh-41u" id="1Vp-xH-h8R"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -27,13 +28,8 @@
                     <rect key="frame" x="0.0" y="70" width="375" height="552"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A82-y6-yUy">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="126"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </view>
                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="ykQ-uk-5WE">
-                            <rect key="frame" x="0.0" y="126" width="375" height="426"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="552"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="lln-AG-Dfp">
@@ -61,7 +57,15 @@
                     <real key="value" value="0.0"/>
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
-            <point key="canvasLocation" x="513" y="-82"/>
+            <point key="canvasLocation" x="24" y="-196"/>
         </searchBar>
+        <view contentMode="scaleToFill" id="A82-y6-yUy">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="230"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="SeG-PC-NeT"/>
+            <point key="canvasLocation" x="452" y="42"/>
+        </view>
     </objects>
 </document>

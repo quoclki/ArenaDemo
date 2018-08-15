@@ -29,20 +29,6 @@ class MultiLanguage {
         dicLanguage.updateValue("Hết thời gian truy vấn", forKey: "the request timed out")
         dicLanguage.updateValue("Tài khoản hoặc mật khẩu không đúng", forKey: "invalid username and/or password")
 //        dicLanguage.updateValue("Giỏ", forKey: "cart")
-//        dicLanguage.updateValue("Tài khoản", forKey: "account")
-//        dicLanguage.updateValue("Tìm kiếm", forKey: "search")
-//        dicLanguage.updateValue("Sản phẩm bán chạy", forKey: "top saller")
-//        dicLanguage.updateValue("Xem thêm", forKey: "view more")
-//        dicLanguage.updateValue("Giỏ hàng của tôi", forKey: "my cart")
-//        dicLanguage.updateValue("Đơn Hàng Của Tôi", forKey: "my order")
-//        dicLanguage.updateValue("Danh Sách Ưa Thích", forKey: "favourite list")
-//        dicLanguage.updateValue("Chính Sách Mua Hàng", forKey: "order condition")
-//        dicLanguage.updateValue("Hệ Thống Cửa Hàng", forKey: "store system")
-//        dicLanguage.updateValue("Thông Tin Liên Hệ", forKey: "contact info")
-//        dicLanguage.updateValue("ĐĂNG NHẬP", forKey: "sign up")
-//        dicLanguage.updateValue("ĐĂNG KÍ", forKey: "sign in")
-//        dicLanguage.updateValue("Mật khẩu", forKey: "password")
-
 
     }
 }

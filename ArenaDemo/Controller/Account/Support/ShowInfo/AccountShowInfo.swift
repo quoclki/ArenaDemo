@@ -87,8 +87,26 @@ extension AccountShowInfo: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         showLoadingView(false, frameLoading: vSafe.frame)
+        
+        let heightTop: CGFloat = 150
+        let vTop = UIView()
+        vTop.frame = CGRect(0, 0, webView.width, heightTop)
+        vTop.backgroundColor = .white
+        webView.scrollView.delegate = self
+        webView.scrollView.addSubview(vTop)
+        webView.scrollView.contentInset.top = -heightTop
+        
+        let heightBottom: CGFloat = 840
+//        let vBottom = UIView()
+//        vBottom.frame = CGRect(0, webView.scrollView.contentSize.height - heightBottom, webView.width, heightBottom)
+//        vBottom.backgroundColor = .blue
+//        webView.scrollView.addSubview(vBottom)
+        webView.scrollView.contentInset.bottom = -heightBottom
     }
-
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return nil
+    }
     
 }
 
