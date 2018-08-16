@@ -100,7 +100,10 @@ class MainVCtrl: BaseVCtrl {
                 return
             }
 
-            let lstID = response.lstTop.map({ $0.product_id ?? -1 })
+            let lstID = response.lstTop.map({ $0.product_id ?? -1 }).prefix(10).map({ $0 })
+            if lstID.isEmpty {
+                return
+            }
             self.getProduct(lstID)
         })
         
@@ -157,6 +160,7 @@ class MainVCtrl: BaseVCtrl {
     func getProductByCategoryID(_ dto: CategoryDTO) {
         let request = GetProductRequest(page: 1)
         request.category = dto.id
+        request.per_page = 4
         
         task = SEProduct.getListProduct(request, completed: { (response) in
             if !response.success {

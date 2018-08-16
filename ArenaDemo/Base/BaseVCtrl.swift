@@ -285,6 +285,7 @@ class BaseVCtrl: UIViewController {
         
         if dto.descriptionAttributed != nil {
             push()
+            return
         }
         
         self.showLoadingView(frameLoading: self.vSetSafeArea.frame)

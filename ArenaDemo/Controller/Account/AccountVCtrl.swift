@@ -69,6 +69,7 @@ class AccountVCtrl: BaseVCtrl {
     
     private var storeDataDTO: PageDTO?
     private var policyDataDTO: PageDTO?
+    private var contactDataDTO: PageDTO?
     
     // MARK: - Properties
     
@@ -277,8 +278,37 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
 //            })
             
         case .contactInfo:
-            return
+            func pushContact(_ dto: PageDTO) {
+                let contact = AccountContactVCtrl(dto)
+                navigationController?.pushViewController(contact, animated: true)
+            }
             
+            if let dto = contactDataDTO {
+                pushContact(dto)
+                return
+            }
+            
+            let request = GetPageRequest(page: 1)
+            request.per_page = 1
+            request.slug = "lien-he"
+            
+            _ = SEPage.getList(request, animation: {
+                self.showLoadingView($0)
+                
+            }, completed: { (response) in
+                if !self.checkResponse(response) {
+                    return
+                }
+                
+                guard let dto = response.lstPage.first else {
+                    _ = self.showWarningAlert(message: "Unable to find page")
+                    return
+                }
+                self.contactDataDTO = dto
+                pushContact(dto)
+                
+            })
+
         case .address:
             let address = AccountAddressVCtrl()
             navigationController?.pushViewController(address, animated: true)
