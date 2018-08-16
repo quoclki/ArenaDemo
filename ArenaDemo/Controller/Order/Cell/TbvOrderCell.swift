@@ -69,7 +69,13 @@ class TbvOrderCell: UITableViewCell {
         lblPaymentQuantity.isHidden = !vActionQuantity.isHidden
         btnDelete.originX = isPayment ? btnFavourite.originX : btnDelete.originX
         
-        ImageStore.shared.setImg(toImageView: imv, imgURL: item.productDTO?.images.first?.src)
+        ImageStore.shared.setImg(toImageView: UIImageView(), imgURL: item.productDTO?.images.first?.src) { (img) in
+            let image = img?.resize(newWidth: self.imv.width)
+            self.imv.image = image
+        }
+        imv.contentMode = .topLeft
+        imv.clipsToBounds = true
+
         lblName.text = item.name
         lblPrice.text = item.price?.toCurrencyString()
         lblPrice.textColor = .red

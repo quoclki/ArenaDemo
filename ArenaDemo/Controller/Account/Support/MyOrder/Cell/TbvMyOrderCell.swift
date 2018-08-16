@@ -30,7 +30,6 @@ class TbvMyOrderCell: UITableViewCell {
     func updateCell(_ item: OrderLineItemDTO) {
         lblName.text = item.name
         lblDate.text = ""
-        imv.contentMode = .scaleAspectFit
         ImageStore.shared.setImg(toImageView: self.imv, imgURL: item.productDTO?.images.first?.src)
 
         if item.isLoading || item.productDTO != nil {

@@ -20,7 +20,7 @@ class ClvPhotoCell: UICollectionViewCell {
 
     func updateCell(_ item: Images) {
         ImageStore.shared.setImg(toImageView: imv, imgURL: item.src)
-        imv.contentMode = .scaleAspectFit
+//        imv.contentMode = .scaleAspectFit
     }
     
 }
