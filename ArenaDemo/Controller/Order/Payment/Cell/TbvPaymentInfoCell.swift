@@ -27,21 +27,9 @@ class TbvPaymentInfoCell: UITableViewCell {
             $0?.delegate = self
         })
         txvNote.delegate = self
-        
-        let vAccessory = UIView()
-        vAccessory.backgroundColor = UIColor(hexString: "F1F2F2")
-        vAccessory.frame = CGRect(0, 0, self.width, 40)
-        
-        let btnDone = UIButton(type: .system)
-        btnDone.touchUpInside { (sender) in
+        txvNote.inputAccessoryView = Base.getAccessoryKeyboard({
             self.parentViewController?.view.endEditing(true)
-        }
-        btnDone.setTitle("Done", for: .normal)
-        btnDone.frame = CGRect(self.width - 75, 0, 60, vAccessory.height)
-        btnDone.titleLabel?.textAlignment = .right
-        vAccessory.addSubview(btnDone)
-        txvNote.inputAccessoryView = vAccessory
-
+        })
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

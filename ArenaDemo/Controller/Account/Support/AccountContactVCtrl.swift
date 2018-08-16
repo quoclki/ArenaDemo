@@ -24,9 +24,6 @@ class AccountContactVCtrl: BaseVCtrl {
     @IBOutlet weak var txvNote: UITextView!
     @IBOutlet weak var btnSent: UIButton!
     
-    @IBOutlet var vKeyboardAccessory: UIView!
-    @IBOutlet var btnDone: UIButton!
-    
     // MARK: - Private properties
     
     // MARK: - Properties
@@ -43,6 +40,9 @@ class AccountContactVCtrl: BaseVCtrl {
         vInfo.layer.applySketchShadow(blur: 4)
         vEmail.layer.applySketchShadow(blur: 4)
         btnSent.cornerRadius = btnSent.height / 2
+        txvNote.textContainerInset.left = 15
+        txvNote.textContainerInset.right = 15
+
     }
     
     // MARK: - Layout UI
@@ -52,7 +52,9 @@ class AccountContactVCtrl: BaseVCtrl {
         addViewToLeftBarItem(createBackButton())
         txtEmail.delegate = self
         txvNote.delegate = self
-        txvNote.inputAccessoryView = vKeyboardAccessory
+        txvNote.inputAccessoryView = Base.getAccessoryKeyboard({
+            self.view.endEditing(true)
+        })
 
     }
     
@@ -64,7 +66,6 @@ class AccountContactVCtrl: BaseVCtrl {
     // MARK: - Event Listerner
     override func eventListener() {
         super.eventListener()
-        btnDone.touchUpInside(block: btnDone_Touched)
     }
     
     // MARK: - Event Handler
@@ -91,10 +92,6 @@ extension AccountContactVCtrl: HandleKeyboardProtocol, UITextFieldDelegate, UITe
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         handleFocusInputView(textView)
         return true
-    }
-
-    func btnDone_Touched(sender: UIButton) {
-        view.endEditing(true)
     }
     
     func handleKeyboard(willShow notify: NSNotification) {

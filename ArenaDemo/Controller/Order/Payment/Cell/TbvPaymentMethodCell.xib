@@ -12,7 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="159" id="KGk-i7-Jjw" customClass="TbvPaymentMethodCell" customModule="ArenaDemo" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="159" id="KGk-i7-Jjw" customClass="TbvPaymentMethodCell" customModule="App_Ban_Hang" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="375" height="159"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
@@ -35,9 +35,6 @@
                 </subviews>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
-            <connections>
-                <outlet property="vBorder" destination="FP5-Wa-W2p" id="oz7-s8-HKK"/>
-            </connections>
             <point key="canvasLocation" x="33.5" y="111.5"/>
         </tableViewCell>
     </objects>

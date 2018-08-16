@@ -11,9 +11,7 @@ import ArenaDemoAPI
 
 class TbvPaymentMethodCell: UITableViewCell {
 
-    @IBOutlet weak var vBorder: UIView!
     private var order: OrderDTO!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -25,19 +23,20 @@ class TbvPaymentMethodCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        vBorder.layer.applySketchShadow(blur: vBorder.cornerRadius)
-    }
-    
     override func prepareForReuse() {
         super.prepareForReuse()
-        vBorder.cleanSubViews()
+        contentView.cleanSubViews()
     }
     
     func updateCell(_ order: OrderDTO) {
         self.order = order
         
+        let vBorder = UIView()
+        vBorder.frame = CGRect(15, 15, Ratio.width - 30, 0)
+        vBorder.layer.applySketchShadow(blur: vBorder.cornerRadius)
+        vBorder.backgroundColor = .white
+        vBorder.cornerRadius = 10
+
         let startY: CGFloat = 7
         var heightForViewBorder: CGFloat = startY
         
@@ -73,6 +72,7 @@ class TbvPaymentMethodCell: UITableViewCell {
         }
         
         vBorder.height = heightForViewBorder + startY
+        self.contentView.addSubview(vBorder)
         order.payment_method_cellHeight = vBorder.frame.maxY + vBorder.originY
         
     }
@@ -95,9 +95,13 @@ class TbvPaymentMethodCell: UITableViewCell {
             payment.isCheck = payment.id == sender.accessibilityValue
         }
         
-        tableView.reloadRows(at: [indexPath], with: .automatic)
-        tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+        CATransaction.begin()
+        CATransaction.setCompletionBlock {
+            tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        }
         
+        tableView.reloadData()
+        CATransaction.commit()
     }
     
 }
