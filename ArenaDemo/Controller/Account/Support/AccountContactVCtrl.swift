@@ -28,19 +28,10 @@ class AccountContactVCtrl: BaseVCtrl {
     @IBOutlet var btnDone: UIButton!
     
     // MARK: - Private properties
-    private var pageDTO: PageDTO = PageDTO()
     
     // MARK: - Properties
     
     // MARK: - Init
-    init(_ pageDTO: PageDTO) {
-        super.init()
-        self.pageDTO = pageDTO
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     // MARK: - UIViewController func
     override func viewWillLayoutSubviews() {
@@ -59,7 +50,6 @@ class AccountContactVCtrl: BaseVCtrl {
         super.configUI()
         createNavigationBar(vSafe, title: "THÔNG TIN LIÊN HỆ")
         addViewToLeftBarItem(createBackButton())
-        lblInfo.attributedText = self.pageDTO.content?.rendered?.htmlAttribute
         txtEmail.delegate = self
         txvNote.delegate = self
         txvNote.inputAccessoryView = vKeyboardAccessory

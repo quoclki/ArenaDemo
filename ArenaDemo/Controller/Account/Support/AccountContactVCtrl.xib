@@ -52,11 +52,28 @@
                                             <rect key="frame" x="0.0" y="0.0" width="345" height="149"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Ds-IF-aVD">
-                                                    <rect key="frame" x="15" y="15" width="315" height="119"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Ds-IF-aVD">
+                                                    <rect key="frame" x="15" y="0.0" width="315" height="149"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
-                                                    <nil key="textColor"/>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="CÔNG TY TNHH THIẾT KẾ ARENA">
+                                                            <attributes>
+                                                                <font key="NSFont" size="16" name=".SFNSText"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineHeightMultiple="1.5" tighteningFactorForTruncation="0.0"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                        <fragment>
+                                                            <string key="content">
+ĐC: 686 CMT8, QUẬN 3, TP.HCM
+MST: 0314982597 - ĐT: 0987.346.126
+WEB: www.appbanhang.com.vn
+GIÁM ĐỐC: ĐOÀN THẾ HIẾU</string>
+                                                            <attributes>
+                                                                <font key="NSFont" size="14" name=".SFNSText"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineHeightMultiple="1.5" tighteningFactorForTruncation="0.0"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>

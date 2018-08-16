@@ -278,36 +278,39 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
 //            })
             
         case .contactInfo:
-            func pushContact(_ dto: PageDTO) {
-                let contact = AccountContactVCtrl(dto)
-                navigationController?.pushViewController(contact, animated: true)
-            }
-            
-            if let dto = contactDataDTO {
-                pushContact(dto)
-                return
-            }
-            
-            let request = GetPageRequest(page: 1)
-            request.per_page = 1
-            request.slug = "lien-he"
-            
-            _ = SEPage.getList(request, animation: {
-                self.showLoadingView($0)
-                
-            }, completed: { (response) in
-                if !self.checkResponse(response) {
-                    return
-                }
-                
-                guard let dto = response.lstPage.first else {
-                    _ = self.showWarningAlert(message: "Unable to find page")
-                    return
-                }
-                self.contactDataDTO = dto
-                pushContact(dto)
-                
-            })
+            let contact = AccountContactVCtrl()
+            navigationController?.pushViewController(contact, animated: true)
+
+//            func pushContact(_ dto: PageDTO) {
+//                let contact = AccountContactVCtrl(dto)
+//                navigationController?.pushViewController(contact, animated: true)
+//            }
+//
+//            if let dto = contactDataDTO {
+//                pushContact(dto)
+//                return
+//            }
+//
+//            let request = GetPageRequest(page: 1)
+//            request.per_page = 1
+//            request.slug = "lien-he"
+//
+//            _ = SEPage.getList(request, animation: {
+//                self.showLoadingView($0)
+//
+//            }, completed: { (response) in
+//                if !self.checkResponse(response) {
+//                    return
+//                }
+//
+//                guard let dto = response.lstPage.first else {
+//                    _ = self.showWarningAlert(message: "Unable to find page")
+//                    return
+//                }
+//                self.contactDataDTO = dto
+//                pushContact(dto)
+//
+//            })
 
         case .address:
             let address = AccountAddressVCtrl()
