@@ -79,7 +79,7 @@ class CategoryVCtrl: BaseVCtrl {
                 return
             }
 
-            self.lstCategory = response.lstCategory
+            self.lstCategory = response.lstCategory.filter({ ($0.count ?? 0) > 0 })
             self.clvCategory.reloadData()
         })
         
