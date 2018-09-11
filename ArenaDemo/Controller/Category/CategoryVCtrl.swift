@@ -93,7 +93,7 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
     }
         
     func configCollectionView() {
-        clvCategory.backgroundColor = .white
+        clvCategory.backgroundColor = UIColor(hexString: "F2F2F2")
         clvCategory.register(UINib(nibName: cellID, bundle: Bundle(for: type(of: self))), forCellWithReuseIdentifier: cellID)
         clvCategory.dataSource = self
         clvCategory.delegate = self

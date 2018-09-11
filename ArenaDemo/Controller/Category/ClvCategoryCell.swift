@@ -31,7 +31,7 @@ class ClvCategoryCell: UICollectionViewCell {
         ImageStore.shared.setImg(toImageView: imv, imgURL: item.image?.src)
         imv.contentMode = .scaleAspectFit
         lblName.text = item.name?.uppercased()
-        self.cornerRadius = 5
+        self.cornerRadius = 10
     }
     
 }
