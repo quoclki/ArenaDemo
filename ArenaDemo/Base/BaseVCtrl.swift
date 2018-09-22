@@ -43,7 +43,6 @@ class BaseVCtrl: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        configSafeArea()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -61,14 +60,14 @@ class BaseVCtrl: UIViewController {
             }
             
             vSetSafeArea.originY = vBar.height
-
+            
             // For Container
-            if let _ = vSetSafeArea.parentViewController?.parent as? ContainerVCtrl {
-                vSetSafeArea.height = view.height - vSetSafeArea.originY
-                return
-            }
-            let bottomPadding = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
-            vSetSafeArea.height = view.height - vSetSafeArea.originY - bottomPadding
+//            if let _ = vSetSafeArea.parentViewController as? ContainerVCtrl {
+//                vSetSafeArea.height = view.height - vSetSafeArea.originY
+//                return
+//            }
+//            let bottomPadding = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
+//            vSetSafeArea.height = view.height - vSetSafeArea.originY - bottomPadding
         }
         
     }
@@ -89,16 +88,17 @@ class BaseVCtrl: UIViewController {
     func createNavigationBar(_ vSafe: UIView, title: String? = nil, searchBar: UISearchBar? = nil) {
         self.vSetSafeArea = vSafe
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        let barHeight: CGFloat = 50
         let v = UIView()
         v.backgroundColor = Base.baseColor
-        v.frame = CGRect(0, 0, UIScreen.main.bounds.width, statusBarHeight + 50)
+        v.frame = CGRect(0, 0, UIScreen.main.bounds.width, statusBarHeight + barHeight)
         
         if let title = title, !title.isEmpty {
             let label = UILabel()
             label.text = title
             label.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.light)
             label.sizeToFit()
-            label.center = CGPoint(v.center.x, statusBarHeight + 25)
+            label.center = CGPoint(v.center.x, statusBarHeight + barHeight / 2)
             label.textColor = Base.titleTintColor
             v.addSubview(label)
         }
@@ -107,7 +107,7 @@ class BaseVCtrl: UIViewController {
             searchBar.backgroundImage = UIImage()
             searchBar.enablesReturnKeyAutomatically = true
             searchBar.width = v.width * 0.95
-            searchBar.center = CGPoint(v.center.x, statusBarHeight + 25)
+            searchBar.center = CGPoint(v.center.x, statusBarHeight + barHeight / 2)
             searchBar.tintColor = .white
             if let textField = searchBar.value(forKey: "searchField") as? UITextField, let backgroundView = textField.subviews.first {
                 backgroundView.layer.cornerRadius = 19
@@ -119,6 +119,12 @@ class BaseVCtrl: UIViewController {
         }
         
         vBar = v
+        
+        // setup vSafe
+        let value = vBar.height - vSafe.originY
+        vSafe.originY = vBar.height
+        vSafe.height = vSafe.height - value
+        
         self.view.addSubview(vBar)
         
     }

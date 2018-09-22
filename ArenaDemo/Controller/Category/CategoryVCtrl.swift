@@ -39,7 +39,11 @@ class CategoryVCtrl: BaseVCtrl {
     // MARK: - Init
     
     // MARK: - UIViewController func
-
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        Base.container.setHiddenAnimationMenu(true)
+    }
+    
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
@@ -49,7 +53,7 @@ class CategoryVCtrl: BaseVCtrl {
     
     override func configUIViewWillAppear() {
         super.configUIViewWillAppear()
-        
+        Base.container.setHiddenAnimationMenu(false)
     }
     
     // MARK: - Event Listerner

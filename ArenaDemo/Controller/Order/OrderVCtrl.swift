@@ -42,10 +42,11 @@ class OrderVCtrl: BaseVCtrl {
     override func configUI() {
         super.configUI()
         createNavigationBar(vSafe, title: "GIỎ HÀNG CỦA TÔI (\( order.totalItem.toString() ))")
-        configTableView()
         if isCreateBack {
+            vSafe.height = self.view.height - vBar.height
             addViewToLeftBarItem(createBackButton())
         }
+        configTableView()
         
     }
     
@@ -61,7 +62,7 @@ class OrderVCtrl: BaseVCtrl {
     override func configUIViewWillAppear() {
         super.configUIViewWillAppear()
         addContinueVCtrl()
-
+        Base.container.setHiddenAnimationMenu(isCreateBack)
     }
     
     // MARK: - Event Listerner
@@ -164,6 +165,8 @@ extension OrderVCtrl: HandleKeyboardProtocol {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         handleKeyboard(register: false)
+        Base.container.setHiddenAnimationMenu(true)
+
     }
 
 }

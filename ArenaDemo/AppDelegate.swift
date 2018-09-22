@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         Base.container = ContainerVCtrl()
-        window?.rootViewController = UINavigationController(rootViewController: Base.container)
+        window?.rootViewController = Base.container
         window?.makeKeyAndVisible()
     
         print(#function)

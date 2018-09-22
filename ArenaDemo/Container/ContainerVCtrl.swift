@@ -69,10 +69,7 @@ class ContainerVCtrl: BaseVCtrl {
     
     // MARK: - Event Handler
     func btnMenu_Touched(sender: UIButton) {
-        guard let tab = EMenu(rawValue: sender.tag) else {
-            return
-        }
-        if self.tab == tab {
+        guard let tab = EMenu(rawValue: sender.tag), self.tab != tab else {
             return
         }
         
@@ -201,16 +198,6 @@ class ContainerVCtrl: BaseVCtrl {
     }
     
     func selectedTab() {
-        vBody.cleanSubViews()
-        for child in childViewControllers {
-            child.removeFromParentViewController()
-        }
-        
-        let vctrl = tab.controller
-        vctrl.view.size = vBody.size
-        addChildViewController(vctrl)
-        vBody.addSubview(vctrl.view)
-        
         for v in vMenu.subviews {
             guard let imv = v.subviews.first(where: { $0 is UIImageView }) as? UIImageView else {
                 continue
@@ -228,8 +215,31 @@ class ContainerVCtrl: BaseVCtrl {
             
             imv.setTintColor(unSelectedColor)
             label.textColor = unSelectedColor
-
+            
         }
+
+        if let main = childViewControllers.first(where: { $0.accessibilityValue == EMenu.home.rawValue.toString() }), tab == EMenu.home {
+            vBody.bringSubview(toFront: main.view)
+            return
+        }
+        
+        if let main = childViewControllers.first(where: { $0.accessibilityValue == EMenu.category.rawValue.toString() }), tab == EMenu.category {
+            vBody.bringSubview(toFront: main.view)
+            return
+        }
+        
+        for child in childViewControllers.filter({ ![EMenu.home.rawValue.toString(), EMenu.category.rawValue.toString()].contains($0.accessibilityValue ?? "") }) {
+            child.removeFromParentViewController()
+            child.view.removeFromSuperview()
+        }
+        
+        let nav = UINavigationController(rootViewController: tab.controller)
+        nav.accessibilityValue = tab.rawValue.toString()
+        nav.navigationBar.isTranslucent = false
+        nav.navigationBar.isHidden = true
+        nav.view.size = vBody.size
+        addChildViewController(nav)
+        vBody.addSubview(nav.view)
         
     }
     
@@ -243,6 +253,17 @@ class ContainerVCtrl: BaseVCtrl {
         }
         
         Order.shared.cusDTO = dto
+    }
+    
+    func setHiddenAnimationMenu(_ isHidden: Bool) {
+        vMenu.isUserInteractionEnabled = false
+        UIView.animate(withDuration: 0.3, animations: {
+            self.vMenu.originY = isHidden ? self.vContainer.height : self.vContainer.height - self.vMenu.height
+        }) { (fn) in
+            if fn {
+                self.vMenu.isUserInteractionEnabled = true
+            }
+        }
     }
     
 }

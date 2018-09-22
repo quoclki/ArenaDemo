@@ -87,6 +87,7 @@ class AccountVCtrl: BaseVCtrl {
         vBorder.layer.applySketchShadow(blur: vBorder.cornerRadius)
     }
     
+    
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
@@ -129,7 +130,7 @@ class AccountVCtrl: BaseVCtrl {
     
     override func configUIViewWillAppear() {
         super.configUIViewWillAppear()
-        
+        Base.container.setHiddenAnimationMenu(false)
     }
     
     // MARK: - Event Listerner
@@ -513,6 +514,7 @@ extension AccountVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         handleKeyboard(register: false)
+        Base.container.setHiddenAnimationMenu(true)
     }
     
 }
