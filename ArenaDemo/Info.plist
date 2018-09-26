@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>4</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -28,9 +28,9 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>App Ban Hang muốn truy cập camera của bạn</string>
+	<string>$(PRODUCT_NAME) muốn truy cập camera của bạn</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>App Ban Hang muốn truy cập thư viện hình ảnh của bạn</string>
+	<string>$(PRODUCT_NAME) muốn truy cập thư viện hình ảnh của bạn</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
