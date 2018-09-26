@@ -41,7 +41,8 @@ class OrderVCtrl: BaseVCtrl {
     // MARK: - Layout UI
     override func configUI() {
         super.configUI()
-        createNavigationBar(vSafe, title: "GIỎ HÀNG CỦA TÔI (\( order.totalItem.toString() ))")
+        createNavigationBar(vSafe, title: "")
+        updateTitle()
         if isCreateBack {
             vSafe.height = self.view.height - vBar.height
             addViewToLeftBarItem(createBackButton())
@@ -50,7 +51,16 @@ class OrderVCtrl: BaseVCtrl {
         
     }
     
+    func updateTitle() {
+        if let lbl = vBar.subviews.first(where: { $0 is UILabel }) as? UILabel {
+            lbl.text = "GIỎ HÀNG CỦA TÔI (\( order.totalItem.toString() ))"
+            lbl.sizeToFit()
+            lbl.center = CGPoint(vBar.center.x, UIApplication.shared.statusBarFrame.height + (vBar.height - UIApplication.shared.statusBarFrame.height) / 2)
+        }
+    }
+    
     func addContinueVCtrl() {
+        updateTitle()
         if lstItem.isEmpty {
             let _continue = ContinueOrderVCtrl(true)
             _continue.view.frame.size = view.size

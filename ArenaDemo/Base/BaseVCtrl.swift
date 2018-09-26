@@ -49,29 +49,6 @@ class BaseVCtrl: UIViewController {
         super.viewWillDisappear(animated)
     }
     
-    // Config View for Safe Area With All ViewController
-    func configSafeArea() {
-        if #available(iOS 11.0, *) {
-            guard let vSetSafeArea = vSetSafeArea else {
-                return
-            }
-            guard let vBar = vBar else {
-                return
-            }
-            
-            vSetSafeArea.originY = vBar.height
-            
-            // For Container
-//            if let _ = vSetSafeArea.parentViewController as? ContainerVCtrl {
-//                vSetSafeArea.height = view.height - vSetSafeArea.originY
-//                return
-//            }
-//            let bottomPadding = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
-//            vSetSafeArea.height = view.height - vSetSafeArea.originY - bottomPadding
-        }
-        
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configUIViewWillAppear()
@@ -93,7 +70,7 @@ class BaseVCtrl: UIViewController {
         v.backgroundColor = Base.baseColor
         v.frame = CGRect(0, 0, UIScreen.main.bounds.width, statusBarHeight + barHeight)
         
-        if let title = title, !title.isEmpty {
+        if let title = title {
             let label = UILabel()
             label.text = title
             label.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.light)

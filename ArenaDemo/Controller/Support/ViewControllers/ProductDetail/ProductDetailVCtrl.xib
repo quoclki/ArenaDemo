@@ -15,7 +15,7 @@
         </array>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProductDetailVCtrl" customModule="App_Ban_Hang" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProductDetailVCtrl" customModule="ArenaDemo" customModuleProvider="target">
             <connections>
                 <outlet property="btnCart" destination="Hpc-kr-c7l" id="LsW-vp-Nyg"/>
                 <outlet property="btnFavourite" destination="48Z-wf-KAg" id="ZeG-26-cRK"/>
@@ -48,7 +48,7 @@
             <subviews>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZPz-lU-Ciy">
                     <rect key="frame" x="0.0" y="70" width="375" height="597"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vzZ-OX-Xeu">
                             <rect key="frame" x="0.0" y="547" width="375" height="50"/>

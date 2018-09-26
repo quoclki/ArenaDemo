@@ -123,6 +123,10 @@ class TbvOrderCell: UITableViewCell {
     }
     
     func updatePaymentCell() {
+        if let parentVCtrl = self.parentViewController as? OrderVCtrl {
+            parentVCtrl.updateTitle()
+        }
+        
         guard let tableView = self.tableView else {
             return
         }
