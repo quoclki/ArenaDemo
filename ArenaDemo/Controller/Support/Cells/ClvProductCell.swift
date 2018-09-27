@@ -18,19 +18,26 @@ class ClvProductCell: UICollectionViewCell {
     @IBOutlet weak var lblNormalPrice: UILabel!
     @IBOutlet weak var vStar: UIView!
     
+    private var item: ProductDTO!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
     
-    func updateCell(_ item: ProductDTO) {
-        lblName.text = item.name
+    override func layoutSubviews() {
+        super.layoutSubviews()
         ImageStore.shared.setImg(toImageView: UIImageView(), imgURL: item.images.first?.src) { (img) in
             let image = img?.resize(newWidth: self.imv.width)
             self.imv.image = image
         }
         imv.contentMode = .topLeft
         imv.clipsToBounds = true
+    }
+    
+    func updateCell(_ item: ProductDTO) {
+        self.item = item
+        lblName.text = item.name
         
         if let regularPrice = item.regular_price?.toDouble(), let salePrice = item.sale_price?.toDouble(), regularPrice != 0 {
             lblPrice.text = salePrice.toCurrencyString()

@@ -89,6 +89,7 @@ class ProductDetailVCtrl: BaseVCtrl {
         vProductInfo.originY = vSlideBorder.frame.maxY
 
         lblDescription.attributedText = product.descriptionAttributed
+        lblDescription.clipsToBounds = true
         lblDescription.sizeToFit()
 
         vDescribe.height = lblDescription.frame.maxY

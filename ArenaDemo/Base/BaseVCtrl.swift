@@ -277,7 +277,7 @@ class BaseVCtrl: UIViewController {
         
         // 345 is lblDescrition width of iPhone8 size
         // 45 is ratio of lblDescrition of iPhone8 size
-        let ratio = (Ratio.width - 30) * 45 / 345
+        let ratio = (Ratio.width - 30) * 44 / 345
         
         Helper.backgroundWorker({
             let attributed = dto.description?.htmlImageCorrector(ratio).htmlAttribute
