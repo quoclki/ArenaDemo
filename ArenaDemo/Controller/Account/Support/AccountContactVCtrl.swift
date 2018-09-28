@@ -66,9 +66,30 @@ class AccountContactVCtrl: BaseVCtrl {
     // MARK: - Event Listerner
     override func eventListener() {
         super.eventListener()
+        btnSent.touchUpInside(block: btnSend_Touched)
     }
     
     // MARK: - Event Handler
+    func btnSend_Touched(sender: UIButton) {
+        if let email = txtEmail.text?.trim, email.isEmail {
+            txtEmail.text = ""
+            _ = showWarningAlert(title: "THÔNG BÁO", message: "Địa chỉ email không hợp lệ", buttonTitle: "OK", action: {
+                self.txtEmail.becomeFirstResponder()
+            })
+            return
+        }
+        
+        if let note = txvNote.text?.trim, note.isEmpty {
+            txvNote.text = ""
+            _ = showWarningAlert(title: "THÔNG BÁO", message: "Vui lòng nhập nội dung", buttonTitle: "OK", action: {
+                self.txvNote.becomeFirstResponder()
+            })
+            return
+        }
+        
+        _ = showWarningAlert(title: "THÔNG BAÓ", message: "Gửi mail thành công", buttonTitle: "OK", action: nil)
+        
+    }
     
     // MARK: - Func
     override func loadData() {
@@ -95,10 +116,12 @@ extension AccountContactVCtrl: HandleKeyboardProtocol, UITextFieldDelegate, UITe
     }
     
     func handleKeyboard(willShow notify: NSNotification) {
+        scrollView.contentSize.height = 0
         self.handleKeyboard(willShow: notify, scv: self.scrollView)
     }
     
     func handleKeyboard(willHide notify: NSNotification) {
+        scrollView.contentSize.height = 0
         self.handleKeyboard(willHide: notify, scv: self.scrollView)
     }
     

@@ -258,10 +258,12 @@ extension AccountAddressVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
     }
     
     func handleKeyboard(willShow notify: NSNotification) {
+        self.scrollView.contentSize.height = vInfo.height
         self.handleKeyboard(willShow: notify, scv: self.scrollView)
     }
     
     func handleKeyboard(willHide notify: NSNotification) {
+        self.scrollView.contentSize.height = vInfo.height
         self.handleKeyboard(willHide: notify, scv: self.scrollView)
     }
     

@@ -80,6 +80,13 @@ extension CALayer {
         }
     }
 
+}
 
+extension CustomerDTO {
+    func updateNullDate() {
+        if (self.billing?.email ?? "").isEmpty {
+            self.billing = nil
+        }
+    }
 }
 

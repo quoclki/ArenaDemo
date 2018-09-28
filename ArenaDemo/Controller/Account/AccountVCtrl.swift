@@ -71,6 +71,9 @@ class AccountVCtrl: BaseVCtrl {
     private var policyDataDTO: PageDTO?
     private var contactDataDTO: PageDTO?
     
+    private var lstTextFieldSignUp: [UITextField] = []
+    private var lstTextFieldSignIn: [UITextField] = []
+    
     // MARK: - Properties
     
     // MARK: - Init
@@ -95,6 +98,8 @@ class AccountVCtrl: BaseVCtrl {
         setupUIForAccount()
         configTableView()
         scrollView.delegate = self
+        lstTextFieldSignUp = [txtSignUpEmail, txtSignUpPassword, txtSignUpConfirmPassword]
+        lstTextFieldSignIn = [txtSignInName, txtSignInPassword]
     }
     
     func setupUIForAccount() {
@@ -141,8 +146,12 @@ class AccountVCtrl: BaseVCtrl {
         btnSignUpDetail.touchUpInside(block: btnSignUpDetail_Touched)
         btnSignUpConfirm.touchUpInside(block: btnSignUpConfirm_Touched)
 
-        [txtSignInName, txtSignInPassword, txtSignUpEmail, txtSignUpPassword, txtSignUpConfirmPassword].forEach({
-            $0?.delegate = self
+        lstTextFieldSignUp.forEach({
+            $0.delegate = self
+        })
+        
+        lstTextFieldSignIn.forEach({
+            $0.delegate = self
         })
 
         btnCheck.touchUpInside(block: btnCheck_Touched)
@@ -419,7 +428,8 @@ extension AccountVCtrl {
                 _ = self.showWarningAlert(title: "Cảnh báo", message: "Không thể đăng kí thông tin!")
                 return
             }
-            Order.shared.updateCusDTO(cusDTO)
+            cusDTO.updateNullDate()
+            Order.shared.updateCusDTO(cusDTO, isSaveUserDefault: true)
             _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG KÍ THÀNH CÔNG", buttonTitle: "OK") {
                 self.configDefaultAccount()
                 self.tbvAccount.reloadData()
@@ -473,6 +483,7 @@ extension AccountVCtrl {
  
     func loginSuccess(_ cusDTO: CustomerDTO) {
         cusDTO.password = self.txtSignInPassword.text
+        cusDTO.updateNullDate()
         Order.shared.updateCusDTO(cusDTO, isSaveUserDefault: self.btnCheck.isSelected)
 
         _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG NHẬP THÀNH CÔNG", buttonTitle: "OK") {
@@ -483,7 +494,6 @@ extension AccountVCtrl {
 
     }
     
-    
 }
 
 extension AccountVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
@@ -491,17 +501,26 @@ extension AccountVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
         handleFocusInputView(textField)
         return true
     }
-
+    
     func handleKeyboard(willShow notify: NSNotification) {
+        self.scrollView.contentSize.height = 0
         self.handleKeyboard(willShow: notify, scv: self.scrollView)
     }
     
     func handleKeyboard(willHide notify: NSNotification) {
+        self.scrollView.contentSize.height = 0
         self.handleKeyboard(willHide: notify, scv: self.scrollView)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        view.endEditing(true)
+        if lstTextFieldSignUp.contains(textField) {
+            handleTextFieldNotInputData(lstTextFieldSignUp)
+        }
+        
+        if lstTextFieldSignIn.contains(textField) {
+            handleTextFieldNotInputData(lstTextFieldSignIn)
+        }
+        
         return true
     }
     
@@ -516,7 +535,27 @@ extension AccountVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
         handleKeyboard(register: false)
         Base.container.setHiddenAnimationMenu(true)
     }
-    
+ 
+    func handleTextFieldNotInputData(_ lstTextField: [UITextField]) {
+        if let tf = lstTextField.first(where: { ($0.text ?? "").isEmpty }) {
+            tf.becomeFirstResponder()
+            
+        } else {
+            self.view.endEditing(true)
+            if lstTextField == self.lstTextFieldSignUp {
+                self.btnSignUpConfirm.sendActions(for: .touchUpInside)
+                return
+            }
+            
+            if lstTextField == self.lstTextFieldSignIn {
+                self.btnSignInConfirm.sendActions(for: .touchUpInside)
+                return
+            }
+            
+        }
+        
+    }
+
 }
 
 

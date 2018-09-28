@@ -31,6 +31,8 @@ class AccountSettingVCtrl: BaseVCtrl {
         return Order.shared.cusDTO
     }
     
+    private var lstTextField: [UITextField] = []
+    
     // MARK: - Properties
     var handleCompleted: (() -> Void)? = nil
     
@@ -59,7 +61,7 @@ class AccountSettingVCtrl: BaseVCtrl {
         createNavigationBar(vSafe, title: "CÀI ĐẶT TÀI KHOẢN")
         addViewToLeftBarItem(createBackButton())
         mappingViewInfo()
-        
+        self.lstTextField = [txtName, txtEmail, txtPassword, txtPasswordNew, txtPasswordNewConfirm]
     }
     
     func mappingViewInfo() {
@@ -80,8 +82,8 @@ class AccountSettingVCtrl: BaseVCtrl {
         btnSave.touchUpInside(block: btnSave_Touched)
         btnSignOut.touchUpInside(block: btnSignOut_Touched)
         
-        [txtName, txtEmail, txtPassword, txtPasswordNew, txtPasswordNewConfirm].forEach({
-            $0?.delegate = self
+        lstTextField.forEach({
+            $0.delegate = self
         })
     }
     
@@ -158,7 +160,8 @@ class AccountSettingVCtrl: BaseVCtrl {
                     _ = self.showWarningAlert(title: "Cảnh báo", message: "Không thể lưu thông tin!")
                     return
                 }
-                
+
+                cusDTO.updateNullDate()
                 Order.shared.updateCusDTO(cusDTO)
                 self.navigationController?.popViewController(animated: true)
                 self.handleCompleted?()
@@ -194,16 +197,30 @@ extension AccountSettingVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
     }
     
     func handleKeyboard(willShow notify: NSNotification) {
+        self.scrollView.contentSize.height = 0
         self.handleKeyboard(willShow: notify, scv: self.scrollView)
     }
     
     func handleKeyboard(willHide notify: NSNotification) {
+        self.scrollView.contentSize.height = 0
         self.handleKeyboard(willHide: notify, scv: self.scrollView)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        view.endEditing(true)
+        handleTextFieldNotInputData()
         return true
+    }
+    
+    func handleTextFieldNotInputData() {
+        if let tf = self.lstTextField.first(where: { ($0.text ?? "").isEmpty }) {
+            tf.becomeFirstResponder()
+            
+        } else {
+            self.view.endEditing(true)
+            self.btnSave.sendActions(for: .touchUpInside)
+            
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

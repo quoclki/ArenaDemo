@@ -298,11 +298,17 @@ extension BaseVCtrl: UIScrollViewDelegate {
     }
     
     func handleKeyboard(willShow notify: NSNotification, scv: UIScrollView) {
+        print(#function)
         guard let keyboardFrame: NSValue = notify.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else {
             return
         }
         
         let keyboardRectangle = keyboardFrame.cgRectValue
+        if !scv.isKind(of: UICollectionView.self) && !scv.isKind(of: UITableView.self) {
+            let frame = scv.superview?.convert(scv.frame, to: self.view) ?? CGRect.zero
+            let bottom = view.height - frame.maxY
+            scv.contentSize.height = max(scv.height, scv.contentSize.height) + keyboardRectangle.height - bottom
+        }
         
         guard let vFocus = self.vFocusInput else {
             return
@@ -320,6 +326,16 @@ extension BaseVCtrl: UIScrollViewDelegate {
     }
     
     func handleKeyboard(willHide notify: NSNotification, scv: UIScrollView) {
+        print(#function)
+        guard let keyboardFrame: NSValue = notify.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue else {
+            return
+        }
+        
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        if !scv.isKind(of: UICollectionView.self) && !scv.isKind(of: UITableView.self) {
+            scv.contentSize.height = scv.contentSize.height - keyboardRectangle.height
+        }
+        
         let totalHeightScroll = scv.contentOffset.y + scv.height
         let heightContentSize = max(scv.contentSize.height, scv.height)
         if totalHeightScroll > heightContentSize {
