@@ -384,8 +384,8 @@ extension AccountVCtrl {
     }
     
     func btnSignUpConfirm_Touched(sender: UIButton) {
-        guard let email = txtSignUpEmail.text?.trim(), !email.isEmail else {
-            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập đúng định dạng egail", buttonTitle: "OK") {
+        guard let email = txtSignUpEmail.text?.trim(), email.isEmail else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập đúng định dạng email", buttonTitle: "OK") {
                 self.txtSignUpEmail.becomeFirstResponder()
             }
             return
