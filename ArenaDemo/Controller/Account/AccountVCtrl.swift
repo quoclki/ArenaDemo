@@ -384,8 +384,8 @@ extension AccountVCtrl {
     }
     
     func btnSignUpConfirm_Touched(sender: UIButton) {
-        guard let email = txtSignUpEmail.text?.trim(), !email.isEmpty else {
-            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập email", buttonTitle: "OK") {
+        guard let email = txtSignUpEmail.text?.trim(), !email.isEmail else {
+            _ = self.showWarningAlert(title: "Thông báo", message: "Vui lòng nhập đúng định dạng egail", buttonTitle: "OK") {
                 self.txtSignUpEmail.becomeFirstResponder()
             }
             return
@@ -411,9 +411,13 @@ extension AccountVCtrl {
 
         }
 
+        let billing = AddressDTO()
+        billing.email = email
+        
         let request = CustomerDTO()
         request.email = email
         request.password = password
+        request.billing = billing
         request.role = ECustomerRole.customer.rawValue
 
         task = SECustomer.createOrUpdate(request, animation: {
@@ -428,7 +432,6 @@ extension AccountVCtrl {
                 _ = self.showWarningAlert(title: "Cảnh báo", message: "Không thể đăng kí thông tin!")
                 return
             }
-            cusDTO.updateNullDate()
             Order.shared.updateCusDTO(cusDTO, isSaveUserDefault: true)
             _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG KÍ THÀNH CÔNG", buttonTitle: "OK") {
                 self.configDefaultAccount()
@@ -483,7 +486,6 @@ extension AccountVCtrl {
  
     func loginSuccess(_ cusDTO: CustomerDTO) {
         cusDTO.password = self.txtSignInPassword.text
-        cusDTO.updateNullDate()
         Order.shared.updateCusDTO(cusDTO, isSaveUserDefault: self.btnCheck.isSelected)
 
         _ = self.showWarningAlert(title: "Thông báo", message: "ĐĂNG NHẬP THÀNH CÔNG", buttonTitle: "OK") {

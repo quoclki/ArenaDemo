@@ -161,7 +161,6 @@ class AccountSettingVCtrl: BaseVCtrl {
                     return
                 }
 
-                cusDTO.updateNullDate()
                 Order.shared.updateCusDTO(cusDTO)
                 self.navigationController?.popViewController(animated: true)
                 self.handleCompleted?()
