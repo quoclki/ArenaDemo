@@ -19,16 +19,18 @@ class TbvPaymentInfoCell: UITableViewCell {
     @IBOutlet weak var txvNote: UITextView!
     
     private var item: OrderDTO!
+    private var lstTextField: [UITextField] = []
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        [txtName, txtPhone, txtEmail, txtAddress].forEach({
-            $0?.delegate = self
+        lstTextField = [txtName, txtPhone, txtEmail, txtAddress]
+        lstTextField.forEach({
+            $0.delegate = self
         })
         txvNote.delegate = self
         txvNote.inputAccessoryView = Base.getAccessoryKeyboard({
-            self.parentViewController?.view.endEditing(true)
+            self.handleTextFieldNotInputData()
         })
     }
 
@@ -58,7 +60,14 @@ class TbvPaymentInfoCell: UITableViewCell {
 }
 
 extension TbvPaymentInfoCell: UITextFieldDelegate, UITextViewDelegate {
-    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField == txtPhone && string != "" {
+            return string.isNumber
+        }
+        
+        return true
+    }
+
     func handleBeginEditing(_ vFocus: UIView) {
         if let parent = self.parentViewController as? PaymentVCtrl {
             parent.handleFocusInputView(vFocus)
@@ -67,12 +76,30 @@ extension TbvPaymentInfoCell: UITextFieldDelegate, UITextViewDelegate {
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         handleBeginEditing(textField)
+        if textField == txtPhone {
+            textField.inputAccessoryView = Base.getAccessoryKeyboard({
+                if !(textField.text ?? "").isEmpty {
+                    self.handleTextFieldNotInputData()
+                }
+            })
+        }
         return true
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.parentViewController?.view.endEditing(true)
+        handleTextFieldNotInputData()
         return true
+    }
+    
+    func handleTextFieldNotInputData() {
+        if let tf = self.lstTextField.first(where: { ($0.text ?? "").isEmpty }) {
+            tf.becomeFirstResponder()
+            
+        } else {
+            self.parentViewController?.view.endEditing(true)
+            
+        }
+
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

@@ -29,11 +29,13 @@ class AccountAddressVCtrl: BaseVCtrl {
     @IBOutlet weak var txtBillingPhone: CustomUITextField!
     @IBOutlet weak var txtBillingEmail: CustomUITextField!
     @IBOutlet weak var txtBillingAddress: CustomUITextField!
-
+    
     // MARK: - Private properties
     private var cusDTO: CustomerDTO {
         return Order.shared.cusDTO
     }
+    
+    private var lstTextField: [UITextField] = []
     
     // MARK: - Properties
     
@@ -66,7 +68,8 @@ class AccountAddressVCtrl: BaseVCtrl {
         mappingViewInfo()
     }
     
-    func mappingViewInfo() {        
+    func mappingViewInfo() {
+        lstTextField = [txtShippingName, txtShippingPhone, txtShippingEmail, txtShippingAddress, txtBillingName, txtBillingPhone, txtBillingEmail, txtBillingAddress]
         txtShippingName.text = cusDTO.shipping?.first_name
         txtShippingPhone.text = cusDTO.shipping?.phone
         txtShippingEmail.text = cusDTO.shipping?.email
@@ -89,16 +92,27 @@ class AccountAddressVCtrl: BaseVCtrl {
         super.eventListener()
         btnSave.touchUpInside(block: btnSave_Touched)
         
-        [txtShippingName, txtShippingPhone, txtShippingEmail, txtShippingAddress, txtBillingName, txtBillingPhone, txtBillingEmail, txtBillingAddress].forEach({
-            $0?.delegate = self
+        lstTextField.forEach({
+            $0.delegate = self
         })
 
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapScrollView))
+        scrollView.addGestureRecognizer(tapGesture)
+        
     }
     
     // MARK: - Event Handler
+    @objc func handleTapScrollView() {
+        self.view.endEditing(true)
+    }
+    
     func btnSave_Touched(sender: UIButton) {
         view.endEditing(true)
 
+        if !validateInfo() {
+            return
+        }
+        
         guard let request = CustomerDTO.fromJson(cusDTO.toJson()) else {
             return
         }
@@ -138,16 +152,108 @@ class AccountAddressVCtrl: BaseVCtrl {
         
     }
     
+    func validateInfo() -> Bool {
+        // SHIPPING
+        var msgShippingArray: [String] = []
+        if let firstName = txtShippingName.text?.trim, firstName.isEmpty {
+            txtShippingName.text = ""
+            msgShippingArray.append("Họ tên trống")
+        }
+        
+        if let phone = txtShippingPhone.text?.trim, phone.isEmpty {
+            txtShippingPhone.text = ""
+            msgShippingArray.append("Điện thoại trống")
+        }
+        
+        if let email = txtShippingEmail.text?.trim, !email.isEmail {
+            txtShippingEmail.text = ""
+            msgShippingArray.append("Email sai định dạng")
+        }
+        
+        if let address = txtShippingAddress.text?.trim, address.isEmpty {
+            txtShippingAddress.text = ""
+            msgShippingArray.append("Địa chỉ trống")
+        }
+        
+        // BILLING
+        var msgBillingArray: [String] = []
+        if let firstName = txtBillingName.text?.trim, firstName.isEmpty {
+            txtBillingName.text = ""
+            msgBillingArray.append("Họ tên trống")
+        }
+        
+        if let phone = txtBillingPhone.text?.trim, phone.isEmpty {
+            txtBillingPhone.text = ""
+            msgBillingArray.append("Điện thoại trống")
+        }
+        
+        if let email = txtBillingEmail.text?.trim, !email.isEmail {
+            txtBillingEmail.text = ""
+            msgBillingArray.append("Email sai định dạng")
+        }
+        
+        if let address = txtBillingAddress.text?.trim, address.isEmpty {
+            txtBillingAddress.text = ""
+            msgBillingArray.append("Địa chỉ trống")
+        }
+        
+        var msgArray: [String] = []
+        if !msgShippingArray.isEmpty {
+            msgArray.append("ĐỊA CHỈ GIAO HÀNG: " + msgShippingArray.joined(separator: ", "))
+        }
+
+        if !msgBillingArray.isEmpty {
+            msgArray.append("ĐỊA CHỈ THANH TOÁN: " + msgBillingArray.joined(separator: ", "))
+        }
+
+        if !msgArray.isEmpty {
+            _ = showWarningAlert(title: "THÔNG BÁO", message: msgArray.joined(separator: "\n"), buttonTitle: "OK", action: {
+                self.handleTextFieldNotInputData()
+            })
+            return false
+        }
+        
+        return true
+    }
+    
     // MARK: - Func
     override func loadData() {
         super.loadData()
         
     }
+    
 }
 
 extension AccountAddressVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if [txtBillingPhone, txtShippingPhone].contains(textField) && string != "" {
+            return string.isNumber
+        }
+
+        return true
+    }
+    
+    func handleTextFieldNotInputData() {
+        if let tf = self.lstTextField.first(where: { ($0.text ?? "").isEmpty }) {
+            tf.becomeFirstResponder()
+            
+        } else {
+            self.view.endEditing(true)
+        }
+    }
+
+    
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         handleFocusInputView(textField)
+        
+        if [txtBillingPhone, txtShippingPhone].contains(textField) {
+            textField.inputAccessoryView = Base.getAccessoryKeyboard({
+                if !(textField.text ?? "").isEmpty {
+                    self.handleTextFieldNotInputData()
+                }
+            })
+        }
+
         return true
     }
     
@@ -160,7 +266,7 @@ extension AccountAddressVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        view.endEditing(true)
+        handleTextFieldNotInputData()
         return true
     }
     

@@ -27,16 +27,17 @@ class ClvProductCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        ImageStore.shared.setImg(toImageView: UIImageView(), imgURL: item.images.first?.src) { (img) in
-            let image = img?.resize(newWidth: self.imv.width)
-            self.imv.image = image
-        }
-        imv.contentMode = .topLeft
-        imv.clipsToBounds = true
     }
     
     func updateCell(_ item: ProductDTO) {
+        ImageStore.shared.setImg(toImageView: imv, imgURL: item.images.first?.src) { (img) in
+            let image = img?.resize(newWidth: self.width)
+            self.imv.image = image
+            self.imv.contentMode = .topLeft
+            self.imv.clipsToBounds = true
+        }
         self.item = item
+        
         lblName.text = item.name
         
         if let regularPrice = item.regular_price?.toDouble(), let salePrice = item.sale_price?.toDouble(), regularPrice != 0 {

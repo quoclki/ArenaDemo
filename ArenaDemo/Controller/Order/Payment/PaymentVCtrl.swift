@@ -125,7 +125,12 @@ class PaymentVCtrl: BaseVCtrl {
     
     // MARK: - Event Handler
     func btnOrder_Touched(sender: UIButton) {
+        if !validateInfoOrder() {
+            return
+        }
+        
         guard let paymentSelected = order.lstPayment.first(where: { $0.isCheck }) else {
+            _ = showWarningAlert(title: "THÔNG BÁO", message: "Vui lòng chọn phương thức thanh toán", buttonTitle: "OK", action: nil)
             return
         }
         
@@ -149,6 +154,52 @@ class PaymentVCtrl: BaseVCtrl {
             let complete = ContinueOrderVCtrl(false)
             self.navigationController?.pushViewController(complete, animated: true)
         })
+    }
+    
+    func validateInfoOrder() -> Bool {
+        guard let billing = self.order.billing else {
+            return false
+        }
+        
+        guard let section = self.lstItem.index(where: { $0 == .paymentInfo }) else {
+            return false
+        }
+        
+        var msgArray: [String] = []
+        
+        let firstName = billing.first_name.trim()
+        if firstName.isEmpty {
+            billing.first_name = ""
+            msgArray.append("Họ tên trống")
+        }
+        
+        let phone = billing.phone.trim()
+        if phone.isEmpty {
+            billing.phone = ""
+            msgArray.append("Điên thoại trống")
+        }
+        
+        let email = billing.email.trim()
+        if !email.isEmail {
+            billing.email = ""
+            msgArray.append("Email sai định dạng")
+        }
+        
+        let address = billing.address_1.trim()
+        if address.isEmpty {
+            billing.address_1 = ""
+            msgArray.append("Địa chỉ trống")
+        }
+
+        if !msgArray.isEmpty {
+            _ = showWarningAlert(title: "THÔNG BÁO", message: msgArray.joined(separator: ", "), buttonTitle: "OK", action: {
+                self.tbvOrder.scrollToRow(at: IndexPath(row: 0, section: section), at: .top, animated: false)
+                self.tbvOrder.reloadSections(IndexSet(integer: section), with: .none)
+            })
+            return false
+        }
+        
+        return true
     }
     
     func btnSignIn_Touched(sender: UIButton) {

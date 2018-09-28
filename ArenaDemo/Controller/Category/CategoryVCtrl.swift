@@ -18,21 +18,6 @@ class CategoryVCtrl: BaseVCtrl {
     
     // MARK: - Private properties
     private var lstCategory: [CategoryDTO] = []
-//    private var lstCategory_Display: [CategoryDTO] = []
-
-//    private var searchText: String = "" {
-//        didSet {
-//            if searchText.trim().isEmpty {
-//                lstCategory_Display = lstCategory
-//                clvCategory.reloadData()
-//                return
-//            }
-//
-//            lstCategory_Display = lstCategory.filter({ $0.name?.contains(s: searchText) ?? false })
-//            clvCategory.reloadData()
-//
-//        }
-//    }
 
     // MARK: - Properties
     
