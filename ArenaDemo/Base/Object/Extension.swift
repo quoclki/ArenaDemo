@@ -75,7 +75,7 @@ extension EOrderStatus {
     var name: String {
         switch self {
         case .any:
-            return "Bất kí"
+            return "Bất kì"
         case .pending:
             return "Tạm dừng"
         case .processing:

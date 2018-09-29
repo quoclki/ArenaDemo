@@ -69,10 +69,21 @@ class MyOrderVCtrl: BaseVCtrl {
         _ = SEProduct.getListProduct(request, animation: { isShow in
             
         }, completed: { (response) in
-            lstItem.forEach{ item in
-                item.productDTO = response.lstProduct.first(where: { $0.id == item.product_id })
+            guard let visibleCell = self.tbvMyOrder.visibleCells as? [TbvMyOrderCell] else {
+                return
             }
-            self.tbvMyOrder.reloadData()
+            
+            var lstIndexPath: [IndexPath] = []
+            visibleCell.forEach({ (cell) in
+                if cell.item == nil {
+                    if let indexPath = self.tbvMyOrder.indexPath(for: cell) {
+                        lstIndexPath.append(indexPath)
+                    }
+                    cell.item.productDTO = response.lstProduct.first(where: { $0.id == cell.item?.product_id })
+                }
+            })
+            self.tbvMyOrder.reloadRows(at: lstIndexPath, with: .automatic)
+            
         })
 
     }

@@ -16,6 +16,8 @@ class TbvMyOrderCell: UITableViewCell {
     @IBOutlet weak var lblName: UILabel!
     @IBOutlet weak var lblDate: UILabel!
     
+    var item: OrderLineItemDTO!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -37,6 +39,7 @@ class TbvMyOrderCell: UITableViewCell {
     }
     
     func updateCell(_ item: OrderLineItemDTO) {
+        self.item = item
         lblName.text = item.name
         lblDate.text = ""
         
