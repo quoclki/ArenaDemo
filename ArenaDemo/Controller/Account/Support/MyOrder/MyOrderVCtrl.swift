@@ -57,6 +57,24 @@ class MyOrderVCtrl: BaseVCtrl {
     override func loadData() {
         super.loadData()
         
+        let lstItem = self.lstOrder.flatMap({ $0.line_items })
+        var lstID: Set<Int> = []
+        lstItem.forEach{
+            lstID.insert($0.product_id ?? 0)
+        }
+        
+        let request = GetProductRequest(page: 1)
+        request.include = lstID.map({ $0 })
+        
+        _ = SEProduct.getListProduct(request, animation: { isShow in
+            
+        }, completed: { (response) in
+            lstItem.forEach{ item in
+                item.productDTO = response.lstProduct.first(where: { $0.id == item.product_id })
+            }
+            self.tbvMyOrder.reloadData()
+        })
+
     }
 }
 
