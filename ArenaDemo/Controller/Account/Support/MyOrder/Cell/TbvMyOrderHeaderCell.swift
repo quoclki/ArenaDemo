@@ -18,6 +18,9 @@ class TbvMyOrderHeaderCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        lblStatus.clipsToBounds = true
+        lblStatus.cornerRadius = lblStatus.height / 2
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -32,7 +35,7 @@ class TbvMyOrderHeaderCell: UITableViewCell {
         let eStatus = EOrderStatus(rawValue: item.status ?? "")
         lblStatus.text = eStatus?.name.uppercased()
         lblStatus.backgroundColor = eStatus?.color
-        lblStatus.cornerRadius = lblStatus.height / 2
+        
     }
     
 }

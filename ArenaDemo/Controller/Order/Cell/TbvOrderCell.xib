@@ -27,12 +27,13 @@
                                 <rect key="frame" x="10" y="15" width="70" height="70"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bLU-Jo-vRL">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bLU-Jo-vRL">
                                 <rect key="frame" x="90" y="111" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <state key="normal" image="icon-favourite"/>
+                                <state key="normal" image="icon-favorite-notCheck"/>
+                                <state key="selected" image="icon-favorite-check"/>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OPc-XQ-JzN">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OPc-XQ-JzN">
                                 <rect key="frame" x="130" y="111" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <state key="normal" image="icon-delete"/>
@@ -135,6 +136,7 @@
     </objects>
     <resources>
         <image name="icon-delete" width="18" height="24"/>
-        <image name="icon-favourite" width="18" height="16"/>
+        <image name="icon-favorite-check" width="26" height="26"/>
+        <image name="icon-favorite-notCheck" width="18" height="16"/>
     </resources>
 </document>

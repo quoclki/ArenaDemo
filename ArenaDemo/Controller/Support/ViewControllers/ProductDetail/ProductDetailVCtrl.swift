@@ -18,7 +18,7 @@ class ProductDetailVCtrl: BaseVCtrl {
     
     @IBOutlet var vHeader: UIView!
     @IBOutlet weak var vSlideBorder: UIView!
-    @IBOutlet weak var btnFavourite: UIButton!
+    @IBOutlet weak var btnFavorite: UIButton!
     @IBOutlet weak var vSlide: UIView!
     @IBOutlet weak var vPagePoint: UIView!
     @IBOutlet weak var lblNoPhoto: UILabel!
@@ -63,6 +63,18 @@ class ProductDetailVCtrl: BaseVCtrl {
             btnPlus.isEnabled = quantity < stock_quantity
         }
     }
+    
+    private var isFavorite: Bool = false {
+        didSet {
+            guard let id = self.product.id else {
+                return
+            }
+            btnFavorite.isSelected = isFavorite
+            FavoriteData.shared.handleFavoriteList(id, isSave: isFavorite)
+            
+        }
+    }
+
     private var lineItem: OrderLineItemDTO!
     
     // MARK: - Properties
@@ -124,6 +136,8 @@ class ProductDetailVCtrl: BaseVCtrl {
         lblPriceNormal.text = product.price?.toCurrencyString()
         
         quantity = max(self.lineItem.quantity, 1)
+        isFavorite = FavoriteData.shared.checkInList(self.product.id)
+
         lineItem.product_id = product.id
         lineItem.name = product.name
         lineItem.price = product.price
@@ -146,7 +160,7 @@ class ProductDetailVCtrl: BaseVCtrl {
     override func eventListener() {
         super.eventListener()
         btnCart.touchUpInside(block: btnCart_Touched)
-        btnFavourite.touchUpInside(block: btnFavourite_Touched)
+        btnFavorite.touchUpInside(block: btnFavorite_Touched)
         btnMinus.touchUpInside(block: btnMinus_Touched)
         btnPlus.touchUpInside(block: btnPlus_Touched)
         btnOrder.touchUpInside(block: btnOrder_Touched)
@@ -158,20 +172,11 @@ class ProductDetailVCtrl: BaseVCtrl {
     
     // MARK: - Event Handler
     func btnCart_Touched(sender: UIButton) {
-        let order = Order.shared.orderDTO
-        if order.line_items.isEmpty {
-            _ = showWarningAlert(title: "Thông báo", message: "Không có sản phẩm nào trong giỏ.", buttonTitle: "OK")
-            return
-        }
-        
-        let myOrder = OrderVCtrl(order)
-        myOrder.isCreateBack = true
-        navigationController?.pushViewController(myOrder, animated: true)
-        
+        pushMyOrderVCtrl()
     }
 
-    func btnFavourite_Touched(sender: UIButton) {
-        
+    func btnFavorite_Touched(sender: UIButton) {
+        isFavorite = !isFavorite
     }
 
     func btnMinus_Touched(sender: UIButton) {

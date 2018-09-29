@@ -25,6 +25,7 @@ class OrderVCtrl: BaseVCtrl {
     
     // MARK: - Properties
     var isCreateBack: Bool = false
+    var isBackPreviousScreen: Bool = false
     
     // MARK: - Init
     init(_ order: OrderDTO) {
@@ -62,6 +63,11 @@ class OrderVCtrl: BaseVCtrl {
     func addContinueVCtrl() {
         updateTitle()
         if lstItem.isEmpty {
+            if isBackPreviousScreen {
+                navigationController?.popViewController(animated: true)
+                return
+            }
+            
             let _continue = ContinueOrderVCtrl(true)
             _continue.view.frame.size = view.size
             addChildViewController(_continue)

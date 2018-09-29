@@ -289,6 +289,21 @@ class BaseVCtrl: UIViewController {
             push()
         }
     }
+    
+    /// Push Order VCtrl
+    func pushMyOrderVCtrl(_ isBackPreviousScreen: Bool = false) {
+        let order = Order.shared.orderDTO
+        if order.line_items.isEmpty {
+            _ = showWarningAlert(title: "Thông báo", message: "Không có sản phẩm nào trong giỏ.", buttonTitle: "OK")
+            return
+        }
+        
+        let myOrder = OrderVCtrl(order)
+        myOrder.isCreateBack = true
+        myOrder.isBackPreviousScreen = isBackPreviousScreen
+        navigationController?.pushViewController(myOrder, animated: true)
+
+    }
 }
 
 /// For Keyboard Only

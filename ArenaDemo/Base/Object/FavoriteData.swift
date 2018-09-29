@@ -26,11 +26,14 @@ class FavoriteData {
         
         var lst = self.lstItem
         if isSave {
-            lst.append(id)
-        } else {
-            _ = lst.removeObject(id)
+            if !lst.contains(id) {
+                lst.append(id)
+                UserDefaults.standard.set(lst, forKey: EUserDefaultKey.favoriteData.rawValue)
+            }
+            return
         }
         
+        _ = lst.removeObject(id)
         UserDefaults.standard.set(lst, forKey: EUserDefaultKey.favoriteData.rawValue)
         
     }

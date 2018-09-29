@@ -42,7 +42,7 @@ class TbvPaymentMethodCell: UITableViewCell {
         
         for (_, element) in order.lstPayment.filter({ $0.enabled == true }) .enumerated() {
             let btn = UIButton()
-            btn.setImage(UIImage(named: "icon-paymentMethod_notCheck", in: Bundle(for: type(of: self)), compatibleWith: nil), for: .normal)
+            btn.setImage(UIImage(named: "icon-paymentMethod-notCheck", in: Bundle(for: type(of: self)), compatibleWith: nil), for: .normal)
             btn.setImage(UIImage(named: "icon-paymentMethod-check", in: Bundle(for: type(of: self)), compatibleWith: nil), for: .selected)
             btn.frame = CGRect(0, heightForViewBorder, 40, 40)
             btn.touchUpInside(block: btnCheck_Touched)

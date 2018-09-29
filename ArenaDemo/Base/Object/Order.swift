@@ -27,7 +27,18 @@ class Order {
     func clearOrder() {
         orderDTO = OrderDTO()
         Base.container.updateTotalItem()
+    }
 
+    func checkItemInOrder(_ id: Int?) -> Bool {
+        guard let id = id else {
+            return false
+        }
+        
+        if !orderDTO.line_items.filter({ $0.product_id == id }).isEmpty {
+            return true
+        }
+        
+        return false
     }
     
 }

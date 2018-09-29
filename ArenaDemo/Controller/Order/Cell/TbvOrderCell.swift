@@ -34,7 +34,7 @@ class TbvOrderCell: UITableViewCell {
             guard let id = self.itemLine.product_id else {
                 return
             }
-            btnFavourite.tintColor = isFavorite ? Base.favotireColor : .lightGray
+            btnFavourite.isSelected = isFavorite
             FavoriteData.shared.handleFavoriteList(id, isSave: isFavorite)
 
         }
@@ -84,7 +84,7 @@ class TbvOrderCell: UITableViewCell {
         lblName.text = item.name
      
         ImageStore.shared.setImg(toImageView: UIImageView(), imgURL: item.productDTO?.images.first?.src) { (img) in
-            let image = img?.resize(newWidth: self.width)
+            let image = img?.resize(newWidth: self.imv.width)
             self.imv.image = image
             self.imv.contentMode = .topLeft
             self.imv.clipsToBounds = true

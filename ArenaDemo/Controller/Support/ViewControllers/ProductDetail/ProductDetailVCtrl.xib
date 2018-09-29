@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,7 +18,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProductDetailVCtrl" customModule="ArenaDemo" customModuleProvider="target">
             <connections>
                 <outlet property="btnCart" destination="Hpc-kr-c7l" id="LsW-vp-Nyg"/>
-                <outlet property="btnFavourite" destination="48Z-wf-KAg" id="ZeG-26-cRK"/>
+                <outlet property="btnFavorite" destination="48Z-wf-KAg" id="JnK-eh-JVJ"/>
                 <outlet property="btnMinus" destination="AWC-DG-F6j" id="Gv2-hJ-8rC"/>
                 <outlet property="btnOrder" destination="vzZ-OX-Xeu" id="EA6-q7-D28"/>
                 <outlet property="btnPlus" destination="2bL-cl-Rx6" id="OSE-Lh-Pdw"/>
@@ -90,12 +90,6 @@
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pLK-dW-UYp">
                             <rect key="frame" x="-1" y="0.0" width="376" height="375"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="48Z-wf-KAg">
-                                    <rect key="frame" x="18" y="18" width="30" height="30"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                </button>
-                            </subviews>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Không có hình ảnh" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CPa-EL-nuK">
                             <rect key="frame" x="105" y="105" width="165" height="165"/>
@@ -108,6 +102,12 @@
                             <rect key="frame" x="-1" y="343" width="376" height="24"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         </view>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="48Z-wf-KAg">
+                            <rect key="frame" x="18" y="18" width="30" height="30"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="icon-favorite-notCheck"/>
+                            <state key="selected" image="icon-favorite-check"/>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
@@ -262,7 +262,7 @@
             </subviews>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="IGm-Dd-dt3"/>
-            <point key="canvasLocation" x="-692" y="-257"/>
+            <point key="canvasLocation" x="-435" y="-229"/>
         </view>
         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" id="Fek-d7-YqL">
             <rect key="frame" x="0.0" y="0.0" width="46" height="30"/>
@@ -281,5 +281,7 @@
     </objects>
     <resources>
         <image name="icon-cart" width="20" height="20"/>
+        <image name="icon-favorite-check" width="26" height="26"/>
+        <image name="icon-favorite-notCheck" width="18" height="16"/>
     </resources>
 </document>

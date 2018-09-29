@@ -120,10 +120,10 @@ class AccountVCtrl: BaseVCtrl {
         ImageStore.shared.setImg(toImageView: imvLogo, imgURL: Order.shared.cusDTO.avatar_url, defaultImg: Base.logo)
         let cusDTO = Order.shared.cusDTO
         if let _ = Order.shared.cusDTO.id {
-            lstItem = [.myOrder, .favourite, .address, .storeSystem, .orderCondition, .accSetting]
+            lstItem = [.myOrder, .favorite, .address, .storeSystem, .orderCondition, .accSetting]
             lblName.text = cusDTO.first_name
         } else {
-            lstItem = [.myOrder, .favourite, .orderCondition, .storeSystem, .contactInfo, .signInSignUp]
+            lstItem = [.myOrder, .favorite, .orderCondition, .storeSystem, .contactInfo, .signInSignUp]
             lblName.text = "APP BÁN HÀNG"
         }
         [txtSignInName, txtSignInPassword, txtSignUpEmail, txtSignUpPassword, txtSignUpConfirmPassword].forEach({
@@ -214,7 +214,7 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
             
             pushMyOrder()
             
-        case .favourite:
+        case .favorite:
             let lstItem = FavoriteData.shared.lstItem
             if lstItem.isEmpty {
                 _ = showWarningAlert(title: "THÔNG BÁO", message: "Không có sản phẩm yêu thích", buttonTitle: "OK", action: nil)
@@ -585,7 +585,7 @@ extension AccountVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
 
 enum EAccountMenu: Int {
     case myOrder
-    case favourite
+    case favorite
     case address
     case storeSystem
     case orderCondition
@@ -598,7 +598,7 @@ enum EAccountMenu: Int {
         case .myOrder:
             return "Đơn Hàng Của Tôi"
             
-        case .favourite:
+        case .favorite:
             return "Danh Sách Ưa Thích"
             
         case .address:
@@ -622,6 +622,9 @@ enum EAccountMenu: Int {
     }
     
     var icon: UIImage {
+        if self == .favorite {
+            return UIImage(named: "icon-favorite-notCheck", in: Bundle(for: Base.self), compatibleWith: nil) ?? UIImage()
+        }
         return UIImage(named: "icon-" + String(describing: self), in: Bundle(for: Base.self), compatibleWith: nil) ?? UIImage()
     }
 }
