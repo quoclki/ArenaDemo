@@ -215,6 +215,28 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
             pushMyOrder()
             
         case .favourite:
+            let lstItem = FavoriteData.shared.lstItem
+            if lstItem.isEmpty {
+                _ = showWarningAlert(title: "THÔNG BÁO", message: "Không có sản phẩm yêu thích", buttonTitle: "OK", action: nil)
+                return
+            }
+            
+            let request = GetProductRequest(page: 1)
+            request.include = lstItem.map({ $0 })
+            
+            _ = SEProduct.getListProduct(request, animation: {
+                self.showLoadingView($0)
+
+            }, completed: { (response) in
+                if !self.checkResponse(response) {
+                    return
+                }
+                
+                let favorite = AccountFavoriteVCtrl(response.lstProduct)
+                self.navigationController?.pushViewController(favorite, animated: true)
+
+            })
+
             return
             
         case .orderCondition:

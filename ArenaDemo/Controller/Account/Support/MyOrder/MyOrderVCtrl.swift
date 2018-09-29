@@ -79,6 +79,7 @@ extension MyOrderVCtrl: UITableViewDataSource, UITableViewDelegate {
         tbvMyOrder.separatorInset.right = 15
         tbvMyOrder.allowsSelection = false
         tbvMyOrder.backgroundColor = UIColor(hexString: "F1F2F2")
+        tbvMyOrder.tableFooterView = UIView()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

@@ -13,7 +13,7 @@ class TbvMyOrderHeaderCell: UITableViewCell {
 
     @IBOutlet weak var lblOrderNo: UILabel!
     @IBOutlet weak var lblDate: UILabel!
-    @IBOutlet weak var imvStatus: UIImageView!
+    @IBOutlet weak var lblStatus: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -29,6 +29,10 @@ class TbvMyOrderHeaderCell: UITableViewCell {
     func updateCell(_ item: OrderDTO) {
         lblOrderNo.text = "ĐƠN HÀNG: #\( item.number ?? "" )"
         lblDate.text = "Đặt ngày \( item.date_created_gmt?.string("dd/MM/yyyy", localeID: MultiLanguage.shared.currentLocale) ?? "")"
+        let eStatus = EOrderStatus(rawValue: item.status ?? "")
+        lblStatus.text = eStatus?.name.uppercased()
+        lblStatus.backgroundColor = eStatus?.color
+        lblStatus.cornerRadius = lblStatus.height / 2
     }
     
 }

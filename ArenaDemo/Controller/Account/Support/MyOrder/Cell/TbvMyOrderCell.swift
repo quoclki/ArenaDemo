@@ -27,12 +27,25 @@ class TbvMyOrderCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    func setImageForImageView(_ product: ProductDTO) {
+        ImageStore.shared.setImg(toImageView: UIImageView(), imgURL: product.images.first?.src) { img in
+            let image = img?.resize(newWidth: self.imv.width)
+            self.imv.image = image
+            self.imv.contentMode = .topLeft
+            self.imv.clipsToBounds = true
+        }
+    }
+    
     func updateCell(_ item: OrderLineItemDTO) {
         lblName.text = item.name
         lblDate.text = ""
-        ImageStore.shared.setImg(toImageView: self.imv, imgURL: item.productDTO?.images.first?.src)
+        
+        if let productDTO = item.productDTO {
+            setImageForImageView(productDTO)
+            return
+        }
 
-        if item.isLoading || item.productDTO != nil {
+        if item.isLoading {
             return
         }
         
@@ -40,16 +53,16 @@ class TbvMyOrderCell: UITableViewCell {
         request.per_page = 1
         request.id = item.product_id
         
-        item.isLoading = true
         _ = SEProduct.getListProduct(request, animation: {
             item.isLoading = $0
+            
         }, completed: { (response) in
             guard let dto = response.lstProduct.first else {
                 return
             }
             
             item.productDTO = dto
-            ImageStore.shared.setImg(toImageView: self.imv, imgURL: dto.images.first?.src)
+            self.setImageForImageView(dto)
             
         })
         

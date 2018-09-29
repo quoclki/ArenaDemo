@@ -29,6 +29,17 @@ class TbvOrderCell: UITableViewCell {
     private var itemLine: OrderLineItemDTO!
     private var isPayment: Bool = false
     
+    private var isFavorite: Bool = false {
+        didSet {
+            guard let id = self.itemLine.product_id else {
+                return
+            }
+            btnFavourite.tintColor = isFavorite ? Base.favotireColor : .lightGray
+            FavoriteData.shared.handleFavoriteList(id, isSave: isFavorite)
+
+        }
+    }
+    
     private var quantity: Int = 0 {
         didSet {
             itemLine.quantity = quantity
@@ -46,7 +57,6 @@ class TbvOrderCell: UITableViewCell {
         btnPlus.touchUpInside(block: btnPlus_Touched)
         btnFavourite.touchUpInside(block: btnFavourite_Touched)
         btnDelete.touchUpInside(block: btnDelete_Touched)
-
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -64,30 +74,39 @@ class TbvOrderCell: UITableViewCell {
     func updateCell(_ item: OrderLineItemDTO, isPayment: Bool = false) {
         self.itemLine = item
         self.isPayment = isPayment
+        quantity = item.quantity
+        isFavorite = FavoriteData.shared.checkInList(item.product_id)
+
         vActionQuantity.isHidden = isPayment
         btnFavourite.isHidden = vActionQuantity.isHidden
         lblPaymentQuantity.isHidden = !vActionQuantity.isHidden
         btnDelete.originX = isPayment ? btnFavourite.originX : btnDelete.originX
-        
-        ImageStore.shared.setImg(toImageView: UIImageView(), imgURL: item.productDTO?.images.first?.src) { (img) in
-            let image = img?.resize(newWidth: self.imv.width)
-            self.imv.image = image
-        }
-        imv.contentMode = .topLeft
-        imv.clipsToBounds = true
-
         lblName.text = item.name
-        lblPrice.text = item.price?.toCurrencyString()
-        lblPrice.textColor = .red
-        lblPriceNormal.text = item.price?.toCurrencyString()
-        quantity = item.quantity
+     
+        ImageStore.shared.setImg(toImageView: UIImageView(), imgURL: item.productDTO?.images.first?.src) { (img) in
+            let image = img?.resize(newWidth: self.width)
+            self.imv.image = image
+            self.imv.contentMode = .topLeft
+            self.imv.clipsToBounds = true
+        }
         
+        lblPrice.text = item.productDTO?.sale_price?.toCurrencyString()
+        lblPrice.textColor = Base.baseColor
         item.cellHeight = vBorder.frame.maxY
+
+        if let attributed = item.productDTO?.normalPriceAttributed {
+            lblPriceNormal.attributedText = attributed
+            return
+        }
         
+        let attributed = item.productDTO?.getPriceFormat()
+        lblPriceNormal.attributedText = attributed
+        item.productDTO?.normalPriceAttributed = attributed
+
     }
     
     func btnFavourite_Touched(sender: UIButton) {
-        
+        isFavorite = !isFavorite
     }
     
     func btnDelete_Touched(sender: UIButton) {
