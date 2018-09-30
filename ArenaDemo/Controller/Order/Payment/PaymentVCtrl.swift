@@ -125,6 +125,7 @@ class PaymentVCtrl: BaseVCtrl {
     
     // MARK: - Event Handler
     func btnOrder_Touched(sender: UIButton) {
+        self.view.endEditing(true)
         if !validateInfoOrder() {
             return
         }

@@ -69,9 +69,9 @@ class OrderVCtrl: BaseVCtrl {
             }
             
             let _continue = ContinueOrderVCtrl(true)
-            _continue.view.frame.size = view.size
+            _continue.view.frame = CGRect(0, 0, vSafe.width, vSafe.frame.maxY)
             addChildViewController(_continue)
-            view.addSubview(_continue.view)
+            self.view.addSubview(_continue.view)
         }
     }
     
