@@ -75,14 +75,20 @@ class MyOrderVCtrl: BaseVCtrl {
             
             var lstIndexPath: [IndexPath] = []
             visibleCell.forEach({ (cell) in
-                if cell.item == nil {
+                if cell.item.productDTO == nil {
                     if let indexPath = self.tbvMyOrder.indexPath(for: cell) {
                         lstIndexPath.append(indexPath)
                     }
                     cell.item.productDTO = response.lstProduct.first(where: { $0.id == cell.item?.product_id })
                 }
             })
-            self.tbvMyOrder.reloadRows(at: lstIndexPath, with: .automatic)
+            if !lstIndexPath.isEmpty {
+                self.tbvMyOrder.reloadRows(at: lstIndexPath, with: .automatic)
+            }
+            
+            lstItem.forEach({ (item) in
+                item.productDTO = response.lstProduct.first(where: { $0.id == item.product_id })
+            })
             
         })
 
@@ -108,7 +114,12 @@ extension MyOrderVCtrl: UITableViewDataSource, UITableViewDelegate {
         tbvMyOrder.separatorInset.right = 15
         tbvMyOrder.allowsSelection = false
         tbvMyOrder.backgroundColor = UIColor(hexString: "F1F2F2")
-        tbvMyOrder.tableFooterView = UIView()
+        
+        let vFooter = UIView()
+        vFooter.clipsToBounds = false
+        vFooter.size = CGSize(tbvMyOrder.width, 15)
+        vFooter.backgroundColor = tbvMyOrder.backgroundColor
+        tbvMyOrder.tableFooterView = vFooter
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -121,18 +132,8 @@ extension MyOrderVCtrl: UITableViewDataSource, UITableViewDelegate {
         return vHeader
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let vFooter = UIView()
-        vFooter.backgroundColor = .clear
-        return vFooter
-    }
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 60
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return section == lstOrder.count - 1 ? 0 : 10
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

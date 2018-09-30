@@ -133,7 +133,7 @@ class ProductDetailVCtrl: BaseVCtrl {
         lblName.text = product.name
         lblPrice.text = product.price?.toCurrencyString()
         lblPrice.textColor = Base.baseColor
-        lblPriceNormal.text = product.price?.toCurrencyString()
+        lblPriceNormal.attributedText = product.normalPriceAttributed
         
         quantity = max(self.lineItem.quantity, 1)
         isFavorite = FavoriteData.shared.checkInList(self.product.id)

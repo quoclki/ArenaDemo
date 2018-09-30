@@ -15,7 +15,6 @@ class Base {
     
     // Color
     static var baseColor: UIColor = UIColor(hexString: "D0021B")
-    static var favotireColor: UIColor = UIColor(hexString: "FF4A62")
     static var titleTintColor = UIColor.white
     static var logo: UIImage {
         return UIImage(named: "img-Logo", in: Bundle(for: Base.self), compatibleWith: nil) ?? UIImage()

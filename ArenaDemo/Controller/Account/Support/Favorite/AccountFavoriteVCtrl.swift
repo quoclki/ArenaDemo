@@ -112,6 +112,12 @@ extension AccountFavoriteVCtrl: UITableViewDataSource, UITableViewDelegate {
         return 148
     }
     
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let vFooter = UIView()
+        vFooter.backgroundColor = .white
+        return vFooter
+    }
+    
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return section == lstProduct.count - 1 ? 0 : 15
     }

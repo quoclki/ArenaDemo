@@ -83,7 +83,7 @@ extension EOrderStatus {
         case .onhold:
             return "Đang giữ"
         case .completed:
-            return "Hoàn tất"
+            return "Đã giao hàng"
         case .cancelled:
             return "Đã huỷ"
         case .refunded:
@@ -94,6 +94,17 @@ extension EOrderStatus {
     }
     
     var color: UIColor {
-        return .yellow
+        switch self {
+        case .processing:
+            return UIColor(hexString: "2ecc71")
+        case .onhold:
+            return UIColor(hexString: "f39c12")
+        case .completed:
+            return UIColor(hexString: "3498db")
+        case .cancelled:
+            return UIColor(hexString: "e74c3c")
+        default:
+            return .black
+        }
     }
 }

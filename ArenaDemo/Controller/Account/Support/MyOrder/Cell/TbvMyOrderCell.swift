@@ -55,20 +55,19 @@ class TbvMyOrderCell: UITableViewCell {
         let request = GetProductRequest(page: 1)
         request.per_page = 1
         request.id = item.product_id
-        
+
         _ = SEProduct.getListProduct(request, animation: {
             item.isLoading = $0
-            
+
         }, completed: { (response) in
             guard let dto = response.lstProduct.first else {
                 return
             }
-            
+
             item.productDTO = dto
             self.setImageForImageView(dto)
-            
+
         })
-        
         
     }
     
