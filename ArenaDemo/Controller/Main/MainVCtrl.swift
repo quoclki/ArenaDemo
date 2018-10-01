@@ -131,6 +131,12 @@ class MainVCtrl: BaseVCtrl {
                 return
             }
             
+            if let section = self.lstItem.index(where: { $0.type == .topSaller }) {
+                self.lstItem[section].category.lstProduct = response.lstProduct
+                self.clvMain.reloadSections(IndexSet(integer: section))
+                return
+            }
+            
             let category = CategoryDTO()
             category.name = "Sản phẩm bán chạy"
             category.isTopSaller = true
@@ -180,6 +186,12 @@ class MainVCtrl: BaseVCtrl {
                 return
             }
 
+            if let section = self.lstItem.index(where: { $0.type == .category && $0.category.id == dto.id }) {
+                self.lstItem[section].category.lstProduct = response.lstProduct
+                self.clvMain.reloadSections(IndexSet(integer: section))
+                return
+            }
+            
             dto.lstProduct = response.lstProduct
             
             let group = MainDataGroup()

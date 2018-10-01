@@ -121,7 +121,7 @@ class AccountVCtrl: BaseVCtrl {
         let cusDTO = Order.shared.cusDTO
         if let _ = Order.shared.cusDTO.id {
             lstItem = [.myOrder, .favorite, .address, .storeSystem, .orderCondition, .accSetting]
-            lblName.text = cusDTO.first_name
+            lblName.text = cusDTO.first_name ?? cusDTO.email
         } else {
             lstItem = [.myOrder, .favorite, .orderCondition, .storeSystem, .contactInfo, .signInSignUp]
             lblName.text = "APP BÁN HÀNG"
