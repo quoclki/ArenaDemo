@@ -109,17 +109,7 @@ extension AccountFavoriteVCtrl: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 148
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let vFooter = UIView()
-        vFooter.backgroundColor = .white
-        return vFooter
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return section == lstProduct.count - 1 ? 0 : 15
+        return indexPath.row == lstProduct.count - 1 ? 148 + padding : 148
     }
     
     func handleDelete(_ tableView: UITableView, indexPath: IndexPath) {

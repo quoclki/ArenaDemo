@@ -52,16 +52,18 @@ class CategoryVCtrl: BaseVCtrl {
     // MARK: - Func
     override func loadData() {
         super.loadData()
-        getCategory()
+        getCategory({ isShow in
+            self.showLoadingView(isShow, frameLoading: self.vSafe.frame)
+            self.vBar.isUserInteractionEnabled = !isShow
+        })
     }
     
-    func getCategory() {
+    func getCategory(_ animation: ((Bool) -> ())? = nil) {
         let request = GetCategoryRequest(page: 1)
         request.orderby = EProductCategoryOrderBy.name.rawValue
         
         task = SEProduct.getListCategory(request, animation: { (isShow) in
-            self.showLoadingView(isShow, frameLoading: self.vSafe.frame)
-            self.vBar.isUserInteractionEnabled = !isShow
+            animation?(isShow)
             
         }, completed: { (response) in
             if !self.checkResponse(response) {
@@ -87,6 +89,18 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
         clvCategory.dataSource = self
         clvCategory.delegate = self
         
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
+        refreshControl.tintColor = .black
+        clvCategory.alwaysBounceVertical = true
+        if #available(iOS 10.0, *) {
+            clvCategory.refreshControl = refreshControl
+        } else {
+            // Fallback on earlier versions
+            clvCategory.addSubview(refreshControl)
+            clvCategory.sendSubview(toBack: refreshControl)
+        }
+        
         if let layout = clvCategory.collectionViewLayout as? UICollectionViewFlowLayout {
             let padding: CGFloat = 15
             let width = Ratio.width
@@ -97,6 +111,13 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
             let widthItem = (width - padding * 3) / 2
             layout.itemSize = CGSize(widthItem, widthItem)
         }
+    }
+    
+    @objc func handleRefresh(_ refresh: UIRefreshControl) {
+        print(#function)
+        getCategory({ isShow in
+            isShow ? refresh.beginRefreshing() : refresh.endRefreshing()
+        })
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

@@ -216,6 +216,18 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICol
         clvMain.dataSource = self
         clvMain.delegate = self
         
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
+        refreshControl.tintColor = .black
+        refreshControl.backgroundColor = .yellow
+        clvMain.alwaysBounceVertical = true
+        if #available(iOS 10.0, *) {
+            clvMain.refreshControl = refreshControl
+        } else {
+            // Fallback on earlier versions
+            clvMain.addSubview(refreshControl)
+        }
+        
         if let layout = clvMain.collectionViewLayout as? UICollectionViewFlowLayout {
             let padding: CGFloat = 15
             layout.minimumInteritemSpacing = padding
@@ -223,6 +235,14 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICol
             layout.sectionInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
             layout.itemSize = CGSize((Ratio.width -  padding * 3) / 2, 265 * Ratio.ratioWidth)
         }
+    }
+    
+    @objc func handleRefresh(_ refresh: UIRefreshControl) {
+        print(#function)
+        refresh.endRefreshing()
+        self.lstItem.removeAll()
+        self.clvMain.reloadData()
+        self.loadData()
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -260,6 +280,16 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICol
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(collectionView.width, section == 0 ? 40 : 25)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        print(scrollView.contentOffset)
+//        print(vHeader.originY)
+        if scrollView.contentOffset.y > -vHeader.height {
+            vHeader.originY = -vHeader.height
+            return
+        }
+        vHeader.originY = scrollView.contentOffset.y
     }
     
 }

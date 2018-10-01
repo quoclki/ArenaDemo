@@ -158,37 +158,34 @@ class PaymentVCtrl: BaseVCtrl {
     }
     
     func validateInfoOrder() -> Bool {
-        guard let billing = self.order.billing else {
-            return false
-        }
-        
         guard let section = self.lstItem.index(where: { $0 == .paymentInfo }) else {
             return false
         }
-        
+
+        let billing = self.order.billing
         var msgArray: [String] = []
         
-        let firstName = billing.first_name.trim()
+        let firstName = billing?.first_name.trim() ?? ""
         if firstName.isEmpty {
-            billing.first_name = ""
+            billing?.first_name = ""
             msgArray.append("Họ tên trống")
         }
         
-        let phone = billing.phone.trim()
+        let phone = billing?.phone.trim() ?? ""
         if phone.isEmpty {
-            billing.phone = ""
+            billing?.phone = ""
             msgArray.append("Điên thoại trống")
         }
         
-        let email = billing.email.trim()
+        let email = billing?.email.trim() ?? ""
         if !email.isEmail {
-            billing.email = ""
+            billing?.email = ""
             msgArray.append("Email sai định dạng")
         }
         
-        let address = billing.address_1.trim()
+        let address = billing?.address_1.trim() ?? ""
         if address.isEmpty {
-            billing.address_1 = ""
+            billing?.address_1 = ""
             msgArray.append("Địa chỉ trống")
         }
 
