@@ -133,7 +133,7 @@ class AccountAddressVCtrl: BaseVCtrl {
         request.billing = billing
         
         _ = SECustomer.createOrUpdate(request, animation: {
-            self.showLoadingView($0)
+            self.view.showLoadingView($0)
             
         }, completed: { (response) in
             if !self.checkResponse(response) {

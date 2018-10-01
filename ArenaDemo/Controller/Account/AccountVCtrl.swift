@@ -225,7 +225,7 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
             request.include = lstItem.map({ $0 })
             
             _ = SEProduct.getListProduct(request, animation: {
-                self.showLoadingView($0)
+                self.view.showLoadingView($0)
 
             }, completed: { (response) in
                 if !self.checkResponse(response) {
@@ -373,7 +373,7 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
         request.customer = id
         
         _ = SEOrder.getList(request, animation: {
-            self.showLoadingView($0)
+            self.view.showLoadingView($0)
             
         }, completed: { (response) in
             if !self.checkResponse(response) {
@@ -443,7 +443,7 @@ extension AccountVCtrl {
         request.role = ECustomerRole.customer.rawValue
 
         task = SECustomer.createOrUpdate(request, animation: {
-            self.showLoadingView($0)
+            self.view.showLoadingView($0)
 
         }) { (response) in
             if !self.checkResponse(response) {

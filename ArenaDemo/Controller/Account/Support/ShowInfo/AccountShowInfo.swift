@@ -82,11 +82,11 @@ class AccountShowInfo: BaseVCtrl {
 
 extension AccountShowInfo: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        showLoadingView(frameLoading: vSafe.frame)
+        vSafe.showLoadingView()
     }
     
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        showLoadingView(false, frameLoading: vSafe.frame)
+        vSafe.showLoadingView(false)
         
         let heightTop: CGFloat = 150
         let vTop = UIView()

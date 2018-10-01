@@ -85,7 +85,7 @@ class ProductSearchVCtrl: BaseVCtrl {
         
         task?.cancel()
         task = SEProduct.getListProduct(request, animation: {
-            self.showLoadingView($0, frameLoading: self.vSafe.frame)
+            self.view.showLoadingView($0, frameLoading: self.vSafe.frame)
             
         }, completed: { (response) in
             if !self.checkResponse(response) {
@@ -152,7 +152,9 @@ extension ProductSearchVCtrl: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = lstItem[indexPath.row]
-        pushProductVCtrl(item)
+        pushProductVCtrl(item){
+            collectionView.showLoadingView($0)
+        }
     }
     
 }

@@ -112,7 +112,7 @@ class ContainerVCtrl: BaseVCtrl {
         }
 
         _ = SESetting.getGeneral({
-            self.showLoadingView($0)
+            self.view.showLoadingView($0)
             
         }, completed: { (response) in
             if !self.checkResponse(response) {

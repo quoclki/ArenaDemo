@@ -144,7 +144,7 @@ class PaymentVCtrl: BaseVCtrl {
         request.status = EOrderStatus.processing.rawValue
 
         _ = SEOrder.createOrUpdate(request, animation: {
-            self.showLoadingView($0)
+            self.view.showLoadingView($0)
             
         }, completed: { (response) in
             if !self.checkResponse(response) {

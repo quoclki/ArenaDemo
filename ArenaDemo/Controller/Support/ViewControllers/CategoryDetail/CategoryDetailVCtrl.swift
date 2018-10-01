@@ -101,7 +101,9 @@ extension CategoryDetailVCtrl: UICollectionViewDataSource, UICollectionViewDeleg
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = lstProduct[indexPath.row]
-        pushProductVCtrl(item)
+        pushProductVCtrl(item){
+            collectionView.showLoadingView($0)
+        }
     }
     
 }

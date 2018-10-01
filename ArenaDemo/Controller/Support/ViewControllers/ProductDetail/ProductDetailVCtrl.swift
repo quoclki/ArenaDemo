@@ -279,7 +279,9 @@ extension ProductDetailVCtrl: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let item = lstItem[indexPath.row]
-        pushProductVCtrl(item)
+        pushProductVCtrl(item){
+            collectionView.showLoadingView($0)
+        }
 
     }
     

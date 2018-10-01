@@ -164,39 +164,6 @@ class BaseVCtrl: UIViewController {
         
     }
     
-    /// show loading
-    func showLoadingView(_ isShow: Bool = true, frameLoading: CGRect = CGRect.zero, loadingBgColor color: UIColor = UIColor(hexString: "000000", a: 0.1), valueOfLoadingView value: String = "viewForLoading") {
-        
-        if !isShow {
-            self.view.subviews.first(where: { $0.accessibilityValue == value })?.removeFromSuperview()
-            return
-        }
-        
-        let viewLoading = UIView()
-        viewLoading.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        viewLoading.frame = frameLoading == CGRect.zero ? self.view.bounds : frameLoading
-        viewLoading.backgroundColor = color
-        viewLoading.accessibilityValue = value
-        
-        let vLoadingSmall = UIView()
-        vLoadingSmall.frame.size = CGSize(width: 40, height: 40)
-        vLoadingSmall.backgroundColor = UIColor(hexString: "000000", a: 0.3)
-        vLoadingSmall.center = CGPoint(x: viewLoading.width / 2, y: viewLoading.height / 2)
-        vLoadingSmall.autoresizingMask = [.flexibleTopMargin, .flexibleLeftMargin, .flexibleRightMargin, .flexibleBottomMargin]
-        vLoadingSmall.cornerRadius = 4
-        
-        let indicator = UIActivityIndicatorView()
-        indicator.startAnimating()
-        indicator.autoresizingMask = vLoadingSmall.autoresizingMask
-        indicator.center = CGPoint(x: vLoadingSmall.width / 2, y: vLoadingSmall.width / 2)
-        
-        vLoadingSmall.addSubview(indicator)
-        viewLoading.addSubview(vLoadingSmall)
-        
-        self.view.addSubview(viewLoading)
-        self.view.bringSubview(toFront: viewLoading)
-    }
-    
     /// Get Navigation Child ViewController
     func getVCtrlInNavigation<T: UIViewController>(_ type: T.Type) -> T? {
         return navigationController?.viewControllers.firstOrDefault{$0 is T} as? T
@@ -216,7 +183,7 @@ class BaseVCtrl: UIViewController {
         request.password = password
         
         task = SEAuth.authentication(request, animation: {
-            self.showLoadingView($0, frameLoading: self.vSetSafeArea.frame)
+            self.view.showLoadingView($0, frameLoading: self.vSetSafeArea.frame)
             self.vBar.isUserInteractionEnabled = !$0
             
         }, completed: { (response) in
@@ -240,7 +207,7 @@ class BaseVCtrl: UIViewController {
         request.role = ECustomerRole.all.rawValue
         
         task = SECustomer.getList(request, animation: {
-            self.showLoadingView($0, frameLoading: self.vSetSafeArea.frame)
+            self.view.showLoadingView($0, frameLoading: self.vSetSafeArea.frame)
             self.vBar.isUserInteractionEnabled = !$0
 
         }, completed: { (response) in
@@ -260,7 +227,7 @@ class BaseVCtrl: UIViewController {
     }
 
     /// Did select product page
-    func pushProductVCtrl(_ dto: ProductDTO) {
+    func pushProductVCtrl(_ dto: ProductDTO, animation: ((Bool) -> ())? = nil) {
         func push() {
             let detail = ProductDetailVCtrl(dto)
             self.navigationController?.pushViewController(detail, animated: true)
@@ -271,21 +238,22 @@ class BaseVCtrl: UIViewController {
             return
         }
         
-        self.showLoadingView(frameLoading: self.vSetSafeArea.frame)
+        animation?(true)
         let paragraph = NSMutableParagraphStyle()
         paragraph.alignment = .justified
-        
+
         // 345 is lblDescrition width of iPhone8 size
         // 45 is ratio of lblDescrition of iPhone8 size
         let ratio = (Ratio.width - 30) * 44 / 345
-        
+
+        var attributed: NSMutableAttributedString!
         Helper.backgroundWorker({
-            let attributed = dto.description?.htmlImageCorrector(ratio).htmlAttribute
+            attributed = dto.description?.htmlImageCorrector(ratio).htmlAttribute
             attributed?.addAttributes([NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15), NSAttributedStringKey.paragraphStyle: paragraph], range: NSMakeRange(0, attributed?.length ?? 0))
-            dto.descriptionAttributed = attributed
 
         }) {
-            self.showLoadingView(false)
+            dto.descriptionAttributed = attributed
+            animation?(false)
             push()
         }
     }

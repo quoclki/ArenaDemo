@@ -53,7 +53,7 @@ class CategoryVCtrl: BaseVCtrl {
     override func loadData() {
         super.loadData()
         getCategory({ isShow in
-            self.showLoadingView(isShow, frameLoading: self.vSafe.frame)
+            self.view.showLoadingView(isShow, frameLoading: self.vSafe.frame)
             self.vBar.isUserInteractionEnabled = !isShow
         })
     }
@@ -138,7 +138,7 @@ extension CategoryVCtrl: UICollectionViewDataSource, UICollectionViewDelegate {
         request.category = item.id
 
         task = SEProduct.getListProduct(request, animation: { (isShow) in
-            self.showLoadingView(isShow, frameLoading: self.vSafe.frame)
+            self.view.showLoadingView(isShow, frameLoading: self.vSafe.frame)
             self.vBar.isUserInteractionEnabled = !isShow
             
         }, completed: { (response) in
