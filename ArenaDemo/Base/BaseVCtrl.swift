@@ -183,7 +183,7 @@ class BaseVCtrl: UIViewController {
         request.password = password
         
         task = SEAuth.authentication(request, animation: {
-            self.view.showLoadingView($0, frameLoading: self.vSetSafeArea.frame)
+            self.vSetSafeArea.showLoadingView($0)
             self.vBar.isUserInteractionEnabled = !$0
             
         }, completed: { (response) in
@@ -207,7 +207,7 @@ class BaseVCtrl: UIViewController {
         request.role = ECustomerRole.all.rawValue
         
         task = SECustomer.getList(request, animation: {
-            self.view.showLoadingView($0, frameLoading: self.vSetSafeArea.frame)
+            self.vSetSafeArea.showLoadingView($0)
             self.vBar.isUserInteractionEnabled = !$0
 
         }, completed: { (response) in

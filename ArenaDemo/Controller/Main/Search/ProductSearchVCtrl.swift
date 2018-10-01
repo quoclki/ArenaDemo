@@ -85,7 +85,7 @@ class ProductSearchVCtrl: BaseVCtrl {
         
         task?.cancel()
         task = SEProduct.getListProduct(request, animation: {
-            self.view.showLoadingView($0, frameLoading: self.vSafe.frame)
+            self.vSafe.showLoadingView($0)
             
         }, completed: { (response) in
             if !self.checkResponse(response) {

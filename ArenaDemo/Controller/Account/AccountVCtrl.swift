@@ -121,13 +121,19 @@ class AccountVCtrl: BaseVCtrl {
         let cusDTO = Order.shared.cusDTO
         if let _ = Order.shared.cusDTO.id {
             lstItem = [.myOrder, .favorite, .address, .storeSystem, .orderCondition, .accSetting]
-            lblName.text = cusDTO.first_name ?? cusDTO.email
+            lblName.text = cusDTO.email
+            if let firstName = cusDTO.first_name, !firstName.isEmpty {
+                lblName.text = firstName
+            }
         } else {
             lstItem = [.myOrder, .favorite, .orderCondition, .storeSystem, .contactInfo, .signInSignUp]
             lblName.text = "APP BÁN HÀNG"
         }
-        [txtSignInName, txtSignInPassword, txtSignUpEmail, txtSignUpPassword, txtSignUpConfirmPassword].forEach({
-            $0?.text = ""
+        lstTextFieldSignUp.forEach({
+            $0.text = ""
+        })
+        lstTextFieldSignIn.forEach({
+            $0.text = ""
         })
         btnCheck.isSelected = false
         self.tbvAccount.reloadData()

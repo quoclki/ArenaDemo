@@ -148,7 +148,7 @@ class AccountSettingVCtrl: BaseVCtrl {
             request.password = passNew
             
             _ = SECustomer.createOrUpdate(request, animation: {
-                self.view.showLoadingView($0, frameLoading: self.vSafe.frame)
+                self.vSafe.showLoadingView($0)
                 self.vBar.isUserInteractionEnabled = !$0
 
             }, completed: { (response) in
