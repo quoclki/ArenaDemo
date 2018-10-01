@@ -219,7 +219,6 @@ extension MainVCtrl: UICollectionViewDataSource, UICollectionViewDelegate, UICol
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
         refreshControl.tintColor = .black
-        refreshControl.backgroundColor = .yellow
         clvMain.alwaysBounceVertical = true
         if #available(iOS 10.0, *) {
             clvMain.refreshControl = refreshControl
