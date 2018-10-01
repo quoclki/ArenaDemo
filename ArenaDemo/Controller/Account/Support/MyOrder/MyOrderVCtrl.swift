@@ -114,12 +114,7 @@ extension MyOrderVCtrl: UITableViewDataSource, UITableViewDelegate {
         tbvMyOrder.separatorInset.right = 15
         tbvMyOrder.allowsSelection = false
         tbvMyOrder.backgroundColor = UIColor(hexString: "F1F2F2")
-        
-        let vFooter = UIView()
-        vFooter.clipsToBounds = false
-        vFooter.size = CGSize(tbvMyOrder.width, 15)
-        vFooter.backgroundColor = tbvMyOrder.backgroundColor
-        tbvMyOrder.tableFooterView = vFooter
+        tbvMyOrder.tableFooterView = UIView()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -135,6 +130,11 @@ extension MyOrderVCtrl: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 60
     }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return section == lstOrder.count - 1 ? 0 : 10
+    }
+
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return lstOrder[section].line_items.count

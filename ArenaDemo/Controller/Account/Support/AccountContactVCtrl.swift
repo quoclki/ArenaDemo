@@ -71,7 +71,7 @@ class AccountContactVCtrl: BaseVCtrl {
     
     // MARK: - Event Handler
     func btnSend_Touched(sender: UIButton) {
-        if let email = txtEmail.text?.trim, email.isEmail {
+        if let email = txtEmail.text?.trim, !email.isEmail {
             txtEmail.text = ""
             _ = showWarningAlert(title: "THÔNG BÁO", message: "Địa chỉ email không hợp lệ", buttonTitle: "OK", action: {
                 self.txtEmail.becomeFirstResponder()
