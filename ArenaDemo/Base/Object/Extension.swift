@@ -107,4 +107,8 @@ extension EOrderStatus {
             return .black
         }
     }
+    
+    var textColor: UIColor {
+        return .white
+    }
 }

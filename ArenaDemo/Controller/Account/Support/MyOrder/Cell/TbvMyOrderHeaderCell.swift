@@ -35,7 +35,7 @@ class TbvMyOrderHeaderCell: UITableViewCell {
         let eStatus = EOrderStatus(rawValue: item.status ?? "")
         lblStatus.text = eStatus?.name.uppercased()
         lblStatus.backgroundColor = eStatus?.color
-        lblStatus.textColor = lblStatus.backgroundColor?.isLight == true ? .black : .white
+        lblStatus.textColor = eStatus?.textColor
         
     }
     
