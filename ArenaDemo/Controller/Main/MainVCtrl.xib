@@ -10,12 +10,14 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainVCtrl" customModule="App_Ban_Hang" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MainVCtrl" customModule="ArenaDemo" customModuleProvider="target">
             <connections>
                 <outlet property="clvMain" destination="ykQ-uk-5WE" id="2Mv-0D-gPh"/>
                 <outlet property="searchBar" destination="XZb-xH-ZKO" id="qFt-k8-8GW"/>
                 <outlet property="vHeader" destination="A82-y6-yUy" id="XC0-j1-ZWK"/>
+                <outlet property="vPagePoint" destination="b2H-0O-8Ak" id="Gqc-sw-3Se"/>
                 <outlet property="vSafe" destination="8oT-rh-41u" id="1Vp-xH-h8R"/>
+                <outlet property="vSlide" destination="CKI-NL-uOO" id="zcE-ag-0WU"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -59,13 +61,22 @@
             </userDefinedRuntimeAttributes>
             <point key="canvasLocation" x="24" y="-196"/>
         </searchBar>
-        <view contentMode="scaleToFill" id="A82-y6-yUy">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="230"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        <view clipsSubviews="YES" contentMode="scaleToFill" id="A82-y6-yUy">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="187"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CKI-NL-uOO">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="188"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                </view>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b2H-0O-8Ak">
+                    <rect key="frame" x="0.0" y="160" width="375" height="27"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                </view>
+            </subviews>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="SeG-PC-NeT"/>
-            <point key="canvasLocation" x="452" y="42"/>
+            <point key="canvasLocation" x="451.5" y="41.5"/>
         </view>
     </objects>
 </document>

@@ -51,6 +51,7 @@ class ProductDetailVCtrl: BaseVCtrl {
     private var lstImages: [Images] {
         return product.images
     }
+    
     private var padding: CGFloat = 15
     private var quantity: Int = 0 {
         didSet {

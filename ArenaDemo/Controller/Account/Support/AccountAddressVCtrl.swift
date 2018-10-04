@@ -20,8 +20,6 @@ class AccountAddressVCtrl: BaseVCtrl {
     @IBOutlet var vInfo: UIView!
     @IBOutlet weak var vShippingTitle: UIView!
     @IBOutlet weak var txtShippingName: CustomUITextField!
-    @IBOutlet weak var txtShippingPhone: CustomUITextField!
-    @IBOutlet weak var txtShippingEmail: CustomUITextField!
     @IBOutlet weak var txtShippingAddress: CustomUITextField!
     
     @IBOutlet weak var vBillingTitle: UIView!
@@ -69,10 +67,8 @@ class AccountAddressVCtrl: BaseVCtrl {
     }
     
     func mappingViewInfo() {
-        lstTextField = [txtShippingName, txtShippingPhone, txtShippingEmail, txtShippingAddress, txtBillingName, txtBillingPhone, txtBillingEmail, txtBillingAddress]
+        lstTextField = [txtShippingName, txtShippingAddress, txtBillingName, txtBillingPhone, txtBillingEmail, txtBillingAddress]
         txtShippingName.text = cusDTO.shipping?.first_name
-        txtShippingPhone.text = cusDTO.shipping?.phone
-        txtShippingEmail.text = cusDTO.shipping?.email
         txtShippingAddress.text = cusDTO.shipping?.address_1
         
         txtBillingName.text = cusDTO.billing?.first_name
@@ -119,8 +115,6 @@ class AccountAddressVCtrl: BaseVCtrl {
         
         let shipping = AddressDTO()
         shipping.first_name = txtShippingName.text ?? ""
-        shipping.phone = txtShippingPhone.text ?? ""
-        shipping.email = txtShippingEmail.text ?? ""
         shipping.address_1 = txtShippingAddress.text ?? ""
         
         let billing = AddressDTO()
@@ -158,16 +152,6 @@ class AccountAddressVCtrl: BaseVCtrl {
         if let firstName = txtShippingName.text?.trim, firstName.isEmpty {
             txtShippingName.text = ""
             msgShippingArray.append("Họ tên trống")
-        }
-        
-        if let phone = txtShippingPhone.text?.trim, phone.isEmpty {
-            txtShippingPhone.text = ""
-            msgShippingArray.append("Điện thoại trống")
-        }
-        
-        if let email = txtShippingEmail.text?.trim, !email.isEmail {
-            txtShippingEmail.text = ""
-            msgShippingArray.append("Email sai định dạng")
         }
         
         if let address = txtShippingAddress.text?.trim, address.isEmpty {
@@ -226,7 +210,7 @@ class AccountAddressVCtrl: BaseVCtrl {
 
 extension AccountAddressVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if [txtBillingPhone, txtShippingPhone].contains(textField) && string != "" {
+        if [txtBillingPhone].contains(textField) && string != "" {
             return string.isNumber
         }
 
@@ -238,7 +222,7 @@ extension AccountAddressVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
             tf.becomeFirstResponder()
             
         } else {
-            self.view.endEditing(true)
+//            btnSave.sendAction(.touchUpInside)
         }
     }
 
@@ -246,7 +230,7 @@ extension AccountAddressVCtrl: HandleKeyboardProtocol, UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         handleFocusInputView(textField)
         
-        if [txtBillingPhone, txtShippingPhone].contains(textField) {
+        if [txtBillingPhone].contains(textField) {
             textField.inputAccessoryView = Base.getAccessoryKeyboard({
                 if !(textField.text ?? "").isEmpty {
                     self.handleTextFieldNotInputData()
