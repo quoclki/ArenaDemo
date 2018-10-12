@@ -83,6 +83,8 @@ class ContainerVCtrl: BaseVCtrl {
         getGeneralSetting()
         getPayment()
         getCustomerInfo()
+        getCoupon()
+        getProduct()
     }
     
     func getPayment() {
@@ -153,7 +155,7 @@ class ContainerVCtrl: BaseVCtrl {
             label.font = UIFont.systemFont(ofSize: 10, weight: UIFont.Weight.light)
             label.text = element.name
             label.sizeToFit()
-            label.originY = imv.frame.maxY + 3
+            label.originY = imv.frame.maxY + 2
             label.center.x = btn.center.x
             v.addSubview(label)
             
@@ -175,9 +177,15 @@ class ContainerVCtrl: BaseVCtrl {
             
             v.accessibilityValue = element.rawValue.toString()
             vMenu.addSubview(v)
+            
         }
         
         self.tab = .home
+        let vLineTop = UIView()
+        vLineTop.frame = CGRect(0, 0, Ratio.width, 0.5)
+        vLineTop.backgroundColor = self.view.borderColor
+        vMenu.addSubview(vLineTop)
+        
         
     }
     
@@ -266,6 +274,47 @@ class ContainerVCtrl: BaseVCtrl {
         }
     }
     
+    func getCoupon() {
+        let request = GetCouponRequest(page: 1)
+        
+        task = SECoupon.getList(request, completed: { (response) in
+            if !response.success {
+                return
+            }
+            
+            Base.lstCoupon = response.lstCoupon
+            
+        })
+        
+    }
+    
+    func getProduct() {
+        func getProductQuery(_ page: Int) {
+            let request = GetProductRequest(page: page)
+            
+            task = SEProduct.getListProduct(request, completed: { (response) in
+                if !response.success {
+                    return
+                }
+                
+                let lstProduct = response.lstProduct
+                
+                lstProduct.forEach({
+                    Base.lstProduct.append($0)
+                })
+                
+                if !lstProduct.isEmpty {
+                    getProductQuery(page + 1)
+                }
+                
+            })
+        }
+
+        Base.lstProduct.removeAll()
+        getProductQuery(1)
+        
+    }
+
 }
 
 enum EMenu: Int {

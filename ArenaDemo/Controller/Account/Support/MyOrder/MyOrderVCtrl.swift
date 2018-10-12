@@ -56,8 +56,15 @@ class MyOrderVCtrl: BaseVCtrl {
     // MARK: - Func
     override func loadData() {
         super.loadData()
+        setupItemLine()
+    }
+    
+    func setupItemLine() {
+        let lstItem = self.lstOrder.flatMap({ $0.line_items }).filter({ $0.productDTO == nil })
+        if lstItem.isEmpty {
+            return
+        }
         
-        let lstItem = self.lstOrder.flatMap({ $0.line_items })
         var lstID: Set<Int> = []
         lstItem.forEach{
             lstID.insert($0.product_id ?? 0)

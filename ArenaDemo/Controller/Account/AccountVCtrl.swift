@@ -391,6 +391,12 @@ extension AccountVCtrl: UITableViewDataSource, UITableViewDelegate {
                 return
             }
             
+            response.lstOrder.forEach({ (order) in
+                order.line_items.forEach({ (item) in
+                    item.productDTO = Base.lstProduct.first(where: { $0.id == item.product_id })
+                })
+            })
+            
             let myOrder = MyOrderVCtrl(response.lstOrder)
             self.navigationController?.pushViewController(myOrder, animated: true)
             
