@@ -126,9 +126,9 @@ extension OrderDTO {
         }
         
         let couponLine = CouponLineDTO()
-        couponLine.id = coupon.id
         couponLine.code = coupon.code
         couponLine.discount = 0.0.toCurrencyString()
+        couponLine.discount_tax = 0.0.toCurrencyString()
         self.coupon_lines.append(couponLine)
         
         return nil
