@@ -92,6 +92,10 @@ extension OrderDTO {
             return "Hết hạn"
         }
 
+        if !self.coupon_lines.filter({ $0.code == coupon.code }).isEmpty {
+            return "Đơn hàng đã tồn tại mã giảm giá này"
+        }
+        
         guard let minAmt = coupon.minimum_amount?.toDouble(), let maxAmt = coupon.maximum_amount?.toDouble() else {
             return "Cấu hình sai"
         }
@@ -124,7 +128,7 @@ extension OrderDTO {
         let couponLine = CouponLineDTO()
         couponLine.id = coupon.id
         couponLine.code = coupon.code
-        couponLine.discount = 5.00.toCurrencyString()
+        couponLine.discount = 0.0.toCurrencyString()
         self.coupon_lines.append(couponLine)
         
         return nil

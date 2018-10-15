@@ -35,6 +35,7 @@ class TbvOrderPaymentCell: UITableViewCell {
     private var coupon: String? = nil {
         didSet {
             let coupon = self.coupon ?? ""
+            txtCoupon.text = coupon
             btnApply.customEnable(!coupon.isEmpty)
         }
     }
@@ -57,28 +58,38 @@ class TbvOrderPaymentCell: UITableViewCell {
         lblTempTotal.text = order.total.toCurrencyString()
         lblTotal.text = order.total.toCurrencyString()
 
-        txtCoupon.text = ""
         coupon = ""
         
         let heightCoupon: CGFloat = 30
         for (index, element) in order.coupon_lines.enumerated() {
-            let txt = UITextField()
-            txt.text = "Mã giảm giá: \( element.code ?? "" )"
-            txt.font = UIFont.systemFont(ofSize: padding, weight: .light)
-            txt.textColor = .black
-            txt.frame = CGRect(padding, CGFloat(index) * heightCoupon, 200, heightCoupon)
-            vCoupon.addSubview(txt)
+            // txtLabel
+            let labelTitle = UILabel()
+            labelTitle.text = "Mã giảm giá: \( element.code ?? "" )"
+            labelTitle.font = UIFont.systemFont(ofSize: padding, weight: .light)
+            labelTitle.textColor = .black
+            labelTitle.frame = CGRect(padding, CGFloat(index) * heightCoupon, 200, heightCoupon)
+            vCoupon.addSubview(labelTitle)
             
-            let label = UILabel()
-            label.text = element.discount?.toCurrencyString()
-            label.font = UIFont.systemFont(ofSize: padding, weight: .light)
-            label.width = lblTempTotal.width
-            label.height = txt.height
-            label.originX = lblTempTotal.originX
-            label.originY = txt.originY
-            label.autoresizingMask = lblTempTotal.autoresizingMask
-            label.textAlignment = lblTempTotal.textAlignment
-            vCoupon.addSubview(label)
+            // btnDelete
+            let btn = UIButton(type: .system)
+            btn.setTitle("[Xoá]", for: .normal)
+            btn.titleLabel?.font = labelTitle.font
+            btn.tintColor = .red
+            btn.frame = CGRect(vCoupon.width - 40 - padding, labelTitle.originY, 40, labelTitle.height)
+            btn.autoresizingMask = lblTempTotal.autoresizingMask
+            btn.accessibilityValue = element.code
+            btn.touchUpInside(block: btnRemove_Touched)
+            vCoupon.addSubview(btn)
+            
+            // lblValue
+            let labelValue = UILabel()
+            labelValue.text = element.discount?.toCurrencyString()
+            labelValue.font = UIFont.systemFont(ofSize: padding, weight: .light)
+            labelValue.frame = CGRect(btn.originX - lblTempTotal.width, labelTitle.originY, lblTempTotal.width, labelTitle.height)
+            labelValue.autoresizingMask = lblTempTotal.autoresizingMask
+            labelValue.textAlignment = lblTempTotal.textAlignment
+            vCoupon.addSubview(labelValue)
+            
             vCoupon.height = vCoupon.subviews.last?.frame.maxY ?? 0
         }
         
@@ -103,10 +114,6 @@ class TbvOrderPaymentCell: UITableViewCell {
         guard let tableView = self.tableView else {
             return
         }
-        
-//        guard let indexPath = tableView.indexPath(for: self) else {
-//            return
-//        }
 
         let request = GetCouponRequest(page: 1)
         request.code = coupon
@@ -135,8 +142,28 @@ class TbvOrderPaymentCell: UITableViewCell {
             }
             
             _ = parentVCtrl.showWarningAlert(title: "THÔNG BÁO", message: msg, buttonTitle: "OK", action: nil)
-            
+            self.coupon = ""
         }
+    }
+    
+    func btnRemove_Touched(sender: UIButton) {
+        guard let tableView = self.tableView else {
+            return
+        }
+        
+        guard let index = order.coupon_lines.index(where: { $0.code == sender.accessibilityValue }) else {
+            return
+        }
+        
+        order.coupon_lines.remove(at: index)
+        CATransaction.begin()
+        CATransaction.setCompletionBlock({
+            self.vTotal.originY = self.vBorder.frame.maxY + 15
+        })
+        tableView.reloadData()
+        CATransaction.commit()
+        return
+        
     }
 
 }

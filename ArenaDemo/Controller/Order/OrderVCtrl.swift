@@ -79,6 +79,7 @@ class OrderVCtrl: BaseVCtrl {
         super.configUIViewWillAppear()
         addContinueVCtrl()
         Base.container.setHiddenAnimationMenu(isCreateBack)
+        tbvOrder.reloadData()
     }
     
     // MARK: - Event Listerner
