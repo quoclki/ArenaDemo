@@ -131,7 +131,7 @@ extension OrderVCtrl: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == lstItem.count {
             let cell = tableView.dequeueReusableCell(withIdentifier: paymentCellID) as! TbvOrderPaymentCell
-            cell.updateCell()
+            cell.updateCell(order, isPayment: false)
             cell.clipsToBounds = true
             return cell
         }
@@ -144,8 +144,9 @@ extension OrderVCtrl: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == lstItem.count {
-            return 132
+            return max(order.coupon_cellHeight, 132)
         }
+    
         let item = lstItem[indexPath.row]
         return max(item.cellHeight, 167)
         

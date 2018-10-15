@@ -45,9 +45,15 @@ class Order {
 
 extension OrderDTO {
     var total: Double {
-        return line_items.reduce(0, { (value, dto) -> Double in
+        let totalWithNoDiscount = line_items.reduce(0, { (value, dto) -> Double in
             return value + (dto.total.toDouble() )
         })
+        
+        let totalDiscount = self.coupon_lines.reduce(0) { (value, dto) -> Double in
+            return value + (dto.discount?.toDouble() ?? 0)
+        }
+        
+        return totalWithNoDiscount - totalDiscount
     }
     
     var totalItem: Int {
@@ -80,6 +86,51 @@ extension OrderDTO {
         Base.container.updateTotalItem()
         
     }
+    
+    func updateCoupon(_ coupon: CouponDTO) -> String? {
+        if let dateExpired = coupon.date_expires, dateExpired < Date() {
+            return "Hết hạn"
+        }
+
+        guard let minAmt = coupon.minimum_amount?.toDouble(), let maxAmt = coupon.maximum_amount?.toDouble() else {
+            return "Cấu hình sai"
+        }
+
+        if total < minAmt || total > maxAmt {
+
+        }
+
+        switch coupon.discount_type ?? "" {
+        case EDiscountType.fixed_cart.rawValue:
+
+            break
+
+        case EDiscountType.fixed_product.rawValue:
+
+
+            break
+
+
+        case EDiscountType.percent.rawValue:
+
+
+            break
+
+
+        default:
+            break
+        }
+        
+        let couponLine = CouponLineDTO()
+        couponLine.id = coupon.id
+        couponLine.code = coupon.code
+        couponLine.discount = 5.00.toCurrencyString()
+        self.coupon_lines.append(couponLine)
+        
+        return nil
+        
+    }
+    
     
 }
 

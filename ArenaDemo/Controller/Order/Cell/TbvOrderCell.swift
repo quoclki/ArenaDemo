@@ -154,7 +154,7 @@ class TbvOrderCell: UITableViewCell {
             return
         }
         
-        paymentCell.updateCell()
+        paymentCell.updateCell(Order.shared.orderDTO, isPayment: false)
         
     }
 

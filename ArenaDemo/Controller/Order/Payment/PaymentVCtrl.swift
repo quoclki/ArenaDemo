@@ -350,7 +350,7 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
             if indexPath.row == lstItemOrder.count {
                 let cell = tableView.dequeueReusableCell(withIdentifier: paymentCellID) as! TbvOrderPaymentCell
                 cell.vBorder.originY = padding
-                cell.updateCell()
+                cell.updateCell(order, isPayment: true)
                 return cell
             }
             
@@ -377,7 +377,7 @@ extension PaymentVCtrl: UITableViewDataSource, UITableViewDelegate {
         
         if headerData == .myOrder {
             if indexPath.row == lstItemOrder.count {
-                return 205
+                return max(order.coupon_cellHeight, 205)
             }
             let item = lstItemOrder[indexPath.row]
             return max(item.cellHeight, 167)
