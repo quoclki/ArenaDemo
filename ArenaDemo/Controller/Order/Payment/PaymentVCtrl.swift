@@ -139,9 +139,10 @@ class PaymentVCtrl: BaseVCtrl {
             return
         }
         
+        request.calculateTotalIfNeeded()
         request.payment_method = paymentSelected.id
         request.payment_method_title = paymentSelected.title
-        request.status = EOrderStatus.processing.rawValue
+        request.status = paymentSelected.id?.lowercased() == "cod" ? EOrderStatus.processing.rawValue : EOrderStatus.onhold.rawValue
 
         _ = SEOrder.createOrUpdate(request, animation: {
             self.view.showLoadingView($0)

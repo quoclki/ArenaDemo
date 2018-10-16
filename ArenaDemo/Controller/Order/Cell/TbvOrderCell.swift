@@ -154,8 +154,11 @@ class TbvOrderCell: UITableViewCell {
             return
         }
         
-        paymentCell.updateCell(Order.shared.orderDTO, isPayment: false)
+        guard let indexPath = tableView.indexPath(for: paymentCell) else {
+            return
+        }
         
+        tableView.reloadRows(at: [indexPath], with: .none)
     }
 
 }

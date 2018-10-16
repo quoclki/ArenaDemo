@@ -55,9 +55,8 @@ class TbvOrderPaymentCell: UITableViewCell {
         self.order = order
         self.isPayment = isPayment
         self.vTotal.isHidden = !isPayment
-        lblTempTotal.text = order.total.toCurrencyString()
+        lblTempTotal.text = order.subTotal.toCurrencyString()
         lblTotal.text = order.total.toCurrencyString()
-
         coupon = ""
         
         let heightCoupon: CGFloat = 30
@@ -67,7 +66,7 @@ class TbvOrderPaymentCell: UITableViewCell {
             labelTitle.text = "Mã giảm giá: \( element.code ?? "" )"
             labelTitle.font = UIFont.systemFont(ofSize: padding, weight: .light)
             labelTitle.textColor = .black
-            labelTitle.frame = CGRect(padding, CGFloat(index) * heightCoupon, 200, heightCoupon)
+            labelTitle.frame = CGRect(padding, CGFloat(index) * heightCoupon, 200 * Ratio.ratioWidth, heightCoupon)
             vCoupon.addSubview(labelTitle)
             
             // btnDelete
