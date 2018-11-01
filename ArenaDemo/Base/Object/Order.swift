@@ -184,24 +184,24 @@ extension OrderDTO {
         }
         
         // Handle coupon for fixed cart vs percent
-        let totalDiscountAmtForCastAndPercent = lstCouponCartAndPrecent.reduce(0) { (value, dto) -> Double in
+        let totalDiscountAmtForCartAndPercent = lstCouponCartAndPrecent.reduce(0) { (value, dto) -> Double in
             return value + (dto.discount?.toDouble() ?? 0)
         }
-        let totalItemAmt = self.line_items.reduce(0) { (value, dto) -> Double in
-            return value + dto.total.toDouble()
+        let totalQuantity = self.line_items.reduce(0) { (value, dto) -> Int in
+            return value + dto.quantity
         }
         
         var totalAmtDiscount: Double = 0
         for (index, element) in self.line_items.enumerated() {
             var total = element.total.toDouble()
             if index == self.line_items.count - 1 {
-                let totalAmt = totalDiscountAmtForCastAndPercent - totalAmtDiscount
+                let totalAmt = totalDiscountAmtForCartAndPercent - totalAmtDiscount
                 total += totalAmt
                 element.total = total.toString()
                 continue
             }
             
-            let discount = (total / totalItemAmt) * totalDiscountAmtForCastAndPercent
+            let discount = Double(element.quantity) / Double(totalQuantity) * totalDiscountAmtForCartAndPercent
             total += discount
             totalAmtDiscount += discount
             element.total = total.toString()
